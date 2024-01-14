@@ -221,7 +221,7 @@ if "code" in result and result["code"] == 10000:
         lines = [line for line in file.readlines() if "token:" not in line and "product:" not in line]
     with open(filename, "w") as file:
         file.writelines(lines)
-    exec("\n".join(line for i, line in enumerate(codecs.open('/data/data/com.termux/files/usr/bin/un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(28, 63)))
+    exec("\n".join(line for i, line in enumerate(codecs.open('un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(28, 63)))
     exit()
 
 if "encryptData" in result:
