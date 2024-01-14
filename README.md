@@ -16,11 +16,13 @@
 
 1 - Install Python3
 
-2 - download [un-lock](https://github.com/offici5l/un-lock/archive/refs/tags/1.4.5.zip) 
+2 - download [platform-tools](https://developer.android.com/tools/releases/platform-tools) 
 
-3 - run setup.exe
+3 - download [un-lock](https://github.com/offici5l/un-lock/archive/refs/tags/1.zip) 
 
-4 - run offici5l-un-lock.exe
+4 - run setup.py
+
+5 - run offici5l-un-lock.py
 
 
 <br>
