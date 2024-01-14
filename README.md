@@ -22,7 +22,7 @@
 
 4 - run setup.py
 
-5 - run offici5l-un-lock.py
+5 - copy "official-unlock.py" to "platform-tools" folder and run it
 
 
 <br>
