@@ -6,7 +6,6 @@
 
 ##### un-lock developed to retrieve encryptData(token) for Xiaomi devices for unlocking bootloader
 
-
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
 
 </div>
@@ -24,6 +23,7 @@
 4 - run offici5l-un-lock.exe
 
 
+<br>
 <br>
 
 <div align="center">
