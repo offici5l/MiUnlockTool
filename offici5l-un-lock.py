@@ -129,6 +129,10 @@ with open(filename, "a+") as file:
         product_match = re.search(r"product:(.*)", output)
         token = token_match.group(1).strip() if token_match else None
         product = product_match.group(1).strip() if product_match else None
+        print("\ndevice token:")
+        print(token)
+        print("\ndevice product:")
+        print(product)
         file.write(f"\ntoken: {token}\nproduct: {product}\n")
 
 params = {k.encode("utf-8") if isinstance(k, str) else k: v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in {"appId": "1", "data": {"clientId": "2", "clientVersion": "5.5.224.55", "language": "en", "operate": "unlock", "pcId": hashlib.md5(next((line.split(' ', 1)[1].strip() for line in open(filename) if "wb_value:" in line), None).encode("utf-8")).hexdigest(), "product": next((line.split(' ', 1)[1].strip() for line in open(filename) if "product:" in line), None), "deviceInfo": {"product": next((line.split(' ', 1)[1].strip() for line in open(filename) if "product:" in line), None)}, "deviceToken": next((line.split(' ', 1)[1].strip() for line in open(filename) if "token:" in line), None)}
