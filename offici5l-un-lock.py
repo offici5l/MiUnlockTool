@@ -53,6 +53,18 @@ with open(filename, "a+") as file:
     if "Password:" not in content:
         password = input("Enter password: ")
         file.write(f"\nPassword: {password}\n")
+    if "command:" not in content:
+        c = input("Use 1 for Windows, 2 for Mac, or 3 for Linux: ")
+        if c == "1":
+            file.write(f"\ncommand: fastboot\n")
+        elif c == "2":
+            file.write(f"\ncommand: ./fastboot\n")
+        elif c == "3":
+            file.write(f"\ncommand: fastboot\n")
+        else:
+            print("Invalid choice. exit")
+            exit()
+
 
 if "wb_value:" not in open(filename).read():
     input("\nPress Enter to open confirmation page in your default browser. After seeing {\"R\":\"\",\"S\":\"OK\"}, copy Link from address bar. Come back here")
@@ -119,12 +131,14 @@ if not cookies:
 else:
     pass
 
+cmd = next((line.split(' ', 1)[1].strip() for line in open(filename) if "command:" in line), None)
+
 with open(filename, "a+") as file:
     file.seek(0)
     content = file.read()
     if "token:" not in content or "product:" not in content:
         input("\nConnect the device in Fastboot mode and press Enter\033[0m ") 
-        output = os.popen("fastboot getvar all 2>&1").read()
+        output = os.popen(f"{cmd} getvar all 2>&1").read()
         token_match = re.search(r"token:(.*)", output)
         product_match = re.search(r"product:(.*)", output)
         token = token_match.group(1).strip() if token_match else None
@@ -234,8 +248,8 @@ if "encryptData" in result:
     input("\nConnect the device in Fastboot mode and press Enter\033[0m ") 
     with open("token.bin", "wb") as token_file:
         token_file.write(bytes.fromhex(unlock_token))
-        os.system("fastboot stage token.bin")
-        os.system("fastboot oem unlock")
+        os.system(f"{cmd} stage token.bin")
+        os.system(f"{cmd} oem unlock")
 else:
     formatted_result = json.dumps(result, indent=0, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
     framed_result = colored(f"\n{'='*56}\n{formatted_result}\n{'='*56}\n", 'green')
