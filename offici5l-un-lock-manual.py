@@ -245,9 +245,8 @@ if "code" in result and result["code"] == 10000:
 
 if "encryptData" in result:
     unlock_token = result["encryptData"]
-    print("\nunlock token:\n")
-    print(unlock_token)
-    print("\n\nnow open terminal in path platform-tools and run command :\n\n./fastboot oem-unlock token-unlock\n\n(Replace token-unlock with the token you obtained)\n\n\n\nIf unlocking bootloader fails ! restart the tool and obtain a new token-unlock\nBut this time use command (without '-') ex:\n\n./fastboot oem unlock token-unlock \n\n(Replace token-unlock with the token you obtained)\n")
+    print(f"\nunlock token: {unlock_token} \n")
+    print("\n\nnow open (terminal if use mac/linux or cmd if use windows) in path platform-tools and run command :\n\nmac/linux : ./fastboot oem unlock token-unlock\nwindow : fastboot oem unlock token-unlock\n\n(Replace token-unlock with the token you obtained)\n")
 else:
     formatted_result = json.dumps(result, indent=0, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
     framed_result = colored(f"\n{'='*56}\n{formatted_result}\n{'='*56}\n", 'green')
