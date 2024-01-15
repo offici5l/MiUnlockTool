@@ -2,7 +2,8 @@
 
 # un-lock
 
-### Unlock Bootloader (Xiaomi) for Mac Windows Linux
+### Unlock Bootloader Xiaomi devices
+### for Mac Windows Linux
 
 ##### un-lock developed to retrieve encryptData(token) for Xiaomi devices for unlocking bootloader
 
