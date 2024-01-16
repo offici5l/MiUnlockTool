@@ -9,7 +9,7 @@
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
 
-###### ( a version for Android is also available via [link](github.com/offici5l/MiTool) )
+###### ( a version for Android is also available via [link](https://github.com/offici5l/MiTool) )
 
 </div>
 
