@@ -245,11 +245,13 @@ if "code" in result and result["code"] == 10000:
 
 if "encryptData" in result:
     unlock_token = result["encryptData"]
-    input("\nConnect the device in Fastboot mode and press Enter\033[0m ") 
+    binary_data = bytes.fromhex(unlock_token)
+    bytes_io_data = io.BytesIO(binary_data)
     with open("token.bin", "wb") as token_file:
-        token_file.write(bytes.fromhex(unlock_token))
-        os.system(f"{cmd} stage token.bin")
-        os.system(f"{cmd} oem unlock")
+        token_file.write(bytes_io_data.getvalue())
+    input("\nConnect the device in Fastboot mode and press Enter\033[0m ") 
+    os.system(f"{cmd} stage token.bin")
+    os.system(f"{cmd} oem unlock")
 else:
     formatted_result = json.dumps(result, indent=0, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
     framed_result = colored(f"\n{'='*56}\n{formatted_result}\n{'='*56}\n", 'green')
@@ -258,5 +260,3 @@ else:
 
 
 input("Press Enter to exit...")
-
-    
