@@ -249,8 +249,10 @@ if "encryptData" in result:
     bytes_io_data = io.BytesIO(binary_data)
     with open("token.bin", "wb") as token_file:
         token_file.write(bytes_io_data.getvalue())
-    input("\nConnect the device in Fastboot mode and press Enter\033[0m ") 
+    input("\nConnect the device in Fastboot mode and press Enter\033[0m ")
+    time.sleep(3)
     os.system(f"{cmd} stage token.bin")
+    time.sleep(3)
     os.system(f"{cmd} oem unlock")
 else:
     formatted_result = json.dumps(result, indent=0, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
