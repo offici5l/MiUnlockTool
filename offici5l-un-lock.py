@@ -5,31 +5,13 @@ from Cryptodome.Cipher import AES
 from termcolor import colored
 from urllib.parse import urlparse
 
-
-
 filename = "account_info.txt"
 
 
 
-print("\n\033[92m1.\033[0m Unlock")
-print("\033[92m2.\033[0m Lock")
-
-choice = input("\nEnter your \033[92mchoice\033[0m: ")
-
-if choice == "1":
-    print("\nunlock bootloader\n")
-elif choice == "2":
-    input("\nConnect the device in Fastboot mode and press Enter\033[0m ")
-    os.system(f"fastboot oem lock")
-    exit()
-else:
-    print("\nInvalid choice.\n")
-    exit()
-
 text_to_print = """
 Go to Settings » Additional settings » Developer options:\n\n- Enable OEM unlocking and USB debugging.\n- Tap Mi Unlock status » Agree » Add account and device.\n\n"After successful binding, you'll see a confirmation message: Added successfully."
 """
-
 input(colored(f"\n{'='*15}github.com/offici5l/MiTool{'='*15}\n{text_to_print}\n{'='*56}\n", 'green') + "\nIf you complete the steps successfully, press Enter")
 
 while os.path.isfile(filename):
@@ -64,7 +46,6 @@ with open(filename, "a+") as file:
         else:
             print("Invalid choice. exit")
             exit()
-
 
 if "wb_value:" not in open(filename).read():
     input("\nPress Enter to open confirmation page in your default browser. After seeing {\"R\":\"\",\"S\":\"OK\"}, copy Link from address bar. Come back here")
@@ -240,7 +221,7 @@ if "code" in result and result["code"] == 10000:
         lines = [line for line in file.readlines() if "token:" not in line and "product:" not in line]
     with open(filename, "w") as file:
         file.writelines(lines)
-    exec("\n".join(line for i, line in enumerate(codecs.open('un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(12, 45)))
+    exec("\n".join(line for i, line in enumerate(codecs.open('un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(10, 27)))
     exit()
 
 if "encryptData" in result:
@@ -258,7 +239,5 @@ else:
     formatted_result = json.dumps(result, indent=0, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
     framed_result = colored(f"\n{'='*56}\n{formatted_result}\n{'='*56}\n", 'green')
     print(framed_result)
-
-
 
 input("Press Enter to exit...")
