@@ -21,7 +21,7 @@
 
 2 - download [platform-tools](https://developer.android.com/tools/releases/platform-tools) 
 
-3 - download [un-lock](https://github.com/offici5l/un-lock/archive/refs/tags/1.zip) 
+3 - download [un-lock](https://github.com/offici5l/un-lock/archive/refs/tags/1.4.6.zip) 
 
 4 - run setup.py
 
