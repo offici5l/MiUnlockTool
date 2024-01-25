@@ -27,7 +27,7 @@ pip3 install requests pycryptodomex termcolor
 
 3 - download [platform-tools](https://developer.android.com/tools/releases/platform-tools) 
 
-4 - download [un-lock](https://github.com/offici5l/un-lock/archive/refs/tags/1.4.7.zip)
+4 - download [un-lock](https://codeload.github.com/offici5l/un-lock/zip/refs/heads/main)
 
 5 - copy "official-unlock.py" to "platform-tools" folder and run it
 
