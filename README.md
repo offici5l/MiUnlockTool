@@ -19,13 +19,17 @@
 
 1 - Install Python3
 
-2 - download [platform-tools](https://developer.android.com/tools/releases/platform-tools) 
 
-3 - download [un-lock](https://github.com/offici5l/un-lock/archive/refs/tags/1.4.7.zip)
+2 - From Terminal or CMD run:
+```bash
+pip3 install requests pycryptodomex termcolor
+```
 
-4 - run setup.py
+3 - download [platform-tools](https://developer.android.com/tools/releases/platform-tools) 
 
-5 - copy "official-unlock.py" to "platform-tools" folder and run it
+4 - download [un-lock](https://github.com/offici5l/un-lock/archive/refs/tags/1.4.7.zip)
+
+4 - copy "official-unlock.py" to "platform-tools" folder and run it
 
 <br>
 <br>
