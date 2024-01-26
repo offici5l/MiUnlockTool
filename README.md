@@ -29,7 +29,7 @@ pip3 install requests pycryptodomex termcolor
 
 4 - download [un-lock](https://codeload.github.com/offici5l/un-lock/zip/refs/heads/main)
 
-5 - copy "official-unlock.py" to "platform-tools" folder and run it
+5 - copy "offici5l-unlock.py" to "platform-tools" folder and run it
 
 <br>
 <br>
