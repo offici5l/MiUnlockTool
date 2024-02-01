@@ -1,82 +1,179 @@
-import re, requests, json, hmac, random, binascii, urllib, hashlib, os, urllib.parse, time, codecs, sys, webbrowser, io
+import re, requests, json, hmac, random, binascii, urllib, hashlib, os, urllib.parse, time, codecs, io, sys, shutil, platform, urllib.request, zipfile, webbrowser, subprocess
 from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
 from termcolor import colored
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 
-filename = "account_info.txt"
+m_check = ["requests", "pycryptodomex", "termcolor"]
+for module in m_check:
+    try:
+        print(f"Checking for {module}...")
+        subprocess.run(["pip3", "show", module], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+    except subprocess.CalledProcessError:
+        print(f"{module} is not installed, installing now.")
+        subprocess.run(["pip3", "install", module], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+def get_system():
+    return platform.system().lower()
 
-
-
-text_to_print = """
-Go to Settings » Additional settings » Developer options:\n\n- Enable OEM unlocking and USB debugging.\n- Tap Mi Unlock status » Agree » Add account and device.\n\n"After successful binding, you'll see a confirmation message: Added successfully."
-"""
-input(colored(f"\n{'='*15}github.com/offici5l/MiTool{'='*15}\n{text_to_print}\n{'='*56}\n", 'green') + "\nIf you complete the steps successfully, press Enter")
-
-while os.path.isfile(filename):
-    pr = input(f"\ndo you want to use previous information in \033[92m{filename}\033[0m (yes/no) ? : ").lower()
-    if pr == "yes":
-        break
-    elif pr == "no":
-        os.remove(filename)
-        break
+system = get_system()
+system_url = {"windows": "windows", "linux": "linux", "darwin": "darwin"}.get(system)
+dir = os.path.join(os.path.dirname(__file__), "platform-tools")
+if not os.path.exists(dir):
+    url = f"https://dl.google.com/android/repository/platform-tools-latest-{system_url}.zip" if system_url else None
+    if url:
+        zip_path = os.path.join(os.path.dirname(__file__), "platform-tools.zip")
+        print(f"donwload platform-tools for {system} ...")
+        urllib.request.urlretrieve(url, zip_path)            
+        with zipfile.ZipFile(zip_path, 'r') as z:
+            z.extractall(os.path.dirname(zip_path))          
+        os.remove(zip_path)
+        print("Platform-Tools ready.")
     else:
-        print("Invalid choice. Please enter 'yes' or 'no'.")
+        print(f"Unsupported OS: {system}.")
+else:
+    pass
 
+platform_tools_dir = os.path.join(os.path.dirname(__file__), "Platform-Tools")
+if system in ["linux", "darwin"]:
+    cmd_command = os.path.join(platform_tools_dir, "")
+elif system == "windows":
+    cmd_command = os.path.join(platform_tools_dir, "")
+else:
+    sys.exit()
 
+def wait_for_mode():
+    print("\nConnect device in Fastboot mode...") 
+    while os.system(f"{cmd_command}fastboot getvar unlocked") != 0:
+        pass
 
-with open(filename, "a+") as file:
-    file.seek(0)
-    content = file.read()
-    if "Username:" not in content:
-        username = input("Enter username or email or number (Xiaomi Account): ")
-        file.write(f"\nUsername: {username}\n")
-    if "Password:" not in content:
-        password = input("Enter password: ")
-        file.write(f"\nPassword: {password}\n")
-    if "command:" not in content:
-        c = input("Use 1 for Windows, 2 for Mac, or 3 for Linux: ")
-        if c == "1":
-            file.write(f"\ncommand: fastboot\n")
-        elif c == "2":
-            file.write(f"\ncommand: ./fastboot\n")
-        elif c == "3":
-            file.write(f"\ncommand: fastboot\n")
-        else:
-            print("Invalid choice. exit")
-            exit()
-
-if "wb_value:" not in open(filename).read():
-    input("\nPress Enter to open confirmation page in your default browser. After seeing {\"R\":\"\",\"S\":\"OK\"}, copy Link from address bar. Come back here")
-    webbrowser.open('https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true')
-    wbinput = input("\nEnter Link: ")
-    wbinput_list = wbinput.split('sts?d=')
-
-    if len(wbinput_list) > 1:
-        wbinputmatch = wbinput_list[1].split('&ticket')[0]
-
-        with open(filename, "a") as file:
-            file.write(f"\nwb_value: {wbinputmatch}\n")
+def print_result_info(key=None, value=None):
+    if key is not None:
+        padding = ' ' * ((shutil.get_terminal_size().columns - len(f'{key}: {value}') - 0) // 2)
+        border_line = f"┏{'━' * (len(f'{key}: {value}') + 4)}┓"
+        content_line = f"┃  {key}: {value}  ┃"
+        bottom_line = f"┗{'━' * (len(f'{key}: {value}') + 4)}┛"
     else:
-        print("Invalid URL")
-        exit()
+        padding = ' ' * ((shutil.get_terminal_size().columns - len(f'{value}') - 0) // 2)
+        border_line = f"┏{'━' * (len(f'{value}') + 4)}┓"
+        content_line = f"┃  {value}  ┃"
+        bottom_line = f"┗{'━' * (len(f'{value}') + 4)}┛"
+    
+    print(f"\n{padding}{border_line}\n{padding}{content_line}\n{padding}{bottom_line}")
 
-username = next((line.split(' ', 1)[1].strip() for line in open(filename) if "Username:" in line), None)
-password = next((line.split(' ', 1)[1].strip() for line in open(filename) if "Password:" in line), None)
-
-headers={"User-Agent": "XiaomiPCSuite"}
+filedata = os.path.join(os.path.dirname(__file__), "data.json")
+filetp = os.path.join(os.path.dirname(__file__), "device_token_product.json")
 session = requests.Session()
+headers = {"User-Agent": "XiaomiPCSuite"}
 
-response = session.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers=headers, cookies={"deviceId": next((line.split(' ', 1)[1].strip() for line in open(filename) if "wb_value:" in line), None)}).text.replace("&&&START&&&", "")
+def login_confirmation():
+    input("\nPress Enter to open login confirmation page\nWhen you see:\033[92m {{\"R\":\"\",\"S\":\"OK\"}}\033[0m copy link \nand return here\n")
+    webbrowser.open('https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true')
+    url = input("Please enter the link: ")
+    expected_part = "unlock.update.miui.com/sts?d="
 
-if json.loads(response)["securityStatus"] == 16:
-    error_message = f'\n\033[91msecurityStatus {json.loads(response)["securityStatus"]}\033[0m\n\n\033[92mPlease go to: settings > Mi Account > Devices > select Current device > Find device "enable Find device"\033[0m\n'
-    print(error_message)
+    while True:
+        if expected_part in url:
+            break
+        else:
+            print("\n\033[91mInvalid link!\033[0m\n")
+            print("\n(\033[38;5;208mIf you're having trouble obtaining a valid link !\nuse command\033[0m \033[92mr\033[0 \033[38;5;208m to reopen login confirmation page.\033[0m)\n")
+            url = input("\nplease enter a valid link: ")
+            if url.lower() == 'r':
+                webbrowser.open('https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true')
+
+    query_parameters = parse_qs(urlparse(url).query)
+    idd = {key if key != "d" else "deviceId": value[0] for key, value in query_parameters.items()}
+    cookies_json = json.dumps(idd, indent=2)
+
+    return cookies_json
+
+def login_user():
+    while True:
+        user = input("Please enter your username: ")
+        pwd = input("Please enter your password: ")
+        response = requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": user, "hash": hashlib.md5(pwd.encode()).hexdigest().upper()}).text
+        login_response = json.loads(response.replace("&&&START&&&", ""))
+        if "code" in login_response and login_response["code"] == 70016:
+            print("Invalid credentials. Please enter the correct username and password.")
+            continue
+        else:
+            login_c = login_confirmation()
+            userId = login_response.get('userId')
+            with open(filedata, "a") as json_file:
+                json_file.write(f'{{\n  "user": "{userId}",\n  "hash": "{hashlib.md5(pwd.encode()).hexdigest().upper()}", {login_c.strip("{}")}}}')
+            print(f"\n\nsave data in {filedata}\n\n")
+            break
+
+
+
+print_result_info(value="github.com/offici5l/MiTool")
+
+choice = input("\n\n- \033[92m1\033[0m Unlock\n- \033[92m2\033[0m Lock\n\nEnter your \033[92mchoice\033[0m: ")
+
+if choice == "1":
+    pass
+elif choice == "2":
+    wait_for_mode()
+    os.system(f"{cmd_command}fastboot oem lock")
+    exit()
+else:
+    print("\nInvalid choice.\n")
     exit()
 
-if json.loads(response)["code"] == 70016:
-    error_message = f'\n\033[91mcodeStatus {json.loads(response)["code"]} Error descEN: The account ID or password you entered is incorrect. \n\033[0m'
+def remove_file(file_path):
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+            print(f"\n\n{file_path} has been removed\n\n")
+        except Exception as e:
+            print(f"\n\nError removing {file_path}: {e}\n\n")
+
+while True:
+    if os.path.exists(filedata):
+        with open(filedata, 'r') as file:
+            try:
+                data = json.load(file)
+            except json.JSONDecodeError:
+                data = None
+
+            if data:
+                print(f"\n\nuserId: \033[92m{data['user']}\033[0m Data exists !\n")
+                choice = input("\n- \033[92m1\033[0m use previous data\n- \033[92m2\033[0m delete previous data\n\nEnter your \033[92mchoice\033[0m: ")
+                if choice == "1":
+                    print("\n")
+                    break
+                elif choice == "2":
+                    remove_file(filedata)
+                    remove_file(filetp)
+                    login_user()
+                    break
+                else:
+                    print("\nInvalid choice!\n")
+                    continue
+            else:
+                remove_file(filedata)
+                remove_file(filetp)
+                login_user()
+                break
+    else:
+        remove_file(filedata)
+        remove_file(filetp)
+        login_user()
+        break
+
+
+
+with open(filedata, 'r') as file:
+    datafile = json.load(file)
+
+url = "https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true"
+
+response = session.post(url, data=datafile, headers=headers, cookies=datafile).text.replace("&&&START&&&", "")
+
+# securityStatus16 temporary line (delete later)
+if json.loads(response)["securityStatus"] == 16:
+    error_message = f'\n\033[91msecurityStatus {json.loads(response)["securityStatus"]}\033[0m\n\n\033[92mPlease go to: settings > Mi Account > Devices > select Current device > Find device "enable Find device"\033[0m\n'
     print(error_message)
     exit()
 
@@ -104,33 +201,47 @@ response_cookies = session.get( location + "&clientSign=" + urllib.parse.quote_p
 
 cookies = response_cookies
 
+deviceId = datafile.get("deviceId", {})
+
 if not cookies:
-    wbe = next((line.split(' ', 1)[1].strip() for line in open(filename) if "wb_value:" in line), None)
+    wbe = deviceId
     error_message = f'\n\033[91mdescEN: Error information not obtained from server.\nInvalid wb_value: {wbe} \n\033[0m\033[92m'
     print(error_message)
     exit()
 else:
     pass
 
-cmd = next((line.split(' ', 1)[1].strip() for line in open(filename) if "command:" in line), None)
+try:
+    with open(filetp, "r") as file:
+        try:
+            content = json.load(file)
+        except json.JSONDecodeError:
+            content = {}
+except FileNotFoundError:
+    content = {}
 
-with open(filename, "a+") as file:
-    file.seek(0)
-    content = file.read()
-    if "token:" not in content or "product:" not in content:
-        input("\nConnect the device in Fastboot mode and press Enter\033[0m ") 
-        output = os.popen(f"{cmd} getvar all 2>&1").read()
-        token_match = re.search(r"token:(.*)", output)
-        product_match = re.search(r"product:(.*)", output)
-        token = token_match.group(1).strip() if token_match else None
-        product = product_match.group(1).strip() if product_match else None
-        print("\ndevice token:")
-        print(token)
-        print("\ndevice product:")
-        print(product)
-        file.write(f"\ntoken: {token}\nproduct: {product}\n")
+if "deviceToken" not in content or "product" not in content:
+    wait_for_mode()
+    output = os.popen(f"{cmd_command}fastboot getvar all 2>&1").read()
+    token_match = re.search(r"token:(.*)", output)
+    product_match = re.search(r"product:(.*)", output)
+    token = token_match.group(1).strip() if token_match else None
+    product = product_match.group(1).strip() if product_match else None
+    data = {"deviceToken": token, "product": product}
+    with open(filetp, "w") as file:
+        json.dump(data, file, indent=2)
+        print(f"\n\nsave deviceToken and product in {filetp}\n\n")
 
-params = {k.encode("utf-8") if isinstance(k, str) else k: v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in {"appId": "1", "data": {"clientId": "2", "clientVersion": "5.5.224.55", "language": "en", "operate": "unlock", "pcId": hashlib.md5(next((line.split(' ', 1)[1].strip() for line in open(filename) if "wb_value:" in line), None).encode("utf-8")).hexdigest(), "product": next((line.split(' ', 1)[1].strip() for line in open(filename) if "product:" in line), None), "deviceInfo": {"product": next((line.split(' ', 1)[1].strip() for line in open(filename) if "product:" in line), None)}, "deviceToken": next((line.split(' ', 1)[1].strip() for line in open(filename) if "token:" in line), None)}
+with open(filetp, 'r') as file:
+    data = json.load(file)
+
+for key, value in data.items():
+    print(f"{key}: \033[92m{value}\033[0m")
+
+token_value = data.get("deviceToken", {})
+product_value = data.get("product", {})
+
+params = {k.encode("utf-8") if isinstance(k, str) else k: v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in {"appId": "1", "data": {"clientId": "2", "clientVersion": "5.5.224.55", "language": "en", "operate": "unlock", "pcId": hashlib.md5(deviceId.encode("utf-8")).hexdigest(), "product": product_value, "deviceInfo": {"product": product_value}, "deviceToken": token_value}
 }.items()}
 
 psiggn = bytes.fromhex("327442656f45794a54756e6d57554771376251483241626e306b324e686875724f61714266797843754c56676e3441566a3773776361776535337544556e6f")
@@ -215,13 +326,16 @@ session.close()
 code = result.get("code", "")
 descEN = result.get("descEN", "")
 
+current_script_path = os.path.dirname(__file__)
+
 if "code" in result and result["code"] == 10000:
     print(f"\ncode: {code} descEN: {descEN}\nInvalid device token or product.\n")
-    with open(filename, "r") as file:
-        lines = [line for line in file.readlines() if "token:" not in line and "product:" not in line]
-    with open(filename, "w") as file:
-        file.writelines(lines)
-    exec("\n".join(line for i, line in enumerate(codecs.open('offici5l-un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(10, 27)))
+    remove_file(filetp)
+    exec("\n".join(line for i, line in enumerate(codecs.open(os.path.join(current_script_path, 'offici5l-un-lock.py'), 'r', 'utf-8').read().split('\n'), 1) if i not in range(108, 165)))
+    exit()
+
+if "code" in result and result["code"] == 20036:
+    print(f"\n\n\033[92m{descEN}\033[0m\n\n")
     exit()
 
 if "encryptData" in result:
@@ -230,14 +344,19 @@ if "encryptData" in result:
     bytes_io_data = io.BytesIO(binary_data)
     with open("token.bin", "wb") as token_file:
         token_file.write(bytes_io_data.getvalue())
-    input("\nConnect the device in Fastboot mode and press Enter\033[0m ")
-    time.sleep(3)
-    os.system(f"{cmd} stage token.bin")
-    time.sleep(3)
-    os.system(f"{cmd} oem unlock")
+    wait_for_mode()
+    os.system(f"{cmd_command}fastboot stage token.bin")
+    os.system(f"{cmd_command}fastboot oem unlock")
 else:
-    formatted_result = json.dumps(result, indent=0, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
-    framed_result = colored(f"\n{'='*56}\n{formatted_result}\n{'='*56}\n", 'green')
-    print(framed_result)
+    if "uid" in result:
+        print_result_info("userId", result["uid"])
+    if "code" in result:
+        print(f"{colored('code: ' + str(result['code']), 'green')}\n")
+    if "description" in result:
+        print(f"{colored(result['description'], 'green')}\n")
+    if "descEN" in result:
+        print(f"{colored(result['descEN'], 'green')}\n")
+    print("\n\n")
 
 input("Press Enter to exit...")
+
