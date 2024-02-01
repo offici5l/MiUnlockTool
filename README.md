@@ -19,17 +19,8 @@
 
 1 - Install Python3
 
+2 - download [un-lock](https://codeload.github.com/offici5l/un-lock/zip/refs/heads/main) and run it
 
-2 - From Terminal or CMD run:
-```bash
-pip3 install requests pycryptodomex termcolor
-```
-
-3 - download [platform-tools](https://developer.android.com/tools/releases/platform-tools) 
-
-4 - download [un-lock](https://codeload.github.com/offici5l/un-lock/zip/refs/heads/main)
-
-5 - copy "offici5l-un-lock.py" to "platform-tools" folder and run it
 
 <br>
 <br>
