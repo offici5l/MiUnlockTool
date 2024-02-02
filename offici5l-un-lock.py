@@ -99,9 +99,9 @@ def login_user():
             continue
         else:
             login_c = login_confirmation()
-            userId = login_response.get('userId')
+            # userId = login_response.get('userId')
             with open(filedata, "a") as json_file:
-                json_file.write(f'{{\n  "user": "{userId}",\n  "hash": "{hashlib.md5(pwd.encode()).hexdigest().upper()}", {login_c.strip("{}")}}}')
+                json_file.write(f'{{\n  "user": "{user}",\n  "hash": "{hashlib.md5(pwd.encode()).hexdigest().upper()}", {login_c.strip("{}")}}}')
             print(f"\n\nsave data in {filedata}\n\n")
             break
 
