@@ -196,8 +196,7 @@ print(p_)
 for path, data in path_data.items():
     r = RetrieveEncryptData(path, data).add_nonce().run()
     for key, value in r.items():
-        if key != 'descCN':
-            print(f"{key}: {value}")
+        print(f"\n{key}: {value}")
     print(p_)
     if "encryptData" in r:
         ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
