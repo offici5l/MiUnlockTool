@@ -38,7 +38,7 @@ def dwt():
     shutil.copy(__file__, np)
     os.chmod(np, 0o755)
     print(notice)
-    print("\nSetup completed successfully! To use un-lock, run the command: \033[92munlock\033[0m\n")
+    print("\nSetup completed successfully!\nTo use un-lock, run the command: \033[92munlock\033[0m\n")
     os.remove(__file__)
     exit()
 
