@@ -52,10 +52,7 @@ It is compatible with all platforms.
     termux-setup-storage
     ```
     ```bash
-    yes | pkg install python3
-    ```
-    ```bash
-    curl https://raw.githubusercontent.com/offici5l/un-lock/master/un-lock.py | python3
+    yes | pkg install python3 && curl -O https://raw.githubusercontent.com/offici5l/un-lock/master/un-lock.py && python3 un-lock.py
     ```
     **Usage:**
     Run command:
