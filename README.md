@@ -1,30 +1,64 @@
 <div align="center">
 
-# un-lock
+# Unlock Bootloader For Xiaomi
 
-### Unlock Bootloader (Xiaomi)
-### for : Mac Windows Linux
+un-lock developed to retrieve encryptData(token) for Xiaomi devices to unlock bootloader.
 
-##### un-lock developed to retrieve encryptData(token) for Xiaomi devices for unlocking bootloader
+It is compatible with all platforms.
 
-[![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
-
-###### ( version for Android [link](https://github.com/offici5l/MiTool) )
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 
 </div>
 
-<br>
+![Version](https://img.shields.io/badge/version-1.5.0-blue)
 
-## Install
+<details>
+  <summary>show Version History</summary>
 
-1 - Install Python3
+### Version 1.4.8:
 
-2 - download [un-lock](https://codeload.github.com/offici5l/un-lock/zip/refs/heads/main) and run it
+- Make the installation method easier, just download and run the file, it will take care of the rest.
+- Other improvements
 
+### Version 1.4.9:
 
-<br>
-<br>
+- Improvements and fixes
 
-<div align="center">
+### Version 1.5.0:
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
+- un-lock has been restructured and rebuilt.
+- Improved and reduced un-lock size.
+- un-lock is now compatible with all operating systems.
+- Resolved the "securityStatus16" issue and fixed other problems.
+
+</details>
+
+[![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
+
+# Installation:
+
+### For Mac, Windows, Linux:
+
+1. Install Python3.
+2. Download [un-lock](https://codeload.github.com/offici5l/un-lock/zip/refs/heads/main) and run it.
+
+### For Android:
+
+1. Install Termux for [ARM64](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_arm64-v8a.apk), [armeabi](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_armeabi-v7a.apk), or [Universal](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_universal.apk).
+2. Install [Termux API](https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk).
+3. From Termux command line:
+
+    ```bash
+    termux-setup-storage
+    ```
+    ```bash
+    yes | pkg install python3
+    ```
+    ```bash
+    curl https://raw.githubusercontent.com/offici5l/un-lock/master/un-lock.py | python3
+    ```
+    **Usage:**
+    Run command:
+    ```bash
+    unlock
+    ```
