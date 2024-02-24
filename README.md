@@ -33,7 +33,7 @@ It is compatible with all platforms.
 
 #### Custom Modifications (1.5.0):
 - Deleted `cmd getvar all` in `def CheckB` and replaced it with `getvar token` and `getvar product`.
-- In case of failure to obtain `deviceToken` and `product`, I've added a step to enter them manually.
+- In case of failure to obtain `deviceToken` and `product`, added a step to enter them manually.
 
 </details>
 
