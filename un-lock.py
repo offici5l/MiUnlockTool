@@ -134,7 +134,11 @@ for key in ["user", "pwd", "wb_id", "deviceToken", "product"]:
             data[key] = wb_id
         elif key in ["deviceToken", "product"]:
             tp = CheckB(cmd)
-            data[key] = tp[key]
+            if tp is not None:
+                data[key] = tp[key]
+            else:
+                data["deviceToken"] = input("Enter deviceToken: ")
+                data["product"] = input("Enter product: ")
         print(f"\n{key} saved.\n")
         with open(datafile, "r+") as file:
             json.dump(data, file, indent=2)
