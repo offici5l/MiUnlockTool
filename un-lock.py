@@ -31,21 +31,22 @@ def dw(s):
         zip_ref.extractall(cd)   
     os.remove(fp)
 
+
 def dwt():
-    os.system("yes | pkg remove termux-adb; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-adb $PREFIX/bin/adb; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot")
-    np = "/data/data/com.termux/files/usr/bin/unlock"
-    shutil.copy(__file__, np)
-    os.chmod(np, 0o755)
+    os.system("yes | pkg uninstall termux-adb; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/tfastboot")
     print(notice)
     print("\nSetup completed successfully!\nTo use un-lock, run the command: \033[92munlock\033[0m\n")
-    os.remove(__file__)
     exit()
 
 s = platform.system()
 if s == "Linux" and os.path.exists("/data/data/com.termux"):
-    if not os.path.exists(os.path.join(os.environ.get("PREFIX", ""), "bin", "fastboot")):
+    try:
+        result = os.popen("tfastboot --version").read()
+        if "fastboot version" not in result:
+            dwt()
+    except (FileNotFoundError, Exception):
         dwt()
-    cmd = "fastboot"
+    cmd = "tfastboot"
     datafile = "/sdcard/Download/data.json"
     browserp = "t"
 else:
