@@ -31,7 +31,6 @@ def dw(s):
         zip_ref.extractall(cd)   
     os.remove(fp)
 
-
 def dwt():
     os.system("yes | pkg uninstall termux-adb; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/tfastboot")
     print(notice)
@@ -99,12 +98,15 @@ def CheckB(cmd):
     print("\nCheck if the device is connected via OTG in bootloader mode...\n")
     while True:
         try:
-            result = subprocess.run([cmd, "getvar", "all"], capture_output=True, text=True, timeout=1)
+            result_token = subprocess.run([cmd, "getvar", "token"], capture_output=True, text=True, timeout=1)
+            result_product = subprocess.run([cmd, "getvar", "product"], capture_output=True, text=True, timeout=1)
         except subprocess.TimeoutExpired:
             continue
-        lines = [line.split(":")[1].strip() for line in result.stderr.split('\n') if "token" in line or "product" in line]
-        return {"product": lines[1], "deviceToken": lines[0]} if len(lines) == 2 else None
+        
+        lines_token = [line.split(":")[1].strip() for line in result_token.stderr.split('\n') if "token" in line]
+        lines_product = [line.split(":")[1].strip() for line in result_product.stderr.split('\n') if "product" in line]
 
+        return {"product": lines_product[0], "deviceToken": lines_token[0]} if lines_token and lines_product else None
 
 try:
     with open(datafile, "r+") as file:
@@ -137,7 +139,7 @@ for key in ["user", "pwd", "wb_id", "deviceToken", "product"]:
             if tp is not None:
                 data[key] = tp[key]
             else:
-                print("\nFailed to automatically retrieve deviceToken and product.\n")
+                print(f"\nFailed to retrieve deviceToken and product !\n\nCommand manual to obtain deviceToken and product:\n{cmd} getvar token\n{cmd} getvar product\n\n")
                 data["deviceToken"] = input("Enter deviceToken: ")
                 data["product"] = input("Enter product: ")
         print(f"\n{key} saved.\n")
