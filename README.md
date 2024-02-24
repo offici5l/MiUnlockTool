@@ -31,7 +31,7 @@ It is compatible with all platforms.
 - un-lock is now compatible with all operating systems.
 - Resolved the "securityStatus16" issue and fixed other problems.
 
-#### Custom Modifications (1.5.0):
+#### Version 1.5.0 (Update):
 - Deleted `cmd getvar all` in `def CheckB` and replaced it with `getvar token` and `getvar product`.
 - In case of failure to obtain `deviceToken` and `product`, added a step to enter them manually.
 
