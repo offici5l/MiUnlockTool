@@ -46,6 +46,10 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
             dwt()
     except (FileNotFoundError, Exception):
         dwt()
+    up = os.path.join(os.getenv("PREFIX", ""), "bin", "unlock")
+    if not os.path.exists(up):
+        shutil.copy(__file__, up)
+        os.system(f"chmod +x {up}")
     cmd = "tfastboot"
     datafile = "/sdcard/Download/data.json"
     browserp = "t"
