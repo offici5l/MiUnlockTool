@@ -32,7 +32,7 @@ def dw(s):
     os.remove(fp)
 
 def dwt():
-    os.system("yes | pkg uninstall termux-adb; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/tfastboot")
+    os.system("yes | pkg uninstall termux-adb; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/tfastboot; ln -s $PREFIX/bin/termux-adb $PREFIX/bin/tadb")
     print(notice)
     print("\nSetup completed successfully!\nTo use un-lock, run the command: \033[92munlock\033[0m\n")
     exit()
@@ -40,8 +40,9 @@ def dwt():
 s = platform.system()
 if s == "Linux" and os.path.exists("/data/data/com.termux"):
     try:
-        result = os.popen("tfastboot --version").read()
-        if "fastboot version" not in result:
+        result_tfastboot = os.popen("tfastboot --version").read()
+        result_tadb = os.popen("tadb --version").read()
+        if "fastboot version" not in result_tfastboot or "Android Debug" not in result_tadb:
             dwt()
     except (FileNotFoundError, Exception):
         dwt()
