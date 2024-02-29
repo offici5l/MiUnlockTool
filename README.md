@@ -36,6 +36,14 @@ It is compatible with all platforms.
 - In case of failure to obtain `deviceToken` and `product`, added a step to enter them manually.
 - Other improvements
 
+#### Version 1.5.0 (Update):
+- Simplified cookie extraction for concise code.
+- Streamlined URL determination for better clarity based on the geographical region.
+- Specified "https" directly in the `Url` constructor for secure communication and improved clarity.
+- Deleted requests to "/api/v3/unlock/userinfo" and "/api/v2/unlock/device/clear" to reduce code size as they are not currently important.
+- Adjusted message formatting for enhanced readability.
+- Changed `cmd = "tfastboot"` to `cmd = "fastboot"`. Also, removed `adb`.
+
 </details>
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
