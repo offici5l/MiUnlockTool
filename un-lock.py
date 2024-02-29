@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 version = "1.5.0"
-cv = {"clientVersion": "6.5.224.28"}
 notice = f"\n\033[2m(version: {version}) for Report issues or share feedback at:\ngithub.com/offici5l/un-lock/issues t.me/Offici5l_Group\033[0m\n"
 p_ = "\n\033[32m" + "_"*56 + "\033[0m\n"
 
@@ -32,7 +31,7 @@ def dw(s):
     os.remove(fp)
 
 def dwt():
-    os.system("yes | pkg uninstall termux-adb; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/tfastboot; ln -s $PREFIX/bin/termux-adb $PREFIX/bin/tadb")
+    os.system("yes | pkg uninstall termux-adb; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot")
     print(notice)
     print("\nSetup completed successfully!\nTo use un-lock, run the command: \033[92munlock\033[0m\n")
     exit()
@@ -40,9 +39,8 @@ def dwt():
 s = platform.system()
 if s == "Linux" and os.path.exists("/data/data/com.termux"):
     try:
-        result_tfastboot = os.popen("tfastboot --version").read()
-        result_tadb = os.popen("tadb --version").read()
-        if "fastboot version" not in result_tfastboot or "Android Debug" not in result_tadb:
+        result_fastboot = os.popen("fastboot --version").read()
+        if "fastboot version" not in result_fastboot:
             dwt()
     except (FileNotFoundError, Exception):
         dwt()
@@ -50,7 +48,7 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
     if not os.path.exists(up):
         shutil.copy(__file__, up)
         os.system(f"chmod +x {up}")
-    cmd = "tfastboot"
+    cmd = "fastboot"
     datafile = "/sdcard/Download/data.json"
     browserp = "t"
 else:
@@ -167,16 +165,16 @@ if data["securityStatus"] == 16:
 
 ssecurity, nonce, location = data["ssecurity"], data["nonce"], data["location"]
 
-rc = session.get(location + "&clientSign=" + urllib.parse.quote_plus(b64encode(hashlib.sha1(f"nonce={nonce}".encode("utf-8") + b"&" + ssecurity.encode("utf-8")).digest())), headers=headers)
-
-cookies = {cookie.name: cookie.value for cookie in rc.cookies}
+cookies = {cookie.name: cookie.value for cookie in session.get(location + "&clientSign=" + urllib.parse.quote_plus(b64encode(hashlib.sha1(f"nonce={nonce}".encode("utf-8") + b"&" + ssecurity.encode("utf-8")).digest())), headers=headers).cookies}
 
 if 'serviceToken' not in cookies:
     print("\nFailed to get serviceToken.")
     remove("wb_id")
     sys.exit()
 
-url = {"india": "https://in-unlock.update.intl.miui.com", "global": "https://unlock.update.intl.miui.com", "china": "https://unlock.update.miui.com", "russia": "https://ru-unlock.update.intl.miui.com", "europe": "https://eu-unlock.update.intl.miui.com"}.get(parse_qs(urlparse(rc.url).query).get('p_idc', [None])[0].lower() if parse_qs(urlparse(rc.url).query).get('p_idc', [None])[0].lower() in ['india', 'europe', 'russia', 'china'] else 'global', '')
+g = "unlock.update.intl.miui.com"
+
+url = {'China': g.replace("intl.", ""), 'India': f"in-{g}", 'Russia': f"ru-{g}", 'Europe': f"eu-{g}"}.get(parse_qs(urlparse(location).query).get('p_idc', [''])[0], g)
 
 class RetrieveEncryptData:
     def add_nonce(self):
@@ -187,39 +185,35 @@ class RetrieveEncryptData:
     def __init__(self, path, params):
         self.path = path
         self.params = {k.encode("utf-8"): v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in params.items()}
-    def get_params(self, sep):
+    def getp(self, sep):
         return b'POST'+sep+self.path.encode("utf-8")+sep+b"&".join([k+b"="+v for k,v in self.params.items()])
-    def add_sign(self):
-        self.params[b"sign"] = binascii.hexlify(hmac.digest(b'2tBeoEyJTunmWUGq7bQH2Abn0k2NhhurOaqBfyxCuLVgn4AVj7swcawe53uDUno', self.get_params(b"\n"), "sha1"))
-    def encrypt_params(self):
+    def run(self):
+        self.params[b"sign"] = binascii.hexlify(hmac.digest(b'2tBeoEyJTunmWUGq7bQH2Abn0k2NhhurOaqBfyxCuLVgn4AVj7swcawe53uDUno', self.getp(b"\n"), "sha1"))
         for k, v in self.params.items():
             self.params[k] = b64encode(AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").encrypt(v + (16 - len(v) % 16) * bytes([16 - len(v) % 16])))
-    def add_signature(self):
-        self.params[b"signature"] = b64encode(hashlib.sha1(self.get_params(b"&")+b"&"+ssecurity.encode("utf-8")).digest())
-    def run(self):
-        self.add_sign()
-        self.encrypt_params()
-        self.add_signature()
-        return json.loads(b64decode((lambda s: s[:-s[-1]])(AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").decrypt(b64decode(session.post(Url(host=url, path=self.path).url, data=self.params, headers=headers, cookies=cookies).text)))))
-
-path_data = {"/api/v3/unlock/userinfo": {"data": cv}, "/api/v2/unlock/device/clear": {"data": {**cv, "product": product}}, "/api/v3/ahaUnlock": {"data": {**cv, "deviceInfo": {"product": product}, "deviceToken": deviceToken}}}
+        self.params[b"signature"] = b64encode(hashlib.sha1(self.getp(b"&")+b"&"+ssecurity.encode("utf-8")).digest())
+        return json.loads(b64decode((lambda s: s[:-s[-1]])(AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").decrypt(b64decode(session.post(Url(scheme="https", host=url, path=self.path).url, data=self.params, headers=headers, cookies=cookies).text)))))
 
 print(p_)
-for path, data in path_data.items():
-    r = RetrieveEncryptData(path, data).add_nonce().run()
+
+r = RetrieveEncryptData("/api/v3/ahaUnlock", {"data": {"clientVersion": "6.5.224.28", "deviceInfo": {"product": product}, "deviceToken": deviceToken}}).add_nonce().run()
+
+if "encryptData" in r:
+    ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
+    with open("encryptData", "wb") as edfile:
+        edfile.write(ed.getvalue())
+    CheckB(cmd)
+    os.system(f"{cmd} stage encryptData")
+    os.system(f"{cmd} oem unlock")
+elif "code" in r and r["code"] == 10000:
+    remove("product", "deviceToken")
+    sys.exit()
+elif "code" in r and r["code"] in {20036, 20041, 20031, 10013}:
+    print(f"\n{r.get('descEN', '')}")
+else:
     for key, value in r.items():
         print(f"\n{key}: {value}")
-    print(p_)
-    if "encryptData" in r:
-        ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
-        with open("encryptData", "wb") as edfile:
-            edfile.write(ed.getvalue())
-        CheckB(cmd)
-        os.system(f"{cmd} stage encryptData")
-        os.system(f"{cmd} oem unlock")
-    if "code" in r and r["code"] == 10000:
-        remove("product", "deviceToken")
-        sys.exit()
 
+print(p_)
 print(notice)
 browserp == "wlm" and input("\nPress Enter to exit ...")
