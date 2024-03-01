@@ -198,11 +198,13 @@ print(p_)
 
 r = RetrieveEncryptData("/api/v3/ahaUnlock", {"data": {"clientVersion": "6.5.224.28", "deviceInfo": {"product": product}, "deviceToken": deviceToken}}).add_nonce().run()
 
-if "encryptData" in r:
+if "code" in r and r["code"] == 0:
+    print(f"\n{r.get('description', '')}")
     ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
     with open("encryptData", "wb") as edfile:
         edfile.write(ed.getvalue())
     CheckB(cmd)
+    input("\nPress Enter to unlock the bootloader\n")
     os.system(f"{cmd} stage encryptData")
     os.system(f"{cmd} oem unlock")
 elif "code" in r and r["code"] == 10000:
