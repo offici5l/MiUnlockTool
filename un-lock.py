@@ -211,7 +211,7 @@ elif "code" in r and r["code"] == 10000:
     remove("product", "deviceToken")
     sys.exit()
 elif "code" in r and r["code"] in {20036, 20041, 20031, 10013, 20033}:
-    print(f"\n{r.['descEN']}")
+    print(f"\n{r['descEN']}")
 else:
     for key, value in r.items():
         print(f"\n{key}: {value}")
