@@ -94,18 +94,13 @@ def remove(*keys):
     subprocess.run(["python", __file__, "1"])
 
 def CheckB(cmd):
-    print("\nCheck if the device is connected via OTG in bootloader mode...\n")
+    print("\nCheck if device is connected in bootloader mode...\n")
     while True:
         try:
-            result_token = subprocess.run([cmd, "getvar", "token"], capture_output=True, text=True, timeout=1)
-            result_product = subprocess.run([cmd, "getvar", "product"], capture_output=True, text=True, timeout=1)
+            outputs = {v: next(line.split(":")[1].strip() for line in subprocess.run([cmd, "getvar", v], capture_output=True, text=True, timeout=1).stderr.split('\n') if v in line) for v in ["token", "product"]}
         except subprocess.TimeoutExpired:
             continue
-        
-        lines_token = [line.split(":")[1].strip() for line in result_token.stderr.split('\n') if "token" in line]
-        lines_product = [line.split(":")[1].strip() for line in result_product.stderr.split('\n') if "product" in line]
-
-        return {"product": lines_product[0], "deviceToken": lines_token[0]} if lines_token and lines_product else None
+        return outputs
 
 try:
     with open(datafile, "r+") as file:
@@ -114,7 +109,7 @@ except FileNotFoundError:
     data = {}
     with open(datafile, 'w') as file:
         json.dump(data, file)
-for key in ["user", "pwd", "wb_id", "deviceToken", "product"]:
+for key in ["user", "pwd", "wb_id", "token", "product"]:
     if key not in data:
         if key == "user":
             data[key] = input("\n(Xiaomi Account) Id or Email or Phone: ")
@@ -133,18 +128,18 @@ for key in ["user", "pwd", "wb_id", "deviceToken", "product"]:
                 subprocess.run(["python", __file__, "1"])
                 sys.exit()
             data[key] = wb_id
-        elif key in ["deviceToken", "product"]:
+        elif key in ["token", "product"]:
             tp = CheckB(cmd)
             if tp is not None:
                 data[key] = tp[key]
             else:
                 print(f"\nFailed to retrieve deviceToken and product !\n\nCommand manual to obtain deviceToken and product:\n{cmd} getvar token\n{cmd} getvar product\n\n")
-                data["deviceToken"] = input("Enter deviceToken: ")
+                data["token"] = input("Enter deviceToken: ")
                 data["product"] = input("Enter product: ")
         print(f"\n{key} saved.\n")
         with open(datafile, "r+") as file:
             json.dump(data, file, indent=2)
-user, pwd, wb_id, product, deviceToken = (data.get(key, "") for key in ["user", "pwd", "wb_id", "product", "deviceToken"])
+user, pwd, wb_id, product, token = (data.get(key, "") for key in ["user", "pwd", "wb_id", "product", "token"])
 
 session = requests.Session()
 headers = {"User-Agent": "XiaomiPCSuite"}
@@ -196,15 +191,14 @@ class RetrieveEncryptData:
 
 print(p_)
 
-r = RetrieveEncryptData("/api/v3/ahaUnlock", {"data": {"clientVersion": "6.5.224.28", "deviceInfo": {"product": product}, "deviceToken": deviceToken}}).add_nonce().run()
+r = RetrieveEncryptData("/api/v3/ahaUnlock", {"data": {"clientVersion": "6.5.224.28", "deviceInfo": {"product": product}, "deviceToken": token}}).add_nonce().run()
 
 if "code" in r and r["code"] == 0:
-    print(f"\n{r.get('description', '')}")
     ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
     with open("encryptData", "wb") as edfile:
         edfile.write(ed.getvalue())
     CheckB(cmd)
-    input("\nPress Enter to unlock the bootloader\n")
+    input("\nPress Enter to unlock bootloader\n")
     os.system(f"{cmd} stage encryptData")
     os.system(f"{cmd} oem unlock")
 elif "code" in r and r["code"] == 10000:
