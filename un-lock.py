@@ -31,7 +31,7 @@ def dw(s):
     os.remove(fp)
 
 def dwt():
-    os.system("yes | pkg uninstall termux-adb; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot")
+    os.system("yes | pkg uninstall termux-adb 2>/dev/null; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot")
     print(notice)
     print("\nSetup completed successfully!\nTo use un-lock, run the command: \033[92munlock\033[0m\n")
     exit()
