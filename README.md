@@ -67,8 +67,5 @@ termux-setup-storage
 yes | pkg install python3
 ```
 ```bash
-curl -o $PREFIX/bin/unlock https://raw.githubusercontent.com/offici5l/un-lock/master/un-lock.py && chmod +x $PREFIX/bin/unlock
-```
-```bash
-unlock
+curl -O https://raw.githubusercontent.com/offici5l/un-lock/master/un-lock.py && python un-lock.py
 ```
