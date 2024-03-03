@@ -36,7 +36,7 @@ def dwt():
     up = os.path.join(os.getenv("PREFIX", ""), "bin", "unlock")
     shutil.copy(__file__, up)
     os.system(f"chmod +x {up}")
-    print("\nSetup completed successfully!\nTo use un-lock, run the command: \033[92munlock\033[0m\n")
+    print("\nSetup completed successfully!\nTo use un-lock, run command: \033[92munlock\033[0m\n")
     exit()
 
 s = platform.system()
@@ -51,6 +51,8 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
     if not os.path.exists(up):
         shutil.copy(__file__, up)
         os.system(f"chmod +x {up}")
+        print("\nto use un-lock run command: \033[92munlock\033[0m\n")
+        exit()
     cmd = "fastboot"
     datafile = "/sdcard/Download/data.json"
     browserp = "t"
