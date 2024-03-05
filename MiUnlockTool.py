@@ -138,7 +138,7 @@ for key in ["user", "pwd", "wb_id", "token", "product"]:
             if tp is not None:
                 data[key] = tp[key]
             else:
-                print(f"\nFailed to retrieve deviceToken and product !\n\nCommand manual to obtain deviceToken and product:\n{cmd} getvar token\n{cmd} getvar product\n\n")
+                print("\n\033[91mFailed to retrieve deviceToken and product !\033[0m\n\nCommand manual to obtain deviceToken and product:\n{cmd} getvar token\n{cmd} getvar product\nor\n{cmd} getvar all\n")
                 data["token"] = input("Enter deviceToken: ")
                 data["product"] = input("Enter product: ")
         print(f"\n{key} saved.\n")
