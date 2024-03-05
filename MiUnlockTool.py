@@ -141,6 +141,8 @@ for key in ["user", "pwd", "wb_id", "token", "product"]:
             json.dump(data, file, indent=2)
 user, pwd, wb_id, product, token = (data.get(key, "") for key in ["user", "pwd", "wb_id", "product", "token"])
 
+print(f"\nDeviceInfo:\nproduct: \033[92m{product}\033[0m\ndeviceToken: \033[92m{token}\033[0m\n")
+
 session = requests.Session()
 headers = {"User-Agent": "XiaomiPCSuite"}
 
@@ -171,7 +173,7 @@ region = parse_qs(urlparse(location).query).get('p_idc', [''])[0].lower()
 g = "unlock.update.intl.miui.com"
 url = {'china': g.replace("intl.", ""), 'india': f"in-{g}", 'russia': f"ru-{g}", 'europe': f"eu-{g}"}.get(region, g)
 
-print(f"\nproduct: \033[92m{product}\033[0m\n\ndeviceToken: \033[92m{token}\033[0m\n\nAccount Region: \033[92m{region}\033[0m\n")
+print(f"AccountInfo:\nAccount Id: \033[92m{data['userId']}\033[0m\nAccount Region: \033[92m{region}\033[0m\n")
 
 class RetrieveEncryptData:
     def add_nonce(self):
