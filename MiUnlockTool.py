@@ -97,10 +97,15 @@ def CheckB(cmd):
     print("\nCheck if device is connected in bootloader mode...\n")
     while True:
         try:
-            outputs = {v: next(line.split(":")[1].strip() for line in subprocess.run([cmd, "getvar", v], capture_output=True, text=True, timeout=1).stderr.split('\n') if v in line) for v in ["token", "product"]}
+            result_token = subprocess.run([cmd, "getvar", "token"], capture_output=True, text=True, timeout=1)
+            result_product = subprocess.run([cmd, "getvar", "product"], capture_output=True, text=True, timeout=1)
         except subprocess.TimeoutExpired:
             continue
-        return outputs
+        
+        lines_token = [line.split("token:")[1].strip() for line in result_token.stderr.split('\n') if "token:" in line]
+        lines_product = [line.split("product:")[1].strip() for line in result_product.stderr.split('\n') if "product:" in line]
+
+        return {"product": lines_product[0], "token": lines_token[0]} if lines_token and lines_product else None
 
 try:
     with open(datafile, "r+") as file:
