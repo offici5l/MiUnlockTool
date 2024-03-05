@@ -2,7 +2,7 @@
 
 # Unlock Bootloader For Xiaomi
 
-un-lock developed to retrieve encryptData(token) for Xiaomi devices to unlock bootloader.
+MiUnlockTool developed to retrieve encryptData(token) for Xiaomi devices to unlock bootloader.
 
 It is compatible with all platforms.
 
@@ -44,6 +44,8 @@ It is compatible with all platforms.
 - Adjusted message formatting for enhanced readability.
 - Changed `cmd = "tfastboot"` to `cmd = "fastboot"`. Also, removed `adb`.
 
+### Tool name update: "un-lock" is now "MiUnlockTool".
+
 </details>
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
@@ -53,7 +55,7 @@ It is compatible with all platforms.
 ### For Mac, Windows, Linux:
 
 1. Install Python3.
-2. Download [un-lock](https://codeload.github.com/offici5l/un-lock/zip/refs/heads/main) and run it.
+2. Download [un-lock](https://codeload.github.com/offici5l/MiUnlockTool/zip/refs/heads/main) and run it.
 
 ### For Android:
 
@@ -67,5 +69,5 @@ termux-setup-storage
 yes | pkg install python3
 ```
 ```bash
-curl -O https://raw.githubusercontent.com/offici5l/un-lock/master/un-lock.py && python un-lock.py
+curl -O https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockTool.py && python MiUnlockTool.py
 ```
