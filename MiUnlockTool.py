@@ -167,9 +167,11 @@ if 'serviceToken' not in cookies:
     remove("wb_id")
     sys.exit()
 
+region = parse_qs(urlparse(location).query).get('p_idc', [''])[0].lower()
 g = "unlock.update.intl.miui.com"
+url = {'china': g.replace("intl.", ""), 'india': f"in-{g}", 'russia': f"ru-{g}", 'europe': f"eu-{g}"}.get(region, g)
 
-url = {'China': g.replace("intl.", ""), 'India': f"in-{g}", 'Russia': f"ru-{g}", 'Europe': f"eu-{g}"}.get(parse_qs(urlparse(location).query).get('p_idc', [''])[0], g)
+print(f"\nproduct: \033[92m{product}\033[0m\n\ndeviceToken: \033[92m{token}\033[0m\n\nAccount Region: \033[92m{region}\033[0m\n")
 
 class RetrieveEncryptData:
     def add_nonce(self):
