@@ -128,7 +128,7 @@ for key in ["user", "pwd", "wb_id", "token", "product"]:
                 subprocess.run(["python", __file__, "1"])
                 sys.exit()
             data[key] = wb_id
-        elif key in ["token", "product"]:
+        elif key == "token" or key == "product":
             tp = CheckB(cmd)
             if tp is not None:
                 data[key] = tp[key]
