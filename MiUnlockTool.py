@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 version = "1.5.0"
-notice = f"\n\033[2m(version: {version}) for Report issues or share feedback at:\ngithub.com/offici5l/un-lock/issues t.me/Offici5l_Group\033[0m\n"
+notice = f"\n\033[2m(version: {version}) for Report issues or share feedback at:\ngithub.com/offici5l/MiUnlockTool/issues t.me/Offici5l_Group\033[0m\n"
 p_ = "\n\033[32m" + "_"*56 + "\033[0m\n"
 
 import os
@@ -29,15 +29,11 @@ def dw(s):
     with zipfile.ZipFile(fp, 'r') as zip_ref:
         zip_ref.extractall(cd)   
     os.remove(fp)
+    print(notice)
 
 def dwt():
     os.system("yes | pkg uninstall termux-adb 2>/dev/null; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot")
     print(notice)
-    up = os.path.join(os.getenv("PREFIX", ""), "bin", "unlock")
-    shutil.copy(__file__, up)
-    os.system(f"chmod +x {up}")
-    print("\nSetup completed successfully!\nTo use un-lock, run command: \033[92munlock\033[0m\n")
-    exit()
 
 s = platform.system()
 if s == "Linux" and os.path.exists("/data/data/com.termux"):
@@ -47,12 +43,11 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
             dwt()
     except (FileNotFoundError, Exception):
         dwt()
-    up = os.path.join(os.getenv("PREFIX", ""), "bin", "unlock")
+    up = os.path.join(os.getenv("PREFIX", ""), "bin", "miunlock")
     if not os.path.exists(up):
         shutil.copy(__file__, up)
         os.system(f"chmod +x {up}")
-        print("\nto use un-lock run command: \033[92munlock\033[0m\n")
-        exit()
+        print("\n(For future usage, just run command: \033[92mmiunlock\033[0m)\n")
     cmd = "fastboot"
     datafile = "/sdcard/Download/data.json"
     browserp = "t"
