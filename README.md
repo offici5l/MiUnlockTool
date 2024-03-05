@@ -55,7 +55,7 @@ It is compatible with all platforms.
 ### For Mac, Windows, Linux:
 
 1. Install Python3.
-2. Download [un-lock](https://codeload.github.com/offici5l/MiUnlockTool/zip/refs/heads/main) and run it.
+2. Download [MiUnlockTool](https://codeload.github.com/offici5l/MiUnlockTool/zip/refs/heads/main) and run it.
 
 ### For Android:
 
