@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 version = "1.5.0"
-notice = f"\n\033[2m(version: {version}) for Report issues or share feedback at:\ngithub.com/offici5l/MiUnlockTool/issues t.me/Offici5l_Group\033[0m\n"
+notice = f"\033[2m(version: {version}) For issues or feedback:\n- GitHub: github.com/offici5l/MiUnlockTool/issues\n- Telegram: t.me/Offici5l_Group\033[0m\n"
 p_ = "\n\033[32m" + "_"*56 + "\033[0m\n"
 
 import os
@@ -178,7 +178,7 @@ region = parse_qs(urlparse(location).query).get('p_idc', [''])[0].lower()
 g = "unlock.update.intl.miui.com"
 url = {'china': g.replace("intl.", ""), 'india': f"in-{g}", 'russia': f"ru-{g}", 'europe': f"eu-{g}"}.get(region, g)
 
-print(f"AccountInfo:\nid: \033[92m{data['userId']}\033[0m\nregion: \033[92m{region}\033[0m\n")
+print(f"AccountInfo:\nid: \033[92m{data['userId']}\033[0m\nregion: \033[92m{region}\033[0m")
 
 class RetrieveEncryptData:
     def add_nonce(self):
