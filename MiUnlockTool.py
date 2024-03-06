@@ -93,19 +93,15 @@ def remove(*keys):
         file.truncate()
     subprocess.run(["python", __file__, "1"])
 
-def CheckB(cmd):
-    print("\nCheck if device is connected in bootloader mode...\n")
+def CheckB(cmd, var_name, *fastboot_args):
+    print(f"\nCheck if the device is connected in bootloader mode...\n")
     while True:
         try:
-            result_token = subprocess.run([cmd, "getvar", "token"], capture_output=True, text=True, timeout=1)
-            result_product = subprocess.run([cmd, "getvar", "product"], capture_output=True, text=True, timeout=1)
+            result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=1)
         except subprocess.TimeoutExpired:
-            continue
-        
-        lines_token = [line.split("token:")[1].strip() for line in result_token.stderr.split('\n') if "token:" in line]
-        lines_product = [line.split("product:")[1].strip() for line in result_product.stderr.split('\n') if "product:" in line]
-
-        return {"product": lines_product[0], "token": lines_token[0]} if lines_token and lines_product else None
+            continue     
+        lines = [line.split(f"{var_name}:")[1].strip() for line in result.stderr.split('\n') if f"{var_name}:" in line]
+        return lines[0] if lines else None
 
 try:
     with open(datafile, "r+") as file:
@@ -114,36 +110,43 @@ except FileNotFoundError:
     data = {}
     with open(datafile, 'w') as file:
         json.dump(data, file)
-for key in ["user", "pwd", "wb_id", "token", "product"]:
-    if key not in data:
-        if key == "user":
-            data[key] = input("\n(Xiaomi Account) Id or Email or Phone: ")
-        elif key == "pwd":
-            data[key] = hashlib.md5(input("Enter password: ").encode()).hexdigest().upper()
-        elif key == "wb_id":
-            input("\nPress Enter to open confirmation page, copy link after seeing {\"R\":\"\",\"S\":\"OK\"}, and return here")
-            conl = 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true&passive=false&hidden=false'
-            if browserp == "t":
-                os.system(f"termux-open-url '{conl}'")
-            elif browserp == "wlm":
-                webbrowser.open(conl)
-            wb_id = parse_qs(urlparse(input("\nEnter Link: ")).query).get('d', [None])[0]
-            if wb_id is None:
-                print("\n\nInvalid link\n")
-                subprocess.run(["python", __file__, "1"])
-                sys.exit()
-            data[key] = wb_id
-        elif key == "token" or key == "product":
-            tp = CheckB(cmd)
-            if tp is not None:
-                data[key] = tp[key]
-            else:
-                print("\n\033[91mFailed to retrieve deviceToken and product !\033[0m\n\nCommand manual to obtain deviceToken and product:\n{cmd} getvar token\n{cmd} getvar product\nor\n{cmd} getvar all\n")
-                data["token"] = input("Enter deviceToken: ")
-                data["product"] = input("Enter product: ")
-        print(f"\n{key} saved.\n")
-        with open(datafile, "r+") as file:
-            json.dump(data, file, indent=2)
+
+if "user" not in data:
+    data["user"] = input("\n(Xiaomi Account) Id or Email or Phone: ")
+
+if "pwd" not in data:
+    data["pwd"] = input("Enter password: ")
+
+if "wb_id" not in data:
+    input("\nPress Enter to open confirmation page, copy link after seeing {\"R\":\"\",\"S\":\"OK\"}, and return here")
+    conl = 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true&passive=false&hidden=false'
+    if browserp == "t":
+        os.system(f"termux-open-url '{conl}'")
+    elif browserp == "wlm":
+        webbrowser.open(conl)
+    wb_id = parse_qs(urlparse(input("\nEnter Link: ")).query).get('d', [None])[0]
+    if wb_id is None:
+        print("\n\nInvalid link\n")
+        subprocess.run(["python", __file__, "1"])
+        sys.exit()
+    data["wb_id"] = wb_id
+
+if "product" not in data:
+    p = CheckB(cmd, "product", "getvar", "product")
+    if not p:
+        p = input("\nFailed to obtain the deviceProduct. Please enter it manually: ")
+    data["product"] = p
+
+if "token" not in data:
+    t = CheckB(cmd, "token", "oem", "get_token")
+    if not t:
+        t = CheckB(cmd, "token", "getvar", "token")
+        if not t:
+            t = input("\nFailed to obtain the deviceToken !\n Please enter it manually: ")
+    data["token"] = t
+
+with open(datafile, "r+") as file:
+    json.dump(data, file, indent=2)
 user, pwd, wb_id, product, token = (data.get(key, "") for key in ["user", "pwd", "wb_id", "product", "token"])
 
 print(f"\nDeviceInfo:\nproduct: \033[92m{product}\033[0m\ntoken: \033[92m{token}\033[0m\n")
@@ -152,7 +155,7 @@ session = requests.Session()
 headers = {"User-Agent": "XiaomiPCSuite"}
 
 def postv(sid):
-    return json.loads(session.post(f"https://account.xiaomi.com/pass/serviceLoginAuth2?sid={sid}&_json=true&passive=true&hidden=true", data={"user": user, "hash": pwd}, headers=headers, cookies={"deviceId": str(wb_id)}).text.replace("&&&START&&&", ""))
+    return json.loads(session.post(f"https://account.xiaomi.com/pass/serviceLoginAuth2?sid={sid}&_json=true&passive=true&hidden=true", data={"user": user, "hash": hashlib.md5(pwd.encode()).hexdigest().upper()}, headers=headers, cookies={"deviceId": str(wb_id)}).text.replace("&&&START&&&", ""))
 
 data = postv("unlockApi")
 
