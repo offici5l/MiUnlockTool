@@ -48,6 +48,10 @@ It is compatible with all platforms.
 
 #### Version 1.5.0 (Update):
 - Minor bug fix
+- Add command (cmd, "oem", "get_token")
+- In the event of failure to obtain the device token, the user will be asked to enter it manually
+- Other improvements
+
 </details>
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
