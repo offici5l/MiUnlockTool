@@ -52,6 +52,10 @@ It is compatible with all platforms.
 - In the event of failure to obtain the device token, the user will be asked to enter it manually
 - Other improvements
 
+#### Version 1.5.0 (Update):
+- When 2 or more tokens are obtained via the festboot oem get_token ..
+tool will now merge them automatically
+
 </details>
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
