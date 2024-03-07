@@ -101,6 +101,9 @@ def CheckB(cmd, var_name, *fastboot_args):
         except subprocess.TimeoutExpired:
             continue     
         lines = [line.split(f"{var_name}:")[1].strip() for line in result.stderr.split('\n') if f"{var_name}:" in line]
+        if len(lines) > 1:
+            cvalue = "".join(lines)
+            return cvalue       
         return lines[0] if lines else None
 
 try:
