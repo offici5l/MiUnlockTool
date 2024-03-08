@@ -2,13 +2,13 @@
 
 # Unlock Bootloader For Xiaomi
 
-MiUnlockTool developed to retrieve encryptData(token) for Xiaomi devices to unlock bootloader.
-
-It is compatible with all platforms.
+### It is compatible with all platforms.
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 
 </div>
+
+MiUnlockTool developed to retrieve encryptData(token) for Xiaomi devices to unlock bootloader.
 
 ![Version](https://img.shields.io/badge/version-1.5.0-blue)
 
