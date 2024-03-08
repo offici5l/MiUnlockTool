@@ -1,7 +1,6 @@
 <div align="center">
 
-# Unlock Bootloader
-## (Xiaomi)
+# Unlock Bootloader(Xiaomi)
 
 It is compatible with all platforms.
 
