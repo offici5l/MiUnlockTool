@@ -2,7 +2,7 @@
 
 # Unlock Bootloader
 
-(Xiaomi)
+### (Xiaomi)
 
 ### It is compatible with all platforms.
 
