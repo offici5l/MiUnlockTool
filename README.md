@@ -1,10 +1,9 @@
 <div align="center">
 
 # Unlock Bootloader
-
 ### (Xiaomi)
 
-### It is compatible with all platforms.
+It is compatible with all platforms.
 
 </div>
 
