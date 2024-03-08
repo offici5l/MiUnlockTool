@@ -47,7 +47,8 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
     if not os.path.exists(up):
         shutil.copy(__file__, up)
         os.system(f"chmod +x {up}")
-        print("\n(For future usage, just run command: \033[92mmiunlock\033[0m)\n")
+        print("\n(Now use command: \033[92mmiunlock\033[0m)\n")
+        exit()
     cmd = "fastboot"
     datafile = "/sdcard/Download/data.json"
     browserp = "t"
