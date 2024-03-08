@@ -1,10 +1,8 @@
 <div align="center">
 
-# Unlock Bootloader For Xiaomi
+### Unlock Bootloader For Xiaomi
 
 ### It is compatible with all platforms.
-
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 
 </div>
 
@@ -81,3 +79,11 @@ yes | pkg install python3
 ```bash
 curl -O https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockTool.py && python MiUnlockTool.py
 ```
+
+
+
+<div align="center">
+
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
+
+</div>
