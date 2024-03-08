@@ -66,8 +66,10 @@ tool will now merge them automatically
 
 ### For Android:
 
-1. Install Termux for [ARM64](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_arm64-v8a.apk), [armeabi](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_armeabi-v7a.apk), or [Universal](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_universal.apk).
-2. Install [Termux API](https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk).
+1. Install [Termux](https://github.com/termux/termux-app/releases/tag/v0.118.0)
+
+2. Install [Termux API](https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk)
+
 3. From Termux command line:
 ```bash
 termux-setup-storage
@@ -78,8 +80,6 @@ yes | pkg install python3
 ```bash
 curl -O https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockTool.py && python MiUnlockTool.py
 ```
-
-
 
 <div align="center">
 
