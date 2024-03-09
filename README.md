@@ -1,7 +1,7 @@
 <div align="center">
 
 # MiUnlockTool
-developed to retrieve encryptData(token) for Xiaomi devices to unlock bootloader
+developed to retrieve encryptData(token) for Xiaomi devices to unlock bootloader.
 It is compatible with all platforms.
 
 </div>
