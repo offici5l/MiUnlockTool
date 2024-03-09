@@ -52,6 +52,10 @@ It is compatible with all platforms.
 - When 2 or more tokens are obtained via the festboot oem get_token ..
 tool will now merge them automatically
 
+#### Version 1.5.0 (Update):
+- Updated client version to 7.6.727.43.
+- Improved unlocking process.
+
 </details>
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
