@@ -213,7 +213,7 @@ if "code" in r and r["code"] == 0:
     ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
     with open("encryptData", "wb") as edfile:
         edfile.write(ed.getvalue())
-    CheckB(cmd)
+    CheckB(cmd, "product", "getvar", "product")
     input("\nPress Enter to unlock bootloader\n")
     os.system(f"{cmd} stage encryptData")
     os.system(f"{cmd} oem unlock")
