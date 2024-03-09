@@ -207,7 +207,7 @@ class RetrieveEncryptData:
 
 print(p_)
 
-r = RetrieveEncryptData("/api/v3/ahaUnlock", {"data": {"clientVersion": "6.5.224.28", "deviceInfo": {"product": product}, "deviceToken": token}}).add_nonce().run()
+r = RetrieveEncryptData("/api/v3/ahaUnlock", {"appId":"1", "data":{"clientId":"2", "clientVersion":"7.6.727.43", "language":"en", "operate":"unlock", "pcId":hashlib.md5(wb_id.encode("utf-8")).hexdigest(), "product":product, "region":"","deviceInfo":{"boardVersion":"","product":product, "socId":"","deviceName":""}, "deviceToken":token}}).add_nonce().run()
 
 if "code" in r and r["code"] == 0:
     ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
