@@ -7,7 +7,6 @@ It is compatible with all platforms.
 </div>
 
 [![Version 1.5.0](https://img.shields.io/badge/Version-1.5.0-brightgreen)](#)
-
 <details>
   <summary>show Version History</summary>
 
