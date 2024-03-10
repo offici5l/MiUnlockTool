@@ -84,7 +84,7 @@ while os.path.isfile(datafile):
         os.remove(datafile)
 
 def remove(*keys):
-    print(f"\ninvalid {keys[0] if len(keys) == 1 else ' or '.join(keys)}\n")
+    print(f"\n\033[91minvalid {keys[0] if len(keys) == 1 else ' or '.join(keys)}\033[0m\n")
     with open(datafile, "r+") as file:
         data = json.load(file)
         for key in keys:
@@ -173,7 +173,6 @@ def postv(sid):
 data = postv("unlockApi")
 
 if data["code"] == 70016:
-    print("\n\nincorrect Id/Email/Phone or password\n\n")
     remove("user", "pwd")
     sys.exit()
 
