@@ -55,6 +55,9 @@ tool will now merge them automatically
 - Updated client version to 7.6.727.43.
 - Improved unlocking process.
 
+#### Version 1.5.0 (Update):
+- Save keys:values ​​directly
+
 </details>
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
