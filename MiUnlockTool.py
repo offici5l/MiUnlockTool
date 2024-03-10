@@ -115,11 +115,19 @@ except FileNotFoundError:
     with open(datafile, 'w') as file:
         json.dump(data, file)
 
+def save(data, path, name=None):
+    with open(path, "w") as file:
+        json.dump(data, file, indent=2)
+    if name:
+        print(f"\n\033[92m{name} saved successfully\033[0m\n")
+
 if "user" not in data:
     data["user"] = input("\n(Xiaomi Account) Id or Email or Phone: ")
+    save(data, datafile, name="user")
 
 if "pwd" not in data:
     data["pwd"] = input("Enter password: ")
+    save(data, datafile, name="pwd")
 
 if "wb_id" not in data:
     input("\nPress Enter to open confirmation page, copy link after seeing {\"R\":\"\",\"S\":\"OK\"}, and return here")
@@ -134,12 +142,14 @@ if "wb_id" not in data:
         subprocess.run(["python", __file__, "1"])
         sys.exit()
     data["wb_id"] = wb_id
+    save(data, datafile, name="wb_id")
 
 if "product" not in data:
     p = CheckB(cmd, "product", "getvar", "product")
     if not p:
         p = input("\nFailed to obtain the deviceProduct. Please enter it manually: ")
     data["product"] = p
+    save(data, datafile, name="product")
 
 if "token" not in data:
     t = CheckB(cmd, "token", "oem", "get_token")
@@ -148,9 +158,8 @@ if "token" not in data:
         if not t:
             t = input("\nFailed to obtain the deviceToken !\n Please enter it manually: ")
     data["token"] = t
+    save(data, datafile, name="token")
 
-with open(datafile, "r+") as file:
-    json.dump(data, file, indent=2)
 user, pwd, wb_id, product, token = (data.get(key, "") for key in ["user", "pwd", "wb_id", "product", "token"])
 
 print(f"\nDeviceInfo:\nproduct: \033[92m{product}\033[0m\ntoken: \033[92m{token}\033[0m\n")
@@ -220,7 +229,9 @@ if "code" in r and r["code"] == 0:
 elif "code" in r and r["code"] == 10000:
     remove("product", "token")
     sys.exit()
-elif "code" in r and r["code"] in {20036, 20041, 20031, 10013, 20033}:
+elif "code" in r and r["code"] == 20036:
+    print(f"\n\033[92m{r['descEN']}\033[0m")
+elif "code" in r and r["code"] in {20041, 20031, 10013, 20033}:
     print(f"\n{r['descEN']}")
 else:
     for key, value in r.items():
