@@ -71,7 +71,7 @@ tool will now merge them automatically
 
 ### For Android:
 
-1. Install [Termux](https://github.com/termux/termux-app/releases/tag/v0.118.0)
+1. Install [Termux](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_universal.apk)
 
 2. Install [Termux API](https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk)
 
