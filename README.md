@@ -5,15 +5,14 @@ developed to retrieve encryptData(token) for Xiaomi devices to unlock bootloader
 It is compatible with all platforms.
 
 for bypass use: [MiBypassTool](https://github.com/offici5l/MiBypassTool)
-</div>
-
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
+
+</div>
 
 [![Version 1.5.0](https://img.shields.io/badge/Version-1.5.0-brightgreen)](#)
 
 [Show Version History](https://github.com/offici5l/MiUnlockTool/blob/main/Show-Version-History.md)
-
 
 # Installation:
 
