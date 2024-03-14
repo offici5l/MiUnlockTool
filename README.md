@@ -9,7 +9,7 @@ for bypass use: [MiBypassTool](https://github.com/offici5l/MiBypassTool)
 
 [![Version 1.5.0](https://img.shields.io/badge/Version-1.5.0-brightgreen)](#)
 <details>
-  <summary>show Version History</summary>
+  <summary>Show Version History</summary>
 
 ### Version 1.4.8:
 
