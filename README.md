@@ -32,10 +32,7 @@ for bypass use: [MiBypassTool](https://github.com/offici5l/MiBypassTool)
 termux-setup-storage
 ```
 ```bash
-yes | pkg install python3
-```
-```bash
-curl -O https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockTool.py && python MiUnlockTool.py
+curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed -n '12,15p;42p' | bash; miunlock
 ```
 
 <div align="center">
