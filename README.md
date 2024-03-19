@@ -32,7 +32,7 @@ for bypass use: [MiBypassTool](https://github.com/offici5l/MiBypassTool)
 termux-setup-storage
 ```
 ```bash
-curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed -n '12,15p;42p' | bash; miunlock
+curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed -n '17,20p;47p' | bash; miunlock
 ```
 
 <div align="center">
