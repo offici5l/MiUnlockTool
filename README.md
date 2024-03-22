@@ -1,6 +1,6 @@
 <div align="center">
 
-# MiUnlockTool
+<img src="https://img.shields.io/badge/MiUnlockTool-red" alt="MiUnlockTool" width="200" height="40">
 
 [![Version 1.5.0](https://img.shields.io/badge/Version-1.5.0-brightgreen)](#)
 
