@@ -233,9 +233,11 @@ if "code" in r and r["code"] == 0:
 elif "code" in r and r["code"] == 10000:
     remove("product", "token")
     sys.exit()
+elif "code" in r and r["code"] == 10013:
+    print(f"\n{r['descEN']}\n\nhttps://github.com/offici5l/MiUnlockTool/issues/12")
 elif "code" in r and r["code"] == 20036:
     print(f"\n\033[92m{r['descEN']}\033[0m")
-elif "code" in r and r["code"] in {20041, 20031, 10013, 20033}:
+elif "code" in r and r["code"] in {20041, 20031, 20033}:
     print(f"\n{r['descEN']}")
 else:
     for key, value in r.items():
