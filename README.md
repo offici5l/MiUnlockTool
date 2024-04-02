@@ -31,7 +31,7 @@ for bypass use: [MiBypassTool](https://github.com/offici5l/MiBypassTool)
 termux-setup-storage
 ```
 ```bash
-curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed -n '17,20p;47p' | bash; miunlock
+curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/Android/install | bash
 ```
 
 <div align="center">
