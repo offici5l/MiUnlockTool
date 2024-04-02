@@ -1,31 +1,31 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+if ! command -v python3 &>/dev/null; then
+    printf "\e[1;32mInstalling Python3...\e[0m"
+    yes | pkg install python3
+fi
+
 if ! command -v adb &>/dev/null || ! command -v fastboot &>/dev/null; then
     yes | apt update && yes | apt upgrade
-    echo "Installing ADB and Fastboot..."
+    printf "\e[1;32mInstalling ADB and Fastboot...\e[0m"
     yes | pkg uninstall termux-adb 2>/dev/null
     curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash
     ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
     ln -s $PREFIX/bin/termux-adb $PREFIX/bin/adb
 fi
 
-if ! command -v python3 &>/dev/null; then
-    echo "Installing Python3..."
-    yes | pkg install python3
-fi
-
 if ! python3 -c "import Cryptodome" &>/dev/null; then
-    echo "Installing Cryptodome..."
+    printf "\e[1;32mInstalling Cryptodome...\e[0m\"
     yes | pip install pycryptodomex
 fi
 
 if ! python3 -c "import urllib3" &>/dev/null; then
-    echo "Installing urllib3..."
+    printf "\e[1;32mInstalling urllib3...\e[0m\"
     yes | pip install urllib3
 fi
 
 if ! python3 -c "import requests" &>/dev/null; then
-    echo "Installing requests..."
+    printf "\e[1;32mInstalling requests...\e[0m\"
     yes | pip install requests
 fi
 
