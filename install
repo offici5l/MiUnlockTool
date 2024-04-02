@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 if ! command -v python3 &>/dev/null; then
-    printf "\\n\n\ne[1;32mInstalling Python3...\e[0m\n\n\n"
+    printf "\e[1;32mInstalling Python3...\e[0m\n\n\n"
     yes | pkg install python3
 fi
 
