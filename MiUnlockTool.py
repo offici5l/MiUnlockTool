@@ -227,7 +227,7 @@ if "code" in r and r["code"] == 0:
     with open("encryptData", "wb") as edfile:
         edfile.write(ed.getvalue())
     CheckB(cmd, "product", "getvar", "product")
-    input("\nPress Enter to unlock bootloader\n")
+    input("\n\033[1;31mNotice\033[0m: Unlocking the bootloader will wipe all data\n\nPress Enter to unlock bootloader\n")
     os.system(f"{cmd} stage encryptData")
     os.system(f"{cmd} oem unlock")
 elif "code" in r and r["code"] == 10000:
