@@ -54,6 +54,9 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
         os.system(f"chmod +x {up}")
         print(ttp)
         exit()
+    if not os.path.exists("/data/data/com.termux.api"):
+        print("\nThe com.termux.api application is not installed on the device. Please install it first : \n\nhttps://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk")
+        exit()
     cmd = "fastboot"
     datafile = "/sdcard/Download/data.json"
     browserp = "t"
