@@ -45,3 +45,6 @@ tool will now merge them automatically
 
 #### Version 1.5.0 (Update):
 - Save keys:values ​​directly
+
+#### Version 1.5.0 (Update):
+- Added a step to check if the com.termux.api application is installed ..
