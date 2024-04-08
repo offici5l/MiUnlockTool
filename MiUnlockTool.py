@@ -240,7 +240,7 @@ elif "code" in r and r["code"] == 10013:
     print(f"\n{r['descEN']}\n\nhttps://github.com/offici5l/MiUnlockTool/issues/12")
 elif "code" in r and r["code"] == 20036:
     print(f"\n\033[92m{r['descEN']}\033[0m")
-elif "code" in r and r["code"] in {20041, 20031, 20033, 20030}:
+elif "code" in r and r["code"] in {20041, 20031, 20033, 20030, 20035}:
     print(f"\ncode {r['code']}\n\n{r['descEN']}")
 else:
     for key, value in r.items():
