@@ -14,7 +14,7 @@ for lib in ['Cryptodome', 'urllib3', 'requests']:
         os.system('yes | pkg update' if "com.termux" in os.getenv("PREFIX", "") else '')
         os.system(f'pip install pycryptodomex' if lib == 'Cryptodome' else f'pip install {lib}')
 
-import re, requests, json, hmac, random, binascii, urllib, hashlib, io, urllib.parse, time, sys, urllib.request, zipfile, webbrowser, platform, subprocess, shutil
+import re, requests, json, hmac, random, binascii, urllib, hashlib, io, urllib.parse, time, sys, urllib.request, zipfile, webbrowser, platform, subprocess, shutil, stat
 from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
@@ -27,7 +27,7 @@ def dw(s):
     fp = os.path.join(cd, os.path.basename(url))    
     urllib.request.urlretrieve(url, fp)    
     with zipfile.ZipFile(fp, 'r') as zip_ref:
-        zip_ref.extractall(cd)   
+        zip_ref.extractall(cd)
     os.remove(fp)
     print(notice)
 
@@ -66,6 +66,9 @@ else:
     if not os.path.exists(fp):
         dw(s)
     cmd = os.path.join(fp, "fastboot")
+    if s == "Linux" or s == "Darwin":
+        st = os.stat(cmd)
+        os.chmod(cmd, st.st_mode | stat.S_IEXEC)
     datafile = os.path.join(dir, "data.json")
     browserp = "wlm"
 
