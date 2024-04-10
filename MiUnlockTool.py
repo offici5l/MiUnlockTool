@@ -163,9 +163,9 @@ if "product" not in data:
     save(data, datafile, name="product")
 
 if "token" not in data:
-    t = CheckB(cmd, "token", "oem", "get_token")
+    t = CheckB(cmd, "token", "getvar", "token")
     if not t:
-        t = CheckB(cmd, "token", "getvar", "token")
+        t = CheckB(cmd, "token", "oem", "get_token")
         if not t:
             t = input("\nFailed to obtain the deviceToken !\n Please enter it manually: ")
     data["token"] = t
