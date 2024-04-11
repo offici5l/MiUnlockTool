@@ -109,7 +109,7 @@ def CheckB(cmd, var_name, *fastboot_args):
     print(f"\nCheck if device is connected in bootloader mode...\n")
     while True:
         try:
-            result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=1)
+            result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=6)
         except subprocess.TimeoutExpired:
             continue     
         lines = [line.split(f"{var_name}:")[1].strip() for line in result.stderr.split('\n') if f"{var_name}:" in line]    
