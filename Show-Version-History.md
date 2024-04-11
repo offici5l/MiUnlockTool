@@ -53,3 +53,6 @@ tool will now merge them automatically
 - A few users are experiencing an issue regarding "Check if device is connected in bootloader mode..."
 Due to the slow transmission with the device
 So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTool/blob/main/MiUnlockTool.py#L112)
+
+#### Version 1.5.0 (Update):
+- get tokens(deviceToken) and merging them Automatically done. ( MTK devices )
