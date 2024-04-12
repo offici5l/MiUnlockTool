@@ -29,7 +29,7 @@ It is compatible with all platforms.
 termux-setup-storage
 ```
 ```bash
-curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/Android/install | bash
+curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/install | bash
 ```
 
 <div align="center">
