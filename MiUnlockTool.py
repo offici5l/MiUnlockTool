@@ -76,7 +76,7 @@ while os.path.isfile(datafile):
     try:
         with open(datafile, "r") as file:
             data = json.load(file)
-        if len(sys.argv) > 1 and sys.argv[1] == "1":
+        if '1' in sys.argv:
             choice = "1"
             break
         elif data:
