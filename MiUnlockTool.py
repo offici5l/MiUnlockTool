@@ -14,7 +14,7 @@ for lib in ['Cryptodome', 'urllib3', 'requests']:
         os.system('yes | pkg update' if "com.termux" in os.getenv("PREFIX", "") else '')
         os.system(f'pip install pycryptodomex' if lib == 'Cryptodome' else f'pip install {lib}')
 
-import re, requests, json, hmac, random, binascii, urllib, hashlib, io, urllib.parse, time, sys, urllib.request, zipfile, webbrowser, platform, subprocess, shutil, stat
+import re, requests, json, hmac, random, binascii, urllib, hashlib, io, urllib.parse, time, sys, urllib.request, zipfile, webbrowser, platform, subprocess, shutil, stat, datetime
 from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
@@ -173,6 +173,8 @@ if "token" not in data:
 
 user, pwd, wb_id, product, token = (data.get(key, "") for key in ["user", "pwd", "wb_id", "product", "token"])
 
+datav = data
+
 print(f"\nDeviceInfo:\nproduct: \033[92m{product}\033[0m\ntoken: \033[92m{token}\033[0m\n")
 
 session = requests.Session()
@@ -249,6 +251,9 @@ elif "code" in r and r["code"] == 10013:
     print(f"\n{r['descEN']}\n\nhttps://github.com/offici5l/MiUnlockTool/issues/12")
 elif "code" in r and r["code"] == 20036:
     print(f"\n\033[92m{r['descEN']}\033[0m")
+    print("\nYou can unlock on:", (datetime.datetime.now().replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=r["data"]["waitHour"])).strftime("%Y-%m-%d %H:%M"))
+    datav.pop("token")
+    save(datav, datafile)
 elif "code" in r and r["code"] in {20041, 20031, 20033, 20030, 20035}:
     print(f"\ncode {r['code']}\n\n{r['descEN']}")
 else:
