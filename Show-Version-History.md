@@ -56,3 +56,6 @@ So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTo
 
 #### Version 1.5.0 (Update):
 - get tokens(deviceToken) and merging them Automatically done. ( MTK devices )
+
+#### Version 1.5.0 (Update):
+- Add ability to choose server(host region) from terminal
