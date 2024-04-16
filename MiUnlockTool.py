@@ -254,7 +254,7 @@ elif "code" in r and r["code"] == 20036:
     print("\nYou can unlock on:", (datetime.datetime.now().replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=r["data"]["waitHour"])).strftime("%Y-%m-%d %H:%M"))
     datav.pop("token")
     save(datav, datafile)
-elif "code" in r and r["code"] in {20041, 20031, 20033, 20030, 20035}:
+elif "code" in r and r["code"] in {20041, 20031, 20033, 20030, 20035, 20044}:
     print(f"\ncode {r['code']}\n\n{r['descEN']}")
 else:
     for key, value in r.items():
