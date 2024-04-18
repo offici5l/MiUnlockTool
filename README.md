@@ -26,9 +26,6 @@ It is compatible with all platforms.
 
 3. From Termux command line:
 ```bash
-termux-setup-storage
-```
-```bash
 curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash
 ```
 
