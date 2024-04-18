@@ -62,3 +62,6 @@ So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTo
 
 #### Version 1.5.0 (Update):
 - Adding some improvements
+
+#### Version 1.5.0 (Update):
+- improvements
