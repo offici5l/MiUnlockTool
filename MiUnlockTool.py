@@ -58,7 +58,7 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
         print("\nThe com.termux.api application is not installed on the device. Please install it first : \n\nhttps://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk")
         exit()
     cmd = "fastboot"
-    datafile = "/sdcard/Download/data.json"
+    datafile = os.path.expanduser("~/data.json")
     browserp = "t"
 else:
     dir = os.path.dirname(__file__)
@@ -80,7 +80,7 @@ while os.path.isfile(datafile):
             choice = "1"
             break
         elif data:
-            choice = input(f"\nPrevious Data Exists! in {datafile}\n\n\n- \033[92m1\033[0m Use Previous Data\n- \033[92m2\033[0m Delete Previous Data\n\n\nEnter your \033[92mchoice\033[0m: ").lower()
+            choice = input(f"\nPrevious Data Exists! in: \n       {datafile}\n\n- \033[92m1\033[0m Use Previous Data\n- \033[92m2\033[0m Delete Previous Data\n\nEnter your \033[92mchoice\033[0m: ").lower()
             if choice == "1":
                 break
             elif choice == "2":
