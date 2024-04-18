@@ -191,6 +191,11 @@ if data["code"] == 70016:
 
 if data["securityStatus"] == 16:
     p = postv("passport")
+    if "passToken" not in p:
+         print("\nFailed to get passToken !\n")
+         datav.pop("wb_id")
+         save(datav, datafile)
+         exit()
     data = json.loads(requests.get("https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&_json=true&passive=true&hidden=true", headers=headers, cookies={'passToken': p['passToken'], 'userId': str(p['userId']), 'deviceId': parse_qs(urlparse(p['location']).query)['d'][0]}).text.replace("&&&START&&&", ""))
 
 ssecurity, nonce, location = data["ssecurity"], data["nonce"], data["location"]
