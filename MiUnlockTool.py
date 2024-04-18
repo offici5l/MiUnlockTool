@@ -110,10 +110,10 @@ def CheckB(cmd, var_name, *fastboot_args):
     while True:
         try:
             result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=6)
-            print("\033[92mphone connected\033[0m")
+            print("\n\033[92mphone connected\033[0m")
         except subprocess.TimeoutExpired:
             if not message_printed:
-                print("\n\033[91mNot connected to the phone\033[0m\n\nTurn off the phone, hold Volume Down and Power buttons to enter Bootloader, and connect the phone again\n")
+                print("\n\033[91mNot connected to the phone\033[0m\n\nTurn off the phone, hold Volume Down and Power buttons to enter Bootloader, and connect the phone again")
                 message_printed = True
             continue     
         lines = [line.split(f"{var_name}:")[1].strip() for line in result.stderr.split('\n') if f"{var_name}:" in line]
