@@ -16,7 +16,7 @@ It is compatible with all platforms.
 ### For Mac, Linux, Windows:
 
 1. Install Python3.
-2. Download [MiUnlockTool](https://codeload.github.com/offici5l/MiUnlockTool/zip/refs/heads/Atest) and run it.
+2. Download [MiUnlockTool](https://codeload.github.com/offici5l/MiUnlockTool/zip/refs/heads/main) and run it.
 
 ### For Android:
 
@@ -26,7 +26,7 @@ It is compatible with all platforms.
 
 3. From Termux command line:
 ```bash
-curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/Atest/.install | bash
+curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash
 ```
 
 <div align="center">
