@@ -26,7 +26,7 @@ It is compatible with all platforms.
 
 3. From Termux command line:
 ```bash
-curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash
+curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/Atest/.install | bash
 ```
 
 <div align="center">
