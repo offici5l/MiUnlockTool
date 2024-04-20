@@ -14,18 +14,34 @@ for lib in ['Cryptodome', 'urllib3', 'requests']:
         os.system('yes | pkg update' if "com.termux" in os.getenv("PREFIX", "") else '')
         os.system(f'pip install pycryptodomex' if lib == 'Cryptodome' else f'pip install {lib}')
 
-import re, requests, json, hmac, random, binascii, urllib, hashlib, io, urllib.parse, time, sys, urllib.request, zipfile, webbrowser, platform, subprocess, shutil, stat, datetime
+import re, requests, json, hmac, random, binascii, urllib, hashlib, io, urllib.parse, time, sys, urllib.request, zipfile, webbrowser, platform, subprocess, shutil, stat, datetime, ctypes
 from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
 from urllib.parse import urlparse, parse_qs, urlencode
 
-def dw(s):
-    print("\ndownload platform-tools...\n")
-    url = f"https://dl.google.com/android/repository/platform-tools-latest-{s}.zip"
+def dw(s, url_choice):
+    if url_choice == 1:
+        url = f"https://dl.google.com/android/repository/platform-tools-latest-{s}.zip"
+        print("\nDownloading platform-tools...\n")
+    elif url_choice == 2:
+        url = "https://cdn.cnbj1.fds.api.mi-img.com/flash-tool/miflash_unlock_7.6.727.43.zip"
+        print("\nDownloading USB driver...\n")
+    
+    cd = os.path.dirname(__file__)
+    fp = os.path.join(cd, os.path.basename(url))
+    urllib.request.urlretrieve(url, fp)
+    with zipfile.ZipFile(fp, 'r') as zip_ref:
+        zip_ref.extractall(cd)
+    os.remove(fp)
+    print("Download complete!")
+
+def dwd():
+    print("\ndownload driver...\n")
+    url = f"https://cdn.cnbj1.fds.api.mi-img.com/flash-tool/miflash_unlock_7.6.727.43.zip"
     cd = os.path.join(os.path.dirname(__file__))
-    fp = os.path.join(cd, os.path.basename(url))    
-    urllib.request.urlretrieve(url, fp)    
+    fp = os.path.join(cd, os.path.basename(url))
+    urllib.request.urlretrieve(url, fp)
     with zipfile.ZipFile(fp, 'r') as zip_ref:
         zip_ref.extractall(cd)
     os.remove(fp)
@@ -64,7 +80,7 @@ else:
     dir = os.path.dirname(__file__)
     fp = os.path.join(dir, "platform-tools")
     if not os.path.exists(fp):
-        dw(s)
+        dw(s,1)
     cmd = os.path.join(fp, "fastboot")
     if s == "Linux" or s == "Darwin":
         st = os.stat(cmd)
@@ -105,22 +121,48 @@ def remove(*keys):
         file.truncate()
     subprocess.run(["python", __file__, "1"])
 
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
 def CheckB(cmd, var_name, *fastboot_args):
-    message_printed = False
-    while True:
-        try:
-            result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=6)
-            print("\n\033[92mphone connected\033[0m")
-        except subprocess.TimeoutExpired:
-            if not message_printed:
-                print("\n\033[91mNot connected to the phone\033[0m\n\nTurn off the phone, hold Volume Down and Power buttons to enter Bootloader, and connect the phone again")
-                message_printed = True
-            continue     
-        lines = [line.split(f"{var_name}:")[1].strip() for line in result.stderr.split('\n') if f"{var_name}:" in line]
-        if len(lines) > 1:
-            cvalue = "".join(lines)
-            return cvalue       
-        return lines[0] if lines else None
+    choice = input(f"\nAre you sure MiUsbDriver had been installed?(Y/n?)")
+    if choice.lower() in ("n", "no"):
+        dw(s,2)
+        filepath = os.path.join(os.getcwd(), "MiUsbDriver.exe")
+        if os.path.exists(filepath):
+            if is_admin():
+                subprocess.Popen(filepath)
+                print(f"\nMiUsbDriver installation has been started.")
+            else:
+                print("\nDriver installation requires Administrator permission, run this script as Admin.")
+        else:
+            print(f"\nMiUsbDriver.exe not found in the current directory.")
+
+
+    elif choice.lower() in ("y", "yes"):
+        message_printed = False
+        while True:
+            try:
+                result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=6)
+                print("\n\033[92mphone connected\033[0m")
+            except subprocess.TimeoutExpired:
+                if not message_printed:
+                    print("\n\033[91mNot connected to the phone\033[0m\n\nTurn off the phone, hold Volume Down and Power buttons to enter Bootloader, and connect the phone again")
+                    message_printed = True
+                continue     
+            lines = [line.split(f"{var_name}:")[1].strip() for line in result.stderr.split('\n') if f"{var_name}:" in line]
+            if len(lines) > 1:
+                cvalue = "".join(lines)
+                return cvalue       
+            return lines[0] if lines else None
+            break
+    else:
+        print("\nInvalid choice. Enter '1' or '2'.")
+
+
 
 try:
     with open(datafile, "r+") as file:
