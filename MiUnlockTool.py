@@ -135,7 +135,7 @@ def CheckB(cmd, var_name, *fastboot_args):
         if os.path.exists(filepath):
             if is_admin():
                 subprocess.Popen(filepath)
-                print(f"\nMiUsbDriver installation has been started.")
+                print(f"\nMiUsbDriver installation has started.")
             else:
                 print("\nDriver installation requires Administrator permission, run this script as Admin.")
         else:
