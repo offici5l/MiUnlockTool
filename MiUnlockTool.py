@@ -159,21 +159,24 @@ if "wb_id" not in data:
     data["wb_id"] = wb_id
     save(data, datafile, name="wb_id")
 
-if "product" not in data:
-    p = CheckB(cmd, "product", "getvar", "product")
-    if not p:
-        p = input("\nFailed to obtain the deviceProduct. Please enter it manually: ")
-    data["product"] = p
-    save(data, datafile, name="product")
+if "product" not in data or "token" not in data:
+    print("\nCheck if device is connected in bootloader mode...\n")
 
-if "token" not in data:
-    t = CheckB(cmd, "token", "getvar", "token")
-    if not t:
-        t = CheckB(cmd, "token", "oem", "get_token")
+    if "product" not in data:
+        p = CheckB(cmd, "product", "getvar", "product")
+        if not p:
+            p = input("\nFailed to obtain the deviceProduct. Please enter it manually: ")
+        data["product"] = p
+        save(data, datafile, name="product")
+
+    if "token" not in data:
+        t = CheckB(cmd, "token", "getvar", "token")
         if not t:
-            t = input("\nFailed to obtain the deviceToken !\n Please enter it manually: ")
-    data["token"] = t
-    save(data, datafile, name="token")
+            t = CheckB(cmd, "token", "oem", "get_token")
+            if not t:
+                t = input("\nFailed to obtain the deviceToken !\n Please enter it manually: ")
+        data["token"] = t
+        save(data, datafile, name="token")
 
 user, pwd, wb_id, product, token = (data.get(key, "") for key in ["user", "pwd", "wb_id", "product", "token"])
 
