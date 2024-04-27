@@ -65,3 +65,7 @@ So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTo
 
 #### Version 1.5.0 (Update):
 - improvements
+
+#### Version 1.5.0 (Update):
+- Skip saving device information such as token and product, so as not to cause problems during unlocking...
+- improvements
