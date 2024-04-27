@@ -105,23 +105,6 @@ def remove(*keys):
         file.truncate()
     subprocess.run(["python", __file__, "1"])
 
-def CheckB(cmd, var_name, *fastboot_args):
-    message_printed = False
-    while True:
-        try:
-            result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=6)
-            print("\n\033[92mphone connected\033[0m")
-        except subprocess.TimeoutExpired:
-            if not message_printed:
-                print("\n\033[91mNot connected to the phone\033[0m\n\nTurn off the phone, hold Volume Down and Power buttons to enter Bootloader, and connect the phone again")
-                message_printed = True
-            continue     
-        lines = [line.split(f"{var_name}:")[1].strip() for line in result.stderr.split('\n') if f"{var_name}:" in line]
-        if len(lines) > 1:
-            cvalue = "".join(lines)
-            return cvalue       
-        return lines[0] if lines else None
-
 try:
     with open(datafile, "r+") as file:
         data = json.load(file)
@@ -159,30 +142,9 @@ if "wb_id" not in data:
     data["wb_id"] = wb_id
     save(data, datafile, name="wb_id")
 
-if "product" not in data or "token" not in data:
-    print("\nCheck if device is connected in bootloader mode...\n")
-
-    if "product" not in data:
-        p = CheckB(cmd, "product", "getvar", "product")
-        if not p:
-            p = input("\nFailed to obtain the deviceProduct. Please enter it manually: ")
-        data["product"] = p
-        save(data, datafile, name="product")
-
-    if "token" not in data:
-        t = CheckB(cmd, "token", "getvar", "token")
-        if not t:
-            t = CheckB(cmd, "token", "oem", "get_token")
-            if not t:
-                t = input("\nFailed to obtain the deviceToken !\n Please enter it manually: ")
-        data["token"] = t
-        save(data, datafile, name="token")
-
-user, pwd, wb_id, product, token = (data.get(key, "") for key in ["user", "pwd", "wb_id", "product", "token"])
+user, pwd, wb_id = (data.get(key, "") for key in ["user", "pwd", "wb_id"])
 
 datav = data
-
-print(f"\nDeviceInfo:\nproduct: \033[92m{product}\033[0m\ntoken: \033[92m{token}\033[0m\n")
 
 session = requests.Session()
 headers = {"User-Agent": "XiaomiPCSuite"}
@@ -216,7 +178,7 @@ if 'serviceToken' not in cookies:
 
 region = parse_qs(urlparse(location).query).get('p_idc', [''])[0]
 
-print(f"AccountInfo:\nid: \033[92m{data['userId']}\033[0m\nregion: \033[92m{region}\033[0m")
+print(f"\nAccountInfo:\nid: \033[92m{data['userId']}\033[0m\nregion: \033[92m{region}\033[0m")
 
 for arg in sys.argv:
     if arg.lower() in ['global', 'india', 'russia', 'china', 'europe']:
@@ -225,6 +187,37 @@ for arg in sys.argv:
 
 g = "unlock.update.intl.miui.com"
 url = {'china': g.replace("intl.", ""), 'india': f"in-{g}", 'russia': f"ru-{g}", 'europe': f"eu-{g}"}.get(region.lower(), g)
+
+def CheckB(cmd, var_name, *fastboot_args):
+    message_printed = False
+    while True:
+        try:
+            result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=6)
+            print("\n\033[92mphone connected\033[0m")
+        except subprocess.TimeoutExpired:
+            if not message_printed:
+                print("\n\033[91mNot connected to the phone\033[0m\n\nTurn off the phone, hold Volume Down and Power buttons to enter Bootloader, and connect the phone again")
+                message_printed = True
+            continue     
+        lines = [line.split(f"{var_name}:")[1].strip() for line in result.stderr.split('\n') if f"{var_name}:" in line]
+        if len(lines) > 1:
+            cvalue = "".join(lines)
+            return cvalue       
+        return lines[0] if lines else None
+
+print("\nCheck if device is connected in bootloader mode...\n")
+
+product = CheckB(cmd, "product", "getvar", "product")
+if not product:
+    product = input("\nFailed to obtain the product!\nPlease enter it manually: ")
+
+token = CheckB(cmd, "token", "getvar", "token")
+if not token:
+    token = CheckB(cmd, "token", "oem", "get_token")
+    if not token:
+        token = input("\nFailed to obtain the token!\nPlease enter it manually: ")
+
+print(f"\nDeviceInfo:\nproduct: \033[92m{product}\033[0m\ntoken: \033[92m{token}\033[0m\n")
 
 class RetrieveEncryptData:
     def add_nonce(self):
@@ -252,22 +245,16 @@ if "code" in r and r["code"] == 0:
     ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
     with open("encryptData", "wb") as edfile:
         edfile.write(ed.getvalue())
-    CheckB(cmd, "product", "getvar", "product")
+    CheckB(cmd, "serialno", "getvar", "serialno")
     input("\n\033[1;31mNotice\033[0m: Unlocking the bootloader will wipe all data\n\nPress Enter to unlock bootloader\n")
     os.system(f"{cmd} stage encryptData")
     os.system(f"{cmd} oem unlock")
-elif "code" in r and r["code"] == 10000:
-    remove("product", "token")
-    sys.exit()
-elif "code" in r and r["code"] == 10013:
-    print(f"\n{r['descEN']}\n\nhttps://github.com/offici5l/MiUnlockTool/issues/12")
-elif "code" in r and r["code"] == 20036:
-    print(f"\n\033[92m{r['descEN']}\033[0m")
-    print("\nYou can unlock on:", (datetime.datetime.now().replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=r["data"]["waitHour"])).strftime("%Y-%m-%d %H:%M"))
-    datav.pop("token")
-    save(datav, datafile)
-elif "code" in r and r["code"] in {20041, 20031, 20033, 20030, 20035, 20044}:
+elif "descEN" in r:
     print(f"\ncode {r['code']}\n\n{r['descEN']}")
+    if r["code"] == 20036:
+        print("\nYou can unlock on:", (datetime.datetime.now().replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=r["data"]["waitHour"])).strftime("%Y-%m-%d %H:%M"))
+    if r["code"] == 10000:
+        print(f"\n\033[91minvalid product or token\033[0m")
 else:
     for key, value in r.items():
         print(f"\n{key}: {value}")
