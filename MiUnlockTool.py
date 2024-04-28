@@ -55,7 +55,7 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
         print(ttp)
         exit()
     if not os.path.exists("/data/data/com.termux.api"):
-        print("\nThe com.termux.api application is not installed on the device. Please install it first : \n\nhttps://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk")
+        print("\ncom.termux.api app is not installed\nPlease install it first : \n\nhttps://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk")
         exit()
     cmd = "fastboot"
     datafile = os.path.expanduser("~/data.json")
@@ -77,17 +77,14 @@ while os.path.isfile(datafile):
         with open(datafile, "r") as file:
             data = json.load(file)
         if '1' in sys.argv:
-            choice = "1"
             break
-        elif data:
-            choice = input(f"\nPrevious Data Exists! in: \n       {datafile}\n\n- \033[92m1\033[0m Use Previous Data\n- \033[92m2\033[0m Delete Previous Data\n\nEnter your \033[92mchoice\033[0m: ").lower()
-            if choice == "1":
-                break
-            elif choice == "2":
+        elif data and data.get("login") == "ok":
+            choice = input(f"\nYou are already logged in with account uid: {data['uid']}\n\033[92mPress Enter to continue\033[0m\n\033[2m(to log out, type 2 and press Enter)\033[0m\n").strip().lower()
+            if choice == "2":
                 os.remove(datafile)
                 break
             else:
-                print("\nInvalid choice. Enter '1' or '2'.")
+                break
         else:
             os.remove(datafile)
             break
@@ -113,19 +110,17 @@ except FileNotFoundError:
     with open(datafile, 'w') as file:
         json.dump(data, file)
 
-def save(data, path, name=None):
+def save(data, path):
     with open(path, "w") as file:
         json.dump(data, file, indent=2)
-    if name:
-        print(f"\n\033[92m{name} saved successfully\033[0m\n")
 
 if "user" not in data:
     data["user"] = input("\n(Xiaomi Account) Id or Email or Phone: ")
-    save(data, datafile, name="user")
+    save(data, datafile)
 
 if "pwd" not in data:
     data["pwd"] = input("Enter password: ")
-    save(data, datafile, name="pwd")
+    save(data, datafile)
 
 if "wb_id" not in data:
     input("\nPress Enter to open confirmation page, copy link after seeing {\"R\":\"\",\"S\":\"OK\"}, and return here\n\n\033[1;33mNotice:\nIf logged in with any account in your default browser,\nplease log out before pressing Enter.\033[0m\n\n")
@@ -140,7 +135,7 @@ if "wb_id" not in data:
         subprocess.run(["python", __file__, "1"])
         sys.exit()
     data["wb_id"] = wb_id
-    save(data, datafile, name="wb_id")
+    save(data, datafile)
 
 user, pwd, wb_id = (data.get(key, "") for key in ["user", "pwd", "wb_id"])
 
@@ -175,6 +170,13 @@ if 'serviceToken' not in cookies:
     print("\nFailed to get serviceToken.")
     remove("wb_id")
     sys.exit()
+
+if "login" not in datav:
+    datav["login"] = "ok"
+    if "uid" not in datav:
+        datav["uid"] = data['userId']
+    save(datav, datafile)
+    print("\n\n\033[92mLogin successful!\033[0m Login saved.")
 
 region = parse_qs(urlparse(location).query).get('p_idc', [''])[0]
 
