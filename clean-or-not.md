@@ -6,7 +6,7 @@
 
 ----
 
-**User data not cleared when the devices(code name) is unlocked :**
+**User data not cleared when the devices is unlocked :**
 
 >gemini  
 ido  
