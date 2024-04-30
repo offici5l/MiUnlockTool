@@ -2,11 +2,11 @@
 
 ### Will user data be cleared after unlocking the bootloader ?
 
-> products(code name) Verified on April 29, 2024.
+> products Verified on April 29, 2024.
 
 ----
 
-**User data not cleared when the devices is unlocked :**
+**User data not cleared when the devices(code name) is unlocked :**
 
 >gemini  
 ido  
