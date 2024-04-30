@@ -24,7 +24,7 @@ santoni
 venus  
 wt88047  
 
-**User data will be cleared when the devices is unlocked:**
+**User data will be cleared when the devices is unlocked :**
 
 >mione  
 mione_plus  
