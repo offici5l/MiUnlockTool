@@ -6,7 +6,7 @@
 
 ----
 
-**User data will be cleared when the devices is unlocked:**
+**User data not cleared when the devices is unlocked :**
 
 >gemini  
 ido  
@@ -24,8 +24,7 @@ santoni
 venus  
 wt88047  
 
-
-**User data not cleared when the devices is unlocked :**
+**User data will be cleared when the devices is unlocked:**
 
 >mione  
 mione_plus  
