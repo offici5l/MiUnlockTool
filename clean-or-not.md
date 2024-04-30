@@ -9,21 +9,7 @@
 **User data not cleared when the devices is unlocked :**
 
 ( device codename )
->gemini  
-ido  
-kate  
-kenzo  
-land  
-markw  
-meri  
-mido  
-nikel  
-omega  
-prada  
-rolex  
-santoni  
-venus  
-wt88047  
+>"gemini" "ido" "kate" "kenzo" "land" "markw" "meri" "mido" "nikel" "omega" "prada" "rolex" "santoni" "venus" "wt88047"
 
 **User data will be cleared when the devices is unlocked :**
 
