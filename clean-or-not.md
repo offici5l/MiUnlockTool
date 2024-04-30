@@ -27,6 +27,7 @@ wt88047
 
 **User data will be cleared when the devices is unlocked :**
 
+( device code name )
 >mione  
 mione_plus  
 aries  
