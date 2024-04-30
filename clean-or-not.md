@@ -8,6 +8,7 @@
 
 **User data not cleared when the devices is unlocked :**
 
+( device code name )
 >gemini  
 ido  
 kate  
