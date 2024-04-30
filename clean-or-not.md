@@ -8,7 +8,7 @@
 
 **User data not cleared when the devices is unlocked :**
 
-( device code name )
+( device Codename )
 >gemini  
 ido  
 kate  
@@ -27,7 +27,7 @@ wt88047
 
 **User data will be cleared when the devices is unlocked :**
 
-( device code name )
+( device Codename )
 >mione  
 mione_plus  
 aries  
