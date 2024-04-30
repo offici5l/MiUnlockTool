@@ -248,7 +248,7 @@ if "code" in r and r["code"] == 0:
     with open("encryptData", "wb") as edfile:
         edfile.write(ed.getvalue())
     CheckB(cmd, "serialno", "getvar", "serialno")
-    input("\n\033[1;31mNotice\033[0m: Unlocking the bootloader will wipe all data\n\nPress Enter to unlock bootloader\n")
+    input(f"\n\033[1;36mAn unlocked device is an easy target for malware which may damage your device or cause financial loss.\033[0m\n\n" + ("\033[1;31muser data will be cleared when the device is unlocked.\033[0m" if product not in ["gemini", "ido", "kate", "kenzo", "land", "markw", "meri", "mido", "nikel", "omega", "prada", "rolex", "santoni", "venus", "wt88047"] else "\033[92mUnlocking the device does not clear the user data\033[0m") + "\n\nPress Enter to unlock bootloader\n")
     os.system(f"{cmd} stage encryptData")
     os.system(f"{cmd} oem unlock")
 elif "descEN" in r:
