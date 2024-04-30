@@ -2,7 +2,7 @@
 
 ### Will user data be cleared after unlocking the bootloader ?
 
-> products Verified on April 29, 2024.
+> products(code name) Verified on April 29, 2024.
 
 ----
 
