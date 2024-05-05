@@ -126,7 +126,7 @@ if "wb_id" not in data:
     input("\nPress Enter to open confirmation page, copy link after seeing {\"R\":\"\",\"S\":\"OK\"}, and return here\n\n\033[1;33mNotice:\nIf logged in with any account in your default browser,\nplease log out before pressing Enter.\033[0m\n\n")
     conl = 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true&passive=false&hidden=false'
     if s == "Linux":
-        os.system("xdg-open " + conl)
+        os.system("xdg-open '" + conl + "'")
     else:
         webbrowser.open(conl)
     wb_id = parse_qs(urlparse(input("\nEnter Link: ")).query).get('d', [None])[0]
