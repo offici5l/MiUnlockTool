@@ -75,3 +75,6 @@ So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTo
 
 #### Version 1.5.0 (Update):
 - Correct the issue of the confirmation page not opening in Linux
+
+#### Version 1.5.0 (Update):
+- fix ( For Linux( and termux ) users : the 401 issue .... during account confirmation ... )
