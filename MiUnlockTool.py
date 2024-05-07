@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+version = "1.5.0"
+
 import os
 
 for lib in ['Cryptodome', 'urllib3', 'requests', 'colorama']:
@@ -26,7 +28,7 @@ cres = Style.RESET_ALL
 cy = Style.BRIGHT + Fore.YELLOW
 p_ = cg + "\n" + "_"*56 +"\n"
 
-print(cgg + "\nFor issues or feedback:\n- GitHub: github.com/offici5l/MiUnlockTool/issues\n- Telegram: t.me/Offici5l_Group\n" + cres)
+print(cgg + f"\n[V{version}] For issues or feedback:\n- GitHub: github.com/offici5l/MiUnlockTool/issues\n- Telegram: t.me/Offici5l_Group\n" + cres)
 
 print(p_)
 
