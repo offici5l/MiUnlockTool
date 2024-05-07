@@ -1,12 +1,8 @@
 #!/usr/bin/python
 
-version = "1.5.0"
-notice = f"\033[2m(version: {version}) For issues or feedback:\n- GitHub: github.com/offici5l/MiUnlockTool/issues\n- Telegram: t.me/Offici5l_Group\033[0m\n"
-p_ = "\n\033[32m" + "_"*56 + "\033[0m\n"
-
 import os
 
-for lib in ['Cryptodome', 'urllib3', 'requests']:
+for lib in ['Cryptodome', 'urllib3', 'requests', 'colorama']:
     try:
         __import__(lib)
     except ImportError:
@@ -19,6 +15,20 @@ from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
 from urllib.parse import urlparse, parse_qs, urlencode
+from colorama import init, Fore, Style
+
+init(autoreset=True)
+
+cg = Style.BRIGHT + Fore.GREEN
+cgg = Style.DIM
+cr = Fore.RED
+cres = Style.RESET_ALL
+cy = Style.BRIGHT + Fore.YELLOW
+p_ = cg + "\n" + "_"*56 +"\n"
+
+print(cgg + "\nFor issues or feedback:\n- GitHub: github.com/offici5l/MiUnlockTool/issues\n- Telegram: t.me/Offici5l_Group\n" + cres)
+
+print(p_)
 
 def dw(s):
     print("\ndownload platform-tools...\n")
@@ -29,10 +39,9 @@ def dw(s):
     with zipfile.ZipFile(fp, 'r') as zip_ref:
         zip_ref.extractall(cd)
     os.remove(fp)
-    print(notice)
 
 up = os.path.join(os.getenv("PREFIX", ""), "bin", "miunlock")
-ttp = "\nuse command: \033[92mmiunlock\033[0m\n"
+ttp = f"\nuse command: {cg}miunlock{cres}\n"
 
 def dwt():
     os.system("yes | pkg uninstall termux-adb 2>/dev/null; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot")
@@ -79,7 +88,7 @@ while os.path.isfile(datafile):
         if '1' in sys.argv:
             break
         elif data and data.get("login") == "ok":
-            choice = input(f"\nYou are already logged in with account uid: {data['uid']}\n\033[92mPress Enter to continue\033[0m\n\033[2m(to log out, type 2 and press Enter)\033[0m\n").strip().lower()
+            choice = input(f"\nYou are already logged in with account uid: {data['uid']}\n{cg}Press Enter to continue\n{cgg}(to log out, type 2 and press Enter){cres}\n").strip().lower()
             if choice == "2":
                 os.remove(datafile)
                 break
@@ -92,7 +101,7 @@ while os.path.isfile(datafile):
         os.remove(datafile)
 
 def remove(*keys):
-    print(f"\n\033[91minvalid {keys[0] if len(keys) == 1 else ' or '.join(keys)}\033[0m\n")
+    print(f"\n{cr}invalid {keys[0] if len(keys) == 1 else ' or '.join(keys)}{cres}\n")
     with open(datafile, "r+") as file:
         data = json.load(file)
         for key in keys:
@@ -115,20 +124,21 @@ def save(data, path):
         json.dump(data, file, indent=2)
 
 if "user" not in data:
-    data["user"] = input("\n(Xiaomi Account) Id or Email or Phone: ")
+    data["user"] = input("\n\n(Xiaomi Account) Id or Email or Phone: ")
     save(data, datafile)
 
 if "pwd" not in data:
-    data["pwd"] = input("Enter password: ")
+    data["pwd"] = input("\nEnter password: ")
     save(data, datafile)
 
 if "wb_id" not in data:
-    input("\nPress Enter to open confirmation page, copy link after seeing {\"R\":\"\",\"S\":\"OK\"}, and return here\n\n\033[1;33mNotice:\nIf logged in with any account in your default browser,\nplease log out before pressing Enter.\033[0m\n\n")
+    input(f"\n{Fore.CYAN}Notice:\nIf logged in with any account in your default browser,\nplease log out before pressing Enter.\n\n{cres}{Style.BRIGHT}Press Enter{cres} to open confirmation page, \n copy link after seeing {Fore.CYAN}{Style.BRIGHT}\"R\":\"\",\"S\":\"OK\"{Style.RESET_ALL}, \n  and return here\n\n")
     conl = 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true&passive=false&hidden=false'
     if s == "Linux":
         os.system("xdg-open '" + conl + "'")
     else:
         webbrowser.open(conl)
+    time.sleep(2)
     wb_id = parse_qs(urlparse(input("\nEnter Link: ")).query).get('d', [None])[0]
     if wb_id is None:
         print("\n\nInvalid link\n")
@@ -156,7 +166,7 @@ if data["code"] == 70016:
 if data["securityStatus"] == 16:
     p = postv("passport")
     if "passToken" not in p:
-         print("\nFailed to get passToken !\n")
+         print(f"\n{cr}Failed to get passToken !{cres}\n")
          datav.pop("wb_id")
          save(datav, datafile)
          exit()
@@ -167,7 +177,7 @@ ssecurity, nonce, location = data["ssecurity"], data["nonce"], data["location"]
 cookies = {cookie.name: cookie.value for cookie in session.get(location + "&clientSign=" + urllib.parse.quote_plus(b64encode(hashlib.sha1(f"nonce={nonce}".encode("utf-8") + b"&" + ssecurity.encode("utf-8")).digest())), headers=headers).cookies}
 
 if 'serviceToken' not in cookies:
-    print("\nFailed to get serviceToken.")
+    print(f"\n{cr}Failed to get serviceToken.{cres}")
     remove("wb_id")
     sys.exit()
 
@@ -176,11 +186,19 @@ if "login" not in datav:
     if "uid" not in datav:
         datav["uid"] = data['userId']
     save(datav, datafile)
-    print("\n\n\033[92mLogin successful!\033[0m Login saved.")
+    print(f"\n\n{cg}Login successful! Login saved.{cres}")
 
-region = parse_qs(urlparse(location).query).get('p_idc', [''])[0]
+region = json.loads(session.get("https://account.xiaomi.com/pass/user/login/region?").text.replace("&&&START&&&", ""))['data']['region']
 
-print(f"\nAccountInfo:\nid: \033[92m{data['userId']}\033[0m\nregion: \033[92m{region}\033[0m")
+print(f"\nAccountInfo:\nid: {cg}{data['userId']}")
+print(f"region: {cg}{region}{cres}")
+
+region_config = json.loads(session.get("https://account.xiaomi.com/pass2/config?key=register").text.replace("&&&START&&&", ""))['regionConfig']
+
+for key, value in region_config.items():
+    if 'region.codes' in value and region in value['region.codes']:
+        region = value['name'].lower()
+        break
 
 for arg in sys.argv:
     if arg.lower() in ['global', 'india', 'russia', 'china', 'europe']:
@@ -188,17 +206,28 @@ for arg in sys.argv:
         break
 
 g = "unlock.update.intl.miui.com"
-url = {'china': g.replace("intl.", ""), 'india': f"in-{g}", 'russia': f"ru-{g}", 'europe': f"eu-{g}"}.get(region.lower(), g)
+
+if region == "china":
+    url = g.replace("intl.", "")
+elif region == "india":
+    url = f"in-{g}"
+elif region == "russia":
+    url = f"ru-{g}"
+elif region == "europe":
+    url = f"eu-{g}"
+else:
+    url = g
 
 def CheckB(cmd, var_name, *fastboot_args):
     message_printed = False
     while True:
         try:
             result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=6)
-            print("\n\033[92mphone connected\033[0m")
+            print(f"\n{cg}phone connected{cres}")
         except subprocess.TimeoutExpired:
             if not message_printed:
-                print("\n\033[91mNot connected to the phone\033[0m\n\nTurn off the phone,\nhold Volume Down and Power buttons to enter Bootloader,\nand connect the phone again")
+                print(f"\n{cr}Not connected to the phone{cres}\n\n")
+                print("Turn off the phone,\nhold Volume Down and Power buttons to enter Bootloader,\nand connect the phone again")
                 message_printed = True
             continue     
         lines = [line.split(f"{var_name}:")[1].strip() for line in result.stderr.split('\n') if f"{var_name}:" in line]
@@ -219,7 +248,8 @@ if not token:
     if not token:
         token = input("\nFailed to obtain the token!\nPlease enter it manually: ")
 
-print(f"\nDeviceInfo:\nproduct: \033[92m{product}\033[0m\ntoken: \033[92m{token}\033[0m\n")
+print(f"\nDeviceInfo:\nproduct: {cg}{product}")
+print(f"token: {cg}{token}{cres}\n")
 
 class RetrieveEncryptData:
     def add_nonce(self):
@@ -248,7 +278,9 @@ if "code" in r and r["code"] == 0:
     with open("encryptData", "wb") as edfile:
         edfile.write(ed.getvalue())
     CheckB(cmd, "serialno", "getvar", "serialno")
-    input(f"\n\033[1;36mAn unlocked device is an easy target for malware which may damage your device or cause financial loss.\033[0m\n\n" + ("\033[1;31muser data will be cleared when the device is unlocked.\033[0m" if product not in ["gemini", "ido", "kate", "kenzo", "land", "markw", "meri", "mido", "nikel", "omega", "prada", "rolex", "santoni", "venus", "wt88047"] else "\033[92mUnlocking the device does not clear the user data\033[0m") + "\n\nPress Enter to unlock bootloader\n")
+    print(f"\n{Fore.CYAN}An unlocked device is an easy target for malware which may damage your device or cause financial loss.\n\n" +
+    (f"{Fore.RED}{Style.BRIGHT}user data will be cleared when the device is unlocked.{cres}\n" if product not in ["gemini", "ido", "kate", "kenzo", "land", "markw", "meri", "mido", "nikel", "omega", "prada", "rolex", "santoni", "venus", "wt88047"] else f"{Fore.GREEN}{Style.BRIGHT}Unlocking the device does not clear the user data{cres}\n\n"))
+    input(f"{Style.BRIGHT}Press Enter to unlock bootloader{cres}\n")
     os.system(f"{cmd} stage encryptData")
     os.system(f"{cmd} oem unlock")
 elif "descEN" in r:
@@ -256,11 +288,11 @@ elif "descEN" in r:
     if r["code"] == 20036:
         print("\nYou can unlock on:", (datetime.datetime.now().replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=r["data"]["waitHour"])).strftime("%Y-%m-%d %H:%M"))
     if r["code"] == 10000:
-        print(f"\n\033[91minvalid product or token\033[0m")
+        print(f"\n{cr}invalid product or token")
 else:
     for key, value in r.items():
         print(f"\n{key}: {value}")
 
 print(p_)
-print(notice)
+
 browserp == "wlm" and input("\nPress Enter to exit ...")
