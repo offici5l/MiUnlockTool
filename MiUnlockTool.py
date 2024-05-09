@@ -231,13 +231,15 @@ else:
 connected = 0
 
 def connect(value):
-    c_no = f"\n{cr}Not connected to the phone{cres}\n\nTurn off the phone,\nhold Volume Down and Power buttons to enter Bootloader,\nand connect the phone again"
+    c_no = f"\n{cr}Not connected to the phone !{cres}"
+    c__no = "\n- Turn off the Xiaomi phone\n- hold Volume Down and Power buttons to enter Bootloader\n- connect the phone with a USB cable\n"
     c_nol = f"\n{cr}The phone is no longer connected !!!{cres}\nplease connect the phone again"
     c_yes = f"\n{cg}phone connected{cres}"
     global connected
     if value == 0 and connected == 0:
         connected = 2
         print(c_no)
+        [print(char, end='', flush=True) or time.sleep(0.04) for char in c__no]
     if value == 0 and connected == 1:
         connected = 2
         print(c_nol)
