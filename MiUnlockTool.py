@@ -201,8 +201,7 @@ if "login" not in datav:
 
 region = json.loads(session.get("https://account.xiaomi.com/pass/user/login/region?").text.replace("&&&START&&&", ""))['data']['region']
 
-print(f"\nAccountInfo:\nid: {cg}{data['userId']}")
-print(f"region: {cg}{region}{cres}")
+print(f"\n{cg}AccountInfo:{cres}\nid: {data['userId']}\nregion: {region}")
 
 region_config = json.loads(session.get("https://account.xiaomi.com/pass2/config?key=register").text.replace("&&&START&&&", ""))['regionConfig']
 
@@ -229,17 +228,32 @@ elif region == "europe":
 else:
     url = g
 
+connected = 0
+
+def connect(value):
+    c_no = f"\n{cr}Not connected to the phone{cres}\n\nTurn off the phone,\nhold Volume Down and Power buttons to enter Bootloader,\nand connect the phone again"
+    c_nol = f"\n{cr}The phone is no longer connected !!!{cres}\nplease connect the phone again"
+    c_yes = f"\n{cg}phone connected{cres}"
+    global connected
+    if value == 0 and connected == 0:
+        connected = 2
+        print(c_no)
+    if value == 0 and connected == 1:
+        connected = 2
+        print(c_nol)
+    if value == 1 and (connected == 0 or connected == 2):
+        connected = 1
+        print(c_yes)
+
 def CheckB(cmd, var_name, *fastboot_args):
-    message_printed = False
     while True:
+        # If the device is slow, increase the timeout ex: timeout = 12
+        timeout = 6
         try:
-            result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=6)
-            print(f"\n{cg}phone connected{cres}")
+            result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=timeout)
+            connect(1)
         except subprocess.TimeoutExpired:
-            if not message_printed:
-                print(f"\n{cr}Not connected to the phone{cres}\n\n")
-                print("Turn off the phone,\nhold Volume Down and Power buttons to enter Bootloader,\nand connect the phone again")
-                message_printed = True
+            connect(0)
             continue     
         lines = [line.split(f"{var_name}:")[1].strip() for line in result.stderr.split('\n') if f"{var_name}:" in line]
         if len(lines) > 1:
@@ -247,7 +261,9 @@ def CheckB(cmd, var_name, *fastboot_args):
             return cvalue       
         return lines[0] if lines else None
 
-print("\nCheck if device is connected in bootloader mode...\n")
+[print(char, end='', flush=True) or time.sleep(0.01) for char in "\nCheck if device is connected in bootloader mode...\n"]
+
+unlocked = CheckB(cmd, "Device unlocked", "oem", "device-info")
 
 product = CheckB(cmd, "product", "getvar", "product")
 if not product:
@@ -259,8 +275,7 @@ if not token:
     if not token:
         token = input("\nFailed to obtain the token!\nPlease enter it manually: ")
 
-print(f"\nDeviceInfo:\nproduct: {cg}{product}")
-print(f"token: {cg}{token}{cres}\n")
+print(f"\n{cg}DeviceInfo:{cres}\nunlocked: {unlocked}\nproduct: {product}\ntoken: {token}\n")
 
 class RetrieveEncryptData:
     def add_nonce(self):
