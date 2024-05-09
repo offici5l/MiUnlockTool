@@ -83,3 +83,6 @@ So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTo
 - add colorama to handle colors instead of ANSI
 - Add requests to access the region and deal with the region, to send the request to the correct server accurately
 - improvements
+
+#### Version 1.5.0 (Update):
+- Adding some improvements
