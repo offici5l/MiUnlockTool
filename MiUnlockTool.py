@@ -248,9 +248,13 @@ def connect(value):
         print(c_yes)
 
 def CheckB(cmd, var_name, *fastboot_args):
-    while True:
-        # If the device is slow, increase the timeout ex: timeout = 12
+    for arg in sys.argv:
+        if arg.lower().startswith("time"):
+            timeout = int(arg[4:])
+            break
+    else:
         timeout = 6
+    while True:
         try:
             result = subprocess.run([cmd] + list(fastboot_args), capture_output=True, text=True, timeout=timeout)
             connect(1)
