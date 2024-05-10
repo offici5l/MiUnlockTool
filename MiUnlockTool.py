@@ -199,11 +199,11 @@ if "login" not in datav:
     save(datav, datafile)
     print(f"\n\n{cg}Login successful! Login saved.{cres}")
 
-region = json.loads(session.get("https://account.xiaomi.com/pass/user/login/region?").text.replace("&&&START&&&", ""))['data']['region']
+region = json.loads(requests.get("https://account.xiaomi.com/pass/user/login/region?", headers=headers, cookies={'passToken': data['passToken'], 'userId': str(data['userId']), 'deviceId': parse_qs(urlparse(data['location']).query)['d'][0]}).text.replace("&&&START&&&", ""))['data']['region']
 
 print(f"\n{cg}AccountInfo:{cres}\nid: {data['userId']}\nregion: {region}")
 
-region_config = json.loads(session.get("https://account.xiaomi.com/pass2/config?key=register").text.replace("&&&START&&&", ""))['regionConfig']
+region_config = json.loads(requests.get("https://account.xiaomi.com/pass2/config?key=register").text.replace("&&&START&&&", ""))['regionConfig']
 
 for key, value in region_config.items():
     if 'region.codes' in value and region in value['region.codes']:
