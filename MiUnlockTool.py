@@ -240,7 +240,6 @@ def connect(value):
         connected = 2
         print(c_no)
         [print(char, end='', flush=True) or time.sleep(0.04) for char in c__no]
-        browserp == "t" and print(f"\n{cgg}https://github.com/offici5l/MiUnlockTool/issues/18{cres}\n")
     if value == 0 and connected == 1:
         connected = 2
         print(c_nol)
