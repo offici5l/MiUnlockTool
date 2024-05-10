@@ -267,21 +267,21 @@ def CheckB(cmd, var_name, *fastboot_args):
             return cvalue       
         return lines[0] if lines else None
 
-[print(char, end='', flush=True) or time.sleep(0.01) for char in "\nCheck if device is connected in bootloader mode...\n"]
-
-unlocked = CheckB(cmd, "Device unlocked", "oem", "device-info")
-
-product = CheckB(cmd, "product", "getvar", "product")
-if not product:
-    product = input("\nFailed to obtain the product!\nPlease enter it manually: ")
-
-token = CheckB(cmd, "token", "oem", "get_token")
-if not token:
-    token = CheckB(cmd, "token", "getvar", "token")
+if '-m' in sys.argv:
+    token = input("\nEnter device token: ")
+    product = input("\nEnter device product: ")
+else:
+    [print(char, end='', flush=True) or time.sleep(0.01) for char in "\nCheck if device is connected in bootloader mode...\n"]
+    unlocked = CheckB(cmd, "Device unlocked", "oem", "device-info")
+    product = CheckB(cmd, "product", "getvar", "product")
+    if not product:
+        product = input("\nFailed to obtain the product!\nPlease enter it manually: ")
+    token = CheckB(cmd, "token", "oem", "get_token")
     if not token:
-        token = input("\nFailed to obtain the token!\nPlease enter it manually: ")
-
-print(f"\n{cg}DeviceInfo:{cres}\nunlocked: {unlocked}\nproduct: {product}\ntoken: {token}\n")
+        token = CheckB(cmd, "token", "getvar", "token")
+        if not token:
+            token = input("\nFailed to obtain the token!\nPlease enter it manually: ")
+    print(f"\n{cg}DeviceInfo:{cres}\nunlocked: {unlocked}\nproduct: {product}\ntoken: {token}\n")
 
 class RetrieveEncryptData:
     def add_nonce(self):
@@ -307,13 +307,20 @@ r = RetrieveEncryptData("/api/v3/ahaUnlock", {"appId":"1", "data":{"clientId":"2
 
 if "code" in r and r["code"] == 0:
     ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
-    with open("encryptData", "wb") as edfile:
+    if browserp == "wlm":
+        path = "encryptData"
+    else:
+        path = "/sdcard/Download/encryptData"
+    with open(path, "wb") as edfile:
         edfile.write(ed.getvalue())
+    if '-m' in sys.argv:
+        print(f"\nencryptData saved at: {path}\nTo unlock bootloader, use the following command:\n\n{cmd} stage {path}\nThen execute:\n{cmd} oem unlock\n")
+        sys.exit()
     CheckB(cmd, "serialno", "getvar", "serialno")
     print(f"\n{Fore.CYAN}An unlocked device is an easy target for malware which may damage your device or cause financial loss.\n\n" +
     (f"{Fore.RED}{Style.BRIGHT}user data will be cleared when the device is unlocked.{cres}\n" if product not in ["gemini", "ido", "kate", "kenzo", "land", "markw", "meri", "mido", "nikel", "omega", "prada", "rolex", "santoni", "venus", "wt88047"] else f"{Fore.GREEN}{Style.BRIGHT}Unlocking the device does not clear the user data{cres}\n\n"))
     input(f"{Style.BRIGHT}Press Enter to unlock bootloader{cres}\n")
-    os.system(f"{cmd} stage encryptData")
+    os.system(f"{cmd} stage {path}")
     os.system(f"{cmd} oem unlock")
 elif "descEN" in r:
     print(f"\ncode {r['code']}\n\n{r['descEN']}")
