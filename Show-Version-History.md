@@ -88,4 +88,7 @@ So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTo
 - Adding some improvements
 
 #### Version 1.5.0 (Update):
-- Add manual mode to unlock the bootloader 
+- Add manual mode to unlock the bootloader
+
+#### Version 1.5.0 (Update):
+- Enhanced request security and improved access to region data to fix issues "code 20033"
