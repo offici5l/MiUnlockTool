@@ -17,7 +17,7 @@ fi
 
 if ! python3 -c "import Cryptodome" &>/dev/null; then
     printf "\n\n\n\e[1;32mInstalling Cryptodome...\e[0m\\n\n\n"
-    yes | pip install pycryptodomex
+    yes | pip install pycryptodomex --extra-index-url https://termux-user-repository.github.io/pypi/
 fi
 
 if ! python3 -c "import urllib3" &>/dev/null; then
