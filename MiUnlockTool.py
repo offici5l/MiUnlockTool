@@ -272,7 +272,7 @@ if '-m' in sys.argv:
     product = input("\nEnter device product: ")
 else:
     [print(char, end='', flush=True) or time.sleep(0.01) for char in "\nCheck if device is connected in bootloader mode...\n"]
-    unlocked = CheckB(cmd, "Device unlocked", "oem", "device-info")
+    unlocked = CheckB(cmd, "unlocked", "getvar", "unlocked")
     product = CheckB(cmd, "product", "getvar", "product")
     if not product:
         product = input("\nFailed to obtain the product!\nPlease enter it manually: ")
