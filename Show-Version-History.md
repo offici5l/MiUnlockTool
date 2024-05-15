@@ -92,3 +92,6 @@ So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTo
 
 #### Version 1.5.0 (Update):
 - Enhanced request security and improved access to region data to fix issues "code 20033"
+
+#### Version 1.5.0 (Update):
+- Replace command "oem device-info" with "getvar unloked"
