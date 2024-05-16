@@ -178,6 +178,8 @@ if data["securityStatus"] == 16:
     p = postv("passport")
     if "passToken" not in p:
          print(f"\n{cr}Failed to get passToken !{cres}\n")
+         print('''\nPlease make sure to log out of your Xiaomi account in the default browser before running the tool. 
+Also, link an email or phone number to your Xiaomi account if you haven't done so already. \nThen, restart the tool. \n\nIf the issue persists, please follow these steps: \nGo to Settings > Mi Account > Devices > select the current device > Find device and ensure that "Find device" is enabled.\n''')
          datav.pop("wb_id")
          save(datav, datafile)
          exit()
