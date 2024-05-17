@@ -37,7 +37,10 @@ cres = Style.RESET_ALL
 cy = Style.BRIGHT + Fore.YELLOW
 p_ = cg + "\n" + "_"*56 +"\n"
 
-print(cgg + f"\n[V{version}] For issues or feedback:\n- GitHub: github.com/offici5l/MiUnlockTool/issues\n- Telegram: t.me/Offici5l_Group\n" + cres)
+if '1' in sys.argv:
+    pass
+else:
+    print(cgg + f"\n[V{version}] For issues or feedback:\n- GitHub: github.com/offici5l/MiUnlockTool/issues\n- Telegram: t.me/Offici5l_Group\n" + cres)
 
 print(p_)
 
@@ -165,6 +168,17 @@ datav = data
 session = requests.Session()
 headers = {"User-Agent": "XiaomiPCSuite"}
 
+def add_email(SetEmail):
+    input(f"\n{cr}Failed to get passToken !{cres}\n\nThe account is not linked to an email.\n{cg}Press Enter{cres} to open the email adding page.\nAfter successfully adding your email, return here")
+    if s == "Linux":
+        os.system("xdg-open '" + SetEmail + "'")
+    else:
+        webbrowser.open(SetEmail)
+    time.sleep(2)
+    input(f"\nIf email added successfully, {cg}press Enter{cres} to continue\n")
+    subprocess.run(["python", __file__, "1"])
+    sys.exit()
+
 def postv(sid):
     return json.loads(session.post(f"https://account.xiaomi.com/pass/serviceLoginAuth2?sid={sid}&_json=true&passive=true&hidden=true", data={"user": user, "hash": hashlib.md5(pwd.encode()).hexdigest().upper()}, headers=headers, cookies={"deviceId": str(wb_id)}).text.replace("&&&START&&&", ""))
 
@@ -174,13 +188,15 @@ if data["code"] == 70016:
     remove("user", "pwd")
     sys.exit()
 
+if data["securityStatus"] == 4 and "notificationUrl" in data and "bizType=SetEmail" in data["notificationUrl"]:
+    add_email(data["notificationUrl"])
+
 if data["securityStatus"] == 16:
     p = postv("passport")
-    if "passToken" not in p:
+    if p["securityStatus"] == 4 and "notificationUrl" in p and "bizType=SetEmail" in p["notificationUrl"]:
+        add_email(p["notificationUrl"])
+    elif "passToken" not in p:
          print(f"\n{cr}Failed to get passToken !{cres}\n")
-         print('''\nPlease make sure to log out of your Xiaomi account in the default browser before running the tool.\nAlso, link an email or phone number to your Xiaomi account if you haven't done so already. \nThen, restart the tool. \n\nIf the issue persists, please follow these steps:\nGo to Settings > Mi Account > Devices > select the current device > Find device and ensure that "Find device" is enabled.\n''')
-         datav.pop("wb_id")
-         save(datav, datafile)
          exit()
     data = json.loads(requests.get("https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&_json=true&passive=true&hidden=true", headers=headers, cookies={'passToken': p['passToken'], 'userId': str(p['userId']), 'deviceId': parse_qs(urlparse(p['location']).query)['d'][0]}).text.replace("&&&START&&&", ""))
 
