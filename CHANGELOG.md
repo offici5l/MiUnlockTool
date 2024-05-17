@@ -95,3 +95,6 @@ So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTo
 
 #### Version 1.5.0 (Update):
 - Replace command "oem device-info" with "getvar unloked"
+
+#### Version 1.5.0 (Update):
+- Adding steps to deal with "security Status 4", regarding adding email to xiaomi account This will fix "Failed to get pass Token"
