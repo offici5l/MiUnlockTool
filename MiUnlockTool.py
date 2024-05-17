@@ -33,6 +33,7 @@ init(autoreset=True)
 cg = Style.BRIGHT + Fore.GREEN
 cgg = Style.DIM
 cr = Fore.RED
+crr = Style.BRIGHT + Fore.RED
 cres = Style.RESET_ALL
 cy = Style.BRIGHT + Fore.YELLOW
 p_ = cg + "\n" + "_"*56 +"\n"
