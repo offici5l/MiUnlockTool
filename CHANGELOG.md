@@ -98,3 +98,6 @@ So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTo
 
 #### Version 1.5.0 (Update):
 - Adding steps to deal with "security Status 4", regarding adding email to xiaomi account This will fix "Failed to get pass Token"
+
+#### Version 1.5.0 (Update):
+- Re-added request 'api/v2/unlock/device/clear' to check if the device is cleared or not After unlocking bootloader
