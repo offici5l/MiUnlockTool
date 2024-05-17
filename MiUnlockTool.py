@@ -321,6 +321,16 @@ class RetrieveEncryptData:
 
 print(p_)
 
+c = RetrieveEncryptData("/api/v2/unlock/device/clear", {"data":{"product":product}}).add_nonce().run()
+cleanOrNot = c['cleanOrNot']
+print(Style.BRIGHT + Fore.CYAN + c['notice'] + cres)
+if cleanOrNot == 1:
+    print(f"\n{crr}This device clears user data when it is unlocked{cres}")
+elif cleanOrNot == -1:
+    print(f"\n{cg}Unlocking the device does not clear user data{cres}") 
+
+print(p_)
+
 r = RetrieveEncryptData("/api/v3/ahaUnlock", {"appId":"1", "data":{"clientId":"2", "clientVersion":"7.6.727.43", "language":"en", "operate":"unlock", "pcId":hashlib.md5(wb_id.encode("utf-8")).hexdigest(), "product":product, "region":"","deviceInfo":{"boardVersion":"","product":product, "socId":"","deviceName":""}, "deviceToken":token}}).add_nonce().run()
 
 if "code" in r and r["code"] == 0:
@@ -335,9 +345,7 @@ if "code" in r and r["code"] == 0:
         print(f"\nencryptData saved at: {path}\nTo unlock bootloader, use the following command:\n\n{cmd} stage {path}\nThen execute:\n{cmd} oem unlock\n")
         sys.exit()
     CheckB(cmd, "serialno", "getvar", "serialno")
-    print(f"\n{Fore.CYAN}An unlocked device is an easy target for malware which may damage your device or cause financial loss.\n\n" +
-    (f"{Fore.RED}{Style.BRIGHT}user data will be cleared when the device is unlocked.{cres}\n" if product not in ["gemini", "ido", "kate", "kenzo", "land", "markw", "meri", "mido", "nikel", "omega", "prada", "rolex", "santoni", "venus", "wt88047"] else f"{Fore.GREEN}{Style.BRIGHT}Unlocking the device does not clear the user data{cres}\n\n"))
-    input(f"{Style.BRIGHT}Press Enter to unlock bootloader{cres}\n")
+    input(f"{cg}Press Enter{cres} to unlock bootloader\n")
     os.system(f"{cmd} stage {path}")
     os.system(f"{cmd} oem unlock")
 elif "descEN" in r:
