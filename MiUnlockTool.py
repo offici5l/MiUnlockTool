@@ -37,6 +37,8 @@ crr = Style.BRIGHT + Fore.RED
 cres = Style.RESET_ALL
 cy = Style.BRIGHT + Fore.YELLOW
 p_ = cg + "\n" + "_"*56 +"\n"
+session = requests.Session()
+headers = {"User-Agent": "XiaomiPCSuite"}
 
 if '1' in sys.argv:
     pass
@@ -165,9 +167,6 @@ if "wb_id" not in data:
 user, pwd, wb_id = (data.get(key, "") for key in ["user", "pwd", "wb_id"])
 
 datav = data
-
-session = requests.Session()
-headers = {"User-Agent": "XiaomiPCSuite"}
 
 def add_email(SetEmail):
     input(f"\n{cr}Failed to get passToken !{cres}\n\nThe account is not linked to an email.\n{cg}Press Enter{cres} to open the email adding page.\nAfter successfully adding your email, return here")
