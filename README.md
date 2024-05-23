@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/MiUnlockTool-orange" alt="MiUnlockTool" width="200" height="40">
 
-[![Version 1.5.0](https://img.shields.io/badge/Version-1.5.0-brightgreen)](#)
+[![Version 1.5.1](https://img.shields.io/badge/Version-1.5.1-brightgreen)](#)
 
 developed to retrieve encryptData(token) for Xiaomi devices to unlock bootloader,
 It is compatible with all platforms.
