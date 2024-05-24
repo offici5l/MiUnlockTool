@@ -108,12 +108,12 @@ while os.path.isfile(datafile):
             choice = input(f"\nYou are already logged in with account uid: {data['uid']}\n{cg}Press Enter to continue\n{cgg}(to log out, type 2 and press Enter){cres}\n").strip().lower()
             if choice == "2":
                 os.remove(datafile)
-                break
             else:
                 break
         else:
             os.remove(datafile)
-            break
+    except PermissionError:
+        os.remove(datafile)
     except json.JSONDecodeError:
         os.remove(datafile)
 
