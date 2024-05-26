@@ -103,5 +103,5 @@ So the time was increased from 1s to [6s](https://github.com/offici5l/MiUnlockTo
 - Re-added request 'api/v2/unlock/device/clear' to check if the device is cleared or not After unlocking bootloader
 
 ### Version 1.5.1:
-- Simplified browser login: Confirm login instead of re-entering credentials
+- ~~Simplified browser login: Confirm login instead of re-entering credentials~~ canceled currently due to some problems
 - improvements
