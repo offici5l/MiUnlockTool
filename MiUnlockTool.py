@@ -149,16 +149,8 @@ if "pwd" not in data:
     save(data, datafile)
 
 if "wb_id" not in data:
-    rconl = json.loads(requests.post(f"https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&checkSafeAddress=true&passive=false&hidden=false&_json=true", data={"user": data.get('user', ""), "hash": hashlib.md5(data.get('pwd', "").encode()).hexdigest().upper()}, headers=headers).text.replace("&&&START&&&", ""))
-    if rconl["code"] == 70016:
-        remove("user", "pwd")
-        sys.exit()
-    elif rconl["notificationUrl"]:
-        conl = rconl['notificationUrl']
-    else:
-        print(rconl)
-        sys.exit()
-    input(f"\n{cg}Press Enter{cres} to open confirmation page, \n copy link after seeing {Fore.CYAN}{Style.BRIGHT}\"R\":\"\",\"S\":\"OK\"{Style.RESET_ALL}, \n  and return here\n\n")
+    input(f"\n{Fore.CYAN}Notice:\nIf logged in with any account in your default browser,\nplease log out before pressing Enter.\n\n{cres}{cg}Press Enter{cres} to open confirmation page, \n copy link after seeing {Fore.CYAN}{Style.BRIGHT}\"R\":\"\",\"S\":\"OK\"{Style.RESET_ALL}, \n  and return here\n\n")
+    conl = 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true&passive=false&hidden=false'
     if s == "Linux":
         os.system("xdg-open '" + conl + "'")
     else:
