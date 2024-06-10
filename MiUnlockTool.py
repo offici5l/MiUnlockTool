@@ -350,8 +350,12 @@ if "code" in r and r["code"] == 0:
         sys.exit()
     CheckB(cmd, "serialno", "getvar", "serialno")
     input(f"{cg}Press Enter{cres} to unlock bootloader\n")
-    os.system(f"{cmd} stage {path}")
-    os.system(f"{cmd} oem unlock")
+    try:
+        result_stage = subprocess.run([cmd, "stage", path], check=True, capture_output=True, text=True)
+        result_unlock = subprocess.run([cmd, "oem", "unlock"], check=True, capture_output=True, text=True)
+        print(f"\n{cg}Unlock successful{cgg}\n")
+    except subprocess.CalledProcessError as e:
+        print("Error message:", e.stderr)
 elif "descEN" in r:
     print(f"\ncode {r['code']}\n\n{r['descEN']}")
     if r["code"] == 20036:
