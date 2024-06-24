@@ -25,6 +25,11 @@ It is compatible with all platforms.
 2. Install [Termux API](https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk)
 
 3. From Termux command line:
+
+```
+termux-setup-storage
+```
+
 ```bash
 curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash
 ```
