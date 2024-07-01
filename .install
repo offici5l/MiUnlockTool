@@ -5,10 +5,7 @@ if ! command -v python3 &>/dev/null; then
     yes | pkg install python3
 fi
 
-if ! command -v adb &>/dev/null || ! command -v fastboot &>/dev/null; then
-    yes | apt update && yes | apt upgrade 
-    curl -s https://raw.githubusercontent.com/offici5l/termux-adb-fastboot/main/install | bash
-fi
+curl -s https://raw.githubusercontent.com/offici5l/termux-adb-fastboot/main/install | bash
 
 if ! python3 -c "import Cryptodome" &>/dev/null; then
     printf "\n\n\n\e[1;32mInstalling Cryptodome...\e[0m\\n\n\n"
