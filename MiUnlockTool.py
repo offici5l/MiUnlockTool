@@ -62,7 +62,6 @@ ttp = f"\nuse command: {cg}miunlock{cres}\n"
 
 def dwt():
     os.system("yes | pkg uninstall termux-adb 2>/dev/null; curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash; ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot")
-    print(notice)
     if os.path.exists(up):
         print(ttp)
         exit()
