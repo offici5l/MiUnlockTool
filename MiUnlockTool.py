@@ -321,13 +321,15 @@ print(p_)
 
 c = RetrieveEncryptData("/api/v2/unlock/device/clear", {"data":{"product":product}}).add_nonce().run()
 cleanOrNot = c['cleanOrNot']
-print(Style.BRIGHT + Fore.CYAN + c['notice'] + cres)
-if cleanOrNot == 1:
-    print(f"\n{crr}This device clears user data when it is unlocked{cres}")
-elif cleanOrNot == -1:
-    print(f"\n{cg}Unlocking the device does not clear user data{cres}") 
 
-choice = input(f"\n{cg}Press Enter to continue\n{cgg}( or type q and press Enter to quit){cres}\n")
+if cleanOrNot == 1:
+    print(f"\n{crr}This device clears user data when it is unlocked{cres}\n")
+elif cleanOrNot == -1:
+    print(f"\n{cg}Unlocking the device does not clear user data{cres}\n") 
+
+print(Style.BRIGHT + Fore.CYAN + c['notice'] + cres)
+
+choice = input(f"\n{cg}Press Enter to Unlock\n{cgg}( or type q and press Enter to quit){cres}")
 if choice.lower() == 'q':
     print("\nExiting...\n")
     exit() 
@@ -348,7 +350,6 @@ if "code" in r and r["code"] == 0:
         print(f"\nencryptData saved at: {path}\nTo unlock bootloader, use the following command:\n\n{cmd} stage {path}\nThen execute:\n{cmd} oem unlock\n")
         sys.exit()
     CheckB(cmd, "serialno", "getvar", "serialno")
-    input(f"{cg}Press Enter{cres} to unlock bootloader\n")
     try:
         result_stage = subprocess.run([cmd, "stage", path], check=True, capture_output=True, text=True)
         result_unlock = subprocess.run([cmd, "oem", "unlock"], check=True, capture_output=True, text=True)
