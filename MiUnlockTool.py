@@ -291,12 +291,12 @@ else:
     unlocked = CheckB(cmd, "unlocked", "getvar", "unlocked")
     product = CheckB(cmd, "product", "getvar", "product")
     if not product:
-        product = input("\nFailed to obtain the product!\nPlease enter it manually: ")
+        product = input("\nFailed to obtain the product!\nMaybe the device is in fastboot mode instead of bootloader mode.\nPlease enter it manually: ")
     token = CheckB(cmd, "token", "oem", "get_token")
     if not token:
         token = CheckB(cmd, "token", "getvar", "token")
         if not token:
-            token = input("\nFailed to obtain the token!\nPlease enter it manually: ")
+            token = input("\nFailed to obtain the token!\nMaybe the device is in fastboot mode instead of bootloader mode.\nPlease enter it manually: ")
     print(f"\n{cg}DeviceInfo:{cres}\nunlocked: {unlocked}\nproduct: {product}\ntoken: {token}\n")
 
 class RetrieveEncryptData:
