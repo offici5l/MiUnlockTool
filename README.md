@@ -1,41 +1,41 @@
 <div align="center">
-
-<img src="https://img.shields.io/badge/MiUnlockTool-orange" alt="MiUnlockTool" width="200" height="40">
-
-[![Version 1.5.5](https://img.shields.io/badge/Version-1.5.5-brightgreen)](#)
-
-[CHANGELOG](https://github.com/offici5l/MiUnlockTool/blob/main/CHANGELOG.md)
-
-developed to retrieve encryptData(token) for Xiaomi devices to unlock bootloader,
-It is compatible with all platforms.
-
-[![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
-
+  <img src="https://img.shields.io/badge/MiUnlockTool-%23FF6900?style=flat&logo=xiaomi&logoColor=white" alt="MiUnlockTool" width="200"/>
+  <p>Developed to retrieve <code>encryptData(token)</code> for Xiaomi devices to unlock the bootloader. Compatible with all platforms.</p>
+  <br>
+  <div style="display: inline-block;">
+    <img src="https://img.shields.io/badge/Version-1.5.5-brightgreen" alt="Version 1.5.5" width="100"/>
+    <a href="https://github.com/offici5l/MiUnlockTool/blob/main/CHANGELOG.md">
+      <img src="https://img.shields.io/badge/Changelog-%23000000?style=flat&logo=github&logoColor=white" alt="CHANGELOG"/>
+    </a>
+  </div>
+  <br>
+  <a href="https://t.me/Offici5l_Channel">
+    <img src="https://img.shields.io/badge/Telegram-%230077B5?style=flat&logo=telegram&logoColor=white" alt="Telegram Channel"/>
+  </a>
 </div>
 
-# Installation:
+<h2>Installation:</h2>
 
-### For MacOS, Linux, Windows:
+<h3>For Windows, Linux, MacOS :</h3>
 
-1. Install Python3.
-2. Download [MiUnlockTool](https://codeload.github.com/offici5l/MiUnlockTool/zip/refs/heads/main) and run it.
+<ol>
+  <li>Install Python3.</li>
+  <li>Download <a href="https://codeload.github.com/offici5l/MiUnlockTool/zip/refs/heads/main">MiUnlockTool</a> and run it.</li>
+</ol>
 
-### For Android:
+<h3>For Android :</h3>
 
-1. Install [Termux](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_universal.apk)
+<ol>
+  <li>Install <a href="https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_universal.apk">Termux</a>.</li>
+  <li>Install <a href="https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk">Termux API</a>.</li>
+  <li>From the Termux command line, run the following commands:</li>
+</ol>
 
-2. Install [Termux API](https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk)
-
-3. From Termux command line:
-```
-termux-setup-storage
-```
-```
-curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash
-```
+<pre><code>termux-setup-storage</code></pre>
+<pre><code>curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash</code></pre>
 
 <div align="center">
-
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
-
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License"/>
+  </a>
 </div>
