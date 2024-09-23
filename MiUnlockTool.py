@@ -76,6 +76,11 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
             dwt()
     except (FileNotFoundError, Exception):
         dwt()
+    if not os.path.exists(up):
+        shutil.copy(__file__, up)
+        os.system(f"chmod +x {up}")
+        print(f"\nuse command: {cg}miunlock{cres}\n")
+        exit()
     if not os.path.exists("/data/data/com.termux.api"):
         print("\ncom.termux.api app is not installed\nPlease install it first : \n\nhttps://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk")
         exit()
