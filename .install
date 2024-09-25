@@ -21,9 +21,10 @@ else
     exit 1
 fi
 
+echo -e "\nRepo URL check...\n"
+
 main_repo=$(grep -E '^deb ' /data/data/com.termux/files/usr/etc/apt/sources.list | awk '{print $2}' | head -n 1)
 
-echo -e "\nChecking $main_repo ...\n"
 curl -s --retry 4 $main_repo > /dev/null
 exit_code=$?
 
@@ -36,8 +37,6 @@ elif [ $exit_code -eq 35 ]; then
 fi
 
 git_repo="https://raw.githubusercontent.com"
-
-echo -e "\nChecking $git_repo ...\n"
 
 curl -s --retry 4 $git_repo > /dev/null
 exit_code=$?
@@ -83,8 +82,8 @@ compare_versions() {
   if [ "$installed_version" == "$available_version" ]; then
     echo -e "\n$package_name is already the newest version.\n"
   else
-    curl -O "$url/${package_name}_${available_version}_${arch}.deb"
-    dpkg -i "${package_name}_${available_version}_${arch}.deb"
+    curl -s -O "$url/${package_name}_${available_version}_${arch}.deb"
+    dpkg -i "${package_name}_${available_version}_${arch}.deb" >/dev/null 2>&1
     rm -f "${package_name}_${available_version}_${arch}.deb"
   fi
 }
@@ -119,9 +118,9 @@ for package in "${packages[@]}"; do
         echo -e "\n$package is already the newest version.\n"
     else
         echo -e "\nDownloading $package...\n"
-        apt download "$package"
+        apt download "$package" >/dev/null 2>&1
         echo -e "\nInstalling $package...\n"
-        dpkg -i "${package}"*.deb
+        dpkg -i "${package}"*.deb >/dev/null 2>&1
         rm -f "${package}"*.deb
     fi
 done
