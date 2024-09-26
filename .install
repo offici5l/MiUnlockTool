@@ -103,7 +103,7 @@ compare_versions() {
   if [ "$installed_version" != "$available_version" ]; then
     curl -s -O "$url/${package_name}_${available_version}_${arch}.deb"
     dpkg -i "${package_name}_${available_version}_${arch}.deb" >/dev/null 2>&1
-    rm -f "${package_name}_${available_version}_${arch}.deb"
+    rm -f "${package}_${candidate}_${arch}.deb"
   fi
 
   _progress
