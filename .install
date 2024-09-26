@@ -102,7 +102,7 @@ compare_versions() {
   installed_version="$3"
   if [ "$installed_version" != "$available_version" ]; then
     curl -s -O "$url/${package_name}_${available_version}_${arch}.deb"
-    dpkg -i "${package_name}_${available_version}_${arch}.deb" >/dev/null 2>&1
+    dpkg --force-overwrite -i "${package_name}_${available_version}_${arch}.deb" >/dev/null 2>&1
     rm -f "${package_name}_${available_version}_${arch}.deb"
   fi
 
@@ -138,7 +138,7 @@ for package in "${packages[@]}"; do
     candidate=$(apt policy "$package" 2>/dev/null | grep 'Candidate' | awk '{print $2}')
     if [ "$installed" != "$candidate" ]; then
         apt download "$package" >/dev/null 2>&1
-        dpkg -i "${package}"*.deb >/dev/null 2>&1
+        dpkg --force-overwrite -i "${package}"*.deb >/dev/null 2>&1
         rm -f "${package}"*.deb
     fi
 
