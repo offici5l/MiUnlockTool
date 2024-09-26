@@ -139,7 +139,7 @@ for package in "${packages[@]}"; do
     if [ "$installed" != "$candidate" ]; then
         apt download "$package" >/dev/null 2>&1
         dpkg -i "${package}"*.deb >/dev/null 2>&1
-        rm -f "${package}_${candidate}_${arch}.deb"
+        rm -f "${package}"*.deb
     fi
 
     _progress
