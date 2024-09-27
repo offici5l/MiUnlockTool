@@ -32,7 +32,7 @@
 </ol>
 
 <pre><code>termux-setup-storage</code></pre>
-<pre><code>curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash</code></pre>
+<pre><code>curl -s https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash</code></pre>
 
 <div align="center">
   <a href="./LICENSE">
