@@ -18,6 +18,8 @@ if [ "$arch" = "aarch64" ]; then
     arch="aarch64"
 elif [ "$arch" = "armv7l" ]; then
     arch="arm"
+elif [ "$arch" = "armv8l" ]; then
+    arch="arm"
 else
     echo -e "\nArchitecture $arch not supported\n"
     exit 1
