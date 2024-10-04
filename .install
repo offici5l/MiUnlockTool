@@ -168,7 +168,7 @@ check_package() {
 }
 
 check_package "urllib3" "pip install urllib3"
-check_package "pycryptodomex" "pip install pycryptodomex --extra-index-url https://termux-user-repository.github.io/pypi/"
+check_package "pycryptodomex" "pip install https://github.com/termux-user-repository/pypi-wheel-builder/releases/download/wheels/pycryptodomex-3.20.0-cp311-cp311-linux_${arch}.whl"
 check_package "requests" "pip install requests"
 check_package "colorama" "pip install colorama"
 
