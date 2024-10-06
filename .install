@@ -2,11 +2,6 @@
 
 echo
 
-if [ ! -d "$HOME/storage" ]; then
-    echo -e "\nGrant permission: termux-setup-storage\nThen rerun the command.\n"
-    exit 1
-fi
-
 if [ ! -d "/data/data/com.termux.api" ]; then
     echo -e "\ncom.termux.api app is not installed\nPlease install it first\n"
     exit 1
@@ -168,7 +163,7 @@ check_package() {
 }
 
 check_package "urllib3" "pip install urllib3"
-check_package "pycryptodomex" "pip install https://github.com/termux-user-repository/pypi-wheel-builder/releases/download/wheels/pycryptodomex-3.20.0-cp311-cp311-linux_${arch}.whl"
+check_package "pycryptodomex" "pip install pycryptodomex --index-url https://termux-user-repository.github.io/pypi/
 check_package "requests" "pip install requests"
 check_package "colorama" "pip install colorama"
 
