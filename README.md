@@ -28,7 +28,7 @@
 <ol>
   <li>Install <a href="https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_universal.apk">Termux</a>.</li>
   <li>Install <a href="https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk">Termux API</a>.</li>
-  <li>From the Termux command line, run the following commands:</li>
+  <li>From the Termux command line, run :</li>
 </ol>
 
 <pre><code>curl -s https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash</code></pre>
