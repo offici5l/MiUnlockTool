@@ -147,3 +147,8 @@ FileNotFoundError: [Errno 2] No such file or directory: '/sdcard/Download/encryp
 
 - Add print the type of SoC, based on the order that gets the token.
 
+### Version 1.5.6:
+
+- Remove manual mode, and remove some functions that are no longer necessary. 
+- Some improvements, to handle jobs better.
+- Fix the issue with termux (Error message: fastboot: error: cannot load /sdcard/encryptData) , due to some termux-setup-storage issues, the encryptData will now be saved in $PREFIX/bin instead of /sdcard...
