@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-version = "1.5.5"
+version = "1.5.6"
 
 import os
 
@@ -9,12 +9,9 @@ for lib in ['Cryptodome', 'urllib3', 'requests', 'colorama']:
         __import__(lib)
     except ImportError:
         prefix = os.getenv("PREFIX", "")
-        if "com.termux" in prefix:
-            os.system('yes | pkg update')
-        
         if lib == 'Cryptodome':
             if "com.termux" in prefix:
-                cmd = 'pip install pycryptodomex --extra-index-url https://termux-user-repository.github.io/pypi/'
+                cmd = 'pip install pycryptodomex --index-url https://termux-user-repository.github.io/pypi/'
             else:
                 cmd = 'pip install pycryptodomex'
         else:
@@ -47,60 +44,44 @@ else:
 
 print(p_)
 
-def dw(s):
-    print("\ndownload platform-tools...\n")
-    url = f"https://dl.google.com/android/repository/platform-tools-latest-{s}.zip"
-    cd = os.path.join(os.path.dirname(__file__))
-    fp = os.path.join(cd, os.path.basename(url))    
-    urllib.request.urlretrieve(url, fp)    
-    with zipfile.ZipFile(fp, 'r') as zip_ref:
-        zip_ref.extractall(cd)
-    os.remove(fp)
-
-up = os.path.join(os.getenv("PREFIX", ""), "bin", "miunlock")
-
-def dwt():
-    os.system("curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash")
-    if not os.path.exists(up):
-        shutil.copy(__file__, up)
-        os.system(f"chmod +x {up}")
-        exit()
-    else:
-        exit()
-
 s = platform.system()
 if s == "Linux" and os.path.exists("/data/data/com.termux"):
+    up = os.path.join(os.getenv("PREFIX", ""), "bin", "miunlock")
     try:
-        result_fastboot = os.popen("fastboot --version").read()
-        if "fastboot version" not in result_fastboot:
-            dwt()
-    except (FileNotFoundError, Exception):
-        dwt()
+        if "fastboot version" not in os.popen("fastboot --version").read():
+            raise Exception
+    except:
+        os.system("curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash")
+        exit()
     if not os.path.exists(up):
         shutil.copy(__file__, up)
         os.system(f"chmod +x {up}")
         print(f"\nuse command: {cg}miunlock{cres}\n")
         exit()
     if not os.path.exists("/data/data/com.termux.api"):
-        print("\ncom.termux.api app is not installed\nPlease install it first : \n\nhttps://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk")
+        print("\ncom.termux.api app is not installed\nPlease install it first\n")
         exit()
     cmd = "fastboot"
-    datafile = os.path.expanduser("~/data.json")
     browserp = "t"
-    if not os.path.isdir(os.path.expanduser('~/storage')):
-        print("\nPlease grant permission via command:\ntermux-setup-storage\n\nthen restart the tool\n")
-        exit()
 else:
     dir = os.path.dirname(__file__)
     fp = os.path.join(dir, "platform-tools")
     if not os.path.exists(fp):
-        dw(s)
+        print("\ndownload platform-tools...\n")
+        url = f"https://dl.google.com/android/repository/platform-tools-latest-{s}.zip"
+        cd = os.path.join(os.path.dirname(__file__))
+        fp = os.path.join(cd, os.path.basename(url))    
+        urllib.request.urlretrieve(url, fp)    
+        with zipfile.ZipFile(fp, 'r') as zip_ref:
+            zip_ref.extractall(cd)
+        os.remove(fp)
     cmd = os.path.join(fp, "fastboot")
     if s == "Linux" or s == "Darwin":
         st = os.stat(cmd)
         os.chmod(cmd, st.st_mode | stat.S_IEXEC)
-    datafile = os.path.join(dir, "data.json")
     browserp = "wlm"
+
+datafile = os.path.join(os.path.dirname(__file__), "data.json")
 
 while os.path.isfile(datafile):
     try:
@@ -288,42 +269,31 @@ def CheckB(cmd, var_name, *fastboot_args):
             return "".join(lines)
         return lines[0] if lines else None
 
+[print(char, end='', flush=True) or time.sleep(0.01) for char in "\nEnsure you're in Bootloader mode (fastboot mode)\n\n"]
+
+unlocked = None
 product = None
 SoC = None
 token = None
-unlocked = None
 
-if '-m' in sys.argv:
-    token = input("\nEnter device token: ")
-    product = input("\nEnter device product: ")
-else:
-    [print(char, end='', flush=True) or time.sleep(0.01) for char in "\nEnsure you're in Bootloader mode\n\n"]
-
-    for _ in range(4):
+while unlocked is None or product is None or SoC is None or token is None:
+    if unlocked is None:
         unlocked = CheckB(cmd, "unlocked", "getvar", "unlocked")
-        if unlocked:
-            break
-
-    for _ in range(4):
+    if product is None:
         product = CheckB(cmd, "product", "getvar", "product")
-        if product:
-            break
-
-    for _ in range(4):
+    if token is None:
         token = CheckB(cmd, "token", "oem", "get_token")
         if token:
             SoC = "Mediatek"
-            break
-        token = CheckB(cmd, "token", "getvar", "token")
-        if token:
-            SoC = "Qualcomm"
-            break
-
+        else:
+            token = CheckB(cmd, "token", "getvar", "token")
+            if token:
+                SoC = "Qualcomm"
 
 sys.stdout.write('\r\033[K')
 
 print(f"\n{cg}DeviceInfo:{cres}\nunlocked: {unlocked}\nSoC: {SoC}\nproduct: {product}\ntoken: {token}\n")
-      
+
 class RetrieveEncryptData:
     def add_nonce(self):
         r = RetrieveEncryptData("/api/v2/nonce", {"r":''.join(random.choices(list("abcdefghijklmnopqrstuvwxyz"), k=16)), "sid":"miui_unlocktool_client"}).run()
@@ -365,20 +335,15 @@ r = RetrieveEncryptData("/api/v3/ahaUnlock", {"appId":"1", "data":{"clientId":"2
 
 if "code" in r and r["code"] == 0:
     ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
-    if browserp == "wlm":
-        path = "encryptData"
-    else:
-        path = "/sdcard/encryptData"
-    with open(path, "wb") as edfile:
+    with open("encryptData", "wb") as edfile:
         edfile.write(ed.getvalue())
-    if '-m' in sys.argv:
-        print(f"\nencryptData saved at: {path}\nTo unlock bootloader, use the following command:\n\n{cmd} stage {path}\nThen execute:\n{cmd} oem unlock\n")
-        sys.exit()
     CheckB(cmd, "serialno", "getvar", "serialno")
+    sys.stdout.write('\r\033[K')
     try:
         result_stage = subprocess.run([cmd, "stage", path], check=True, capture_output=True, text=True)
         result_unlock = subprocess.run([cmd, "oem", "unlock"], check=True, capture_output=True, text=True)
         print(f"\n{cg}Unlock successful{cgg}\n")
+        os.remove("encryptData")
     except subprocess.CalledProcessError as e:
         print("Error message:", e.stderr)
 elif "descEN" in r:
