@@ -81,7 +81,7 @@ else:
         os.chmod(cmd, st.st_mode | stat.S_IEXEC)
     browserp = "wlm"
 
-datafile = os.path.join(os.path.dirname(__file__), "data.json")
+datafile = os.path.join(os.path.dirname(__file__), "miunlockdata.json")
 
 while os.path.isfile(datafile):
     try:
