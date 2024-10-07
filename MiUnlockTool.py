@@ -11,7 +11,7 @@ for lib in ['Cryptodome', 'urllib3', 'requests', 'colorama']:
         prefix = os.getenv("PREFIX", "")
         if lib == 'Cryptodome':
             if "com.termux" in prefix:
-                cmd = 'pip install pycryptodomex --index-url https://termux-user-repository.github.io/pypi/'
+                cmd = 'pip install pycryptodomex --index-url https://offici5l.github.io/archives/plib/'
             else:
                 cmd = 'pip install pycryptodomex'
         else:
