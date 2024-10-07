@@ -340,7 +340,7 @@ if "code" in r and r["code"] == 0:
     CheckB(cmd, "serialno", "getvar", "serialno")
     sys.stdout.write('\r\033[K')
     try:
-        result_stage = subprocess.run([cmd, "stage", path], check=True, capture_output=True, text=True)
+        result_stage = subprocess.run([cmd, "stage", "encryptData"], check=True, capture_output=True, text=True)
         result_unlock = subprocess.run([cmd, "oem", "unlock"], check=True, capture_output=True, text=True)
         print(f"\n{cg}Unlock successful{cgg}\n")
         os.remove("encryptData")
