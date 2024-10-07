@@ -163,7 +163,7 @@ check_package() {
 }
 
 check_package "urllib3" "pip install urllib3"
-check_package "pycryptodomex" "pip install pycryptodomex --index-url https://offici5l.github.io/archives/plib/
+check_package "pycryptodomex" "pip install pycryptodomex --index-url https://offici5l.github.io/archives/plib/"
 check_package "requests" "pip install requests"
 check_package "colorama" "pip install colorama"
 
