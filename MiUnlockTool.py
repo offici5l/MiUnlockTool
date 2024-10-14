@@ -126,7 +126,7 @@ def save(data, path):
         json.dump(data, file, indent=2)
 
 if "user" not in data:
-    data["user"] = input("\n\n(Xiaomi Account) Id or Email or Phone: ")
+    data["user"] = input("\n\n(Xiaomi Account) Id or Email or Phone (in international format): ")
     save(data, datafile)
 
 if "pwd" not in data:
