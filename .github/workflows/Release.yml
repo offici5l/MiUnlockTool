@@ -1,0 +1,22 @@
+name: Release miunlock
+
+on:
+  push:
+    paths:
+      - MiUnlockTool.py
+  pull_request:
+    paths:
+      - MiUnlockTool.py
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Upload Release
+        run: |
+          gh release upload miunlock ./MiUnlockTool.py --clobber
+        env:
+          ${{ secrets.GITHUB_TOKEN }}
