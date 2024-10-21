@@ -19,4 +19,4 @@ jobs:
         run: |
           gh release upload miunlock ./MiUnlockTool.py --clobber
         env:
-          ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
