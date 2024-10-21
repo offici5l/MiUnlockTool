@@ -15,8 +15,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Upload Release
+      - name: Get version
+        id: get_version
         run: |
+          version=$(grep -oP '(?<=version = ")(.*)(?=")' MiUnlockTool.py)
+          echo "VERSION=$version" >> $GITHUB_ENV
+
+      - name: add miunlock version and upload file
+        run: |
+          gh release edit miunlock --notes "version $VERSION."
           gh release upload miunlock ./MiUnlockTool.py --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
