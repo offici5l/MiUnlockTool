@@ -23,7 +23,7 @@ jobs:
 
       - name: add miunlock version and upload file
         run: |
-          gh release edit miunlock --notes "version $VERSION."
+          gh release edit miunlock --notes "VERSION: $VERSION"
           gh release upload miunlock ./MiUnlockTool.py --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
