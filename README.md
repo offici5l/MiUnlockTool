@@ -20,7 +20,7 @@
 
 <ol>
   <li>Install Python3.</li>
-  <li>Download <a href="https://codeload.github.com/offici5l/MiUnlockTool/zip/refs/heads/main">MiUnlockTool</a> and run it.</li>
+  <li>Download <a href="https://github.com/offici5l/MiUnlockTool/releases/download/miunlock/MiUnlockTool.py">MiUnlockTool</a> and run it.</li>
 </ol>
 
 <h3>For Android :</h3>

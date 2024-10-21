@@ -163,7 +163,7 @@ for lib in "${libs[@]}"; do
 
 done
 
-curl -s "https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/MiUnlockTool.py" -o "$PREFIX/bin/miunlock" && chmod +x "$PREFIX/bin/miunlock"
+curl -sSL -o "$PREFIX/bin/miunlock" https://github.com/offici5l/MiUnlockTool/releases/download/miunlock/MiUnlockTool.py && chmod +x "$PREFIX/bin/miunlock"
 
 _progress
 
