@@ -13,7 +13,8 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Get version
         id: get_version
@@ -21,10 +22,27 @@ jobs:
           version=$(grep -oP '(?<=version = ")(.*)(?=")' MiUnlockTool.py)
           echo "VERSION=$version" >> $GITHUB_ENV
 
-      - name: add miunlock version and upload file
+      - name: Check if tag exists
+        id: check_tag
         run: |
-          gh release edit miunlock --notes "VERSION: $VERSION"
-          gh release upload miunlock ./MiUnlockTool.py --clobber
+          if git tag | grep -q "$VERSION"; then
+            echo "Tag $VERSION already exists."
+            echo "TAG_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "Tag $VERSION does not exist."
+            echo "TAG_EXISTS=false" >> $GITHUB_ENV
+          fi
+
+      - name: Create tag if not exists
+        if: env.TAG_EXISTS == 'false'
+        run: |
+          git tag "$VERSION"
+          git push origin "$VERSION"
+
+      - name: Add miunlock version and upload file
+        run: |
+          gh release edit --latest --title "VERSION: $VERSION"
+          gh release upload --latest ./MiUnlockTool.py --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
