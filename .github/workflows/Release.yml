@@ -22,24 +22,23 @@ jobs:
           version=$(grep -oP '(?<=version = ")(.*)(?=")' MiUnlockTool.py)
           echo "VERSION=$version" >> $GITHUB_ENV
 
-      - name: Check if tag exists
-        id: check_tag
+      - name: tag
         run: |
-          if git tag | grep -q "$VERSION"; then
-            echo "Tag $VERSION already exists."
-            echo "TAG_EXISTS=true" >> $GITHUB_ENV
-          else
-            echo "Tag $VERSION does not exist."
-            echo "TAG_EXISTS=false" >> $GITHUB_ENV
+          if ! git tag | grep -q "$VERSION"; then
+            git tag "$VERSION"
+            git push origin "$VERSION"
           fi
 
-      - name: Create tag if not exists
-        if: env.TAG_EXISTS == 'false'
+      - name: release
         run: |
-          git tag "$VERSION"
-          git push origin "$VERSION"
+          if ! gh release view $VERSION; then
+            gh release create $VERSION --title "Release $VERSION" --notes "VERSION: $VERSION"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
 
-      - name: Add miunlock version and upload file
+      - name: upload
         run: |
           gh release edit $VERSION --notes "VERSION: $VERSION"
           gh release upload $VERSION ./MiUnlockTool.py --clobber
