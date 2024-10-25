@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-version = "1.5.6"
+version = "1.5.7"
 
 import os
 
@@ -37,10 +37,27 @@ p_ = cg + "\n" + "_"*56 +"\n"
 session = requests.Session()
 headers = {"User-Agent": "XiaomiPCSuite"}
 
+def check_for_update():
+    try:
+        response = requests.get("https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/MiUnlockTool.py", timeout=3)
+        response.raise_for_status()
+        match = re.search(r'version\s*=\s*[\'"]([^\'"]+)[\'"]', response.text)
+        if match:
+            cloud_version = match.group(1)
+            if version < cloud_version:
+                print(f"\nNew version {cloud_version} is available")
+                with open(__file__, "w", encoding="utf-8") as f:
+                    f.write(response.text)
+                    print(f"\n{cg}Updated successfully{cres}")
+                os.execv(sys.executable)
+    except Exception as e:
+        pass
+
 if '1' in sys.argv:
     pass
 else:
     print(cgg + f"\n[V{version}] For issues or feedback:\n- GitHub: github.com/offici5l/MiUnlockTool/issues\n- Telegram: t.me/Offici5l_Group\n" + cres)
+    check_for_update()
 
 print(p_)
 
@@ -62,7 +79,6 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
         print("\ncom.termux.api app is not installed\nPlease install it first\n")
         exit()
     cmd = "fastboot"
-    browserp = "t"
 else:
     dir = os.path.dirname(__file__)
     fp = os.path.join(dir, "platform-tools")
@@ -79,7 +95,6 @@ else:
     if s == "Linux" or s == "Darwin":
         st = os.stat(cmd)
         os.chmod(cmd, st.st_mode | stat.S_IEXEC)
-    browserp = "wlm"
 
 datafile = os.path.join(os.path.dirname(__file__), "miunlockdata.json")
 
@@ -111,7 +126,7 @@ def remove(*keys):
         file.seek(0)
         json.dump(data, file, indent=2)
         file.truncate()
-    subprocess.run(["python", __file__, "1"])
+    os.execv(sys.executable, [sys.executable] + sys.argv + ['1'])
 
 try:
     with open(datafile, "r+") as file:
@@ -126,11 +141,15 @@ def save(data, path):
         json.dump(data, file, indent=2)
 
 if "user" not in data:
-    data["user"] = input("\n\n(Xiaomi Account) Id or Email or Phone (in international format): ")
+    data["user"] = input("Xiaomi Account\nId or Email or Phone(in international format)\n : ")
+    sys.stdout.write("\033[F\033[K\033[F\033[K\033[F\033[K")
+    sys.stdout.flush()
     save(data, datafile)
 
 if "pwd" not in data:
-    data["pwd"] = input("\nEnter password: ")
+    data["pwd"] = input("Enter password: ")
+    sys.stdout.write("\033[F\033[K")
+    sys.stdout.flush()
     save(data, datafile)
 
 if "wb_id" not in data:
@@ -141,11 +160,10 @@ if "wb_id" not in data:
     else:
         webbrowser.open(conl)
     time.sleep(2)
-    wb_id = parse_qs(urlparse(input("\nEnter Link: ")).query).get('d', [None])[0]
+    wb_id = parse_qs(urlparse(input("Enter Link: ")).query).get('d', [None])[0]
     if wb_id is None:
         print("\n\nInvalid link\n")
-        subprocess.run(["python", __file__, "1"])
-        sys.exit()
+        os.execv(sys.executable, [sys.executable] + sys.argv + ['1'])
     data["wb_id"] = wb_id
     save(data, datafile)
 
@@ -161,8 +179,7 @@ def add_email(SetEmail):
         webbrowser.open(SetEmail)
     time.sleep(2)
     input(f"\nIf email added successfully, {cg}press Enter{cres} to continue\n")
-    subprocess.run(["python", __file__, "1"])
-    sys.exit()
+    os.execv(sys.executable, [sys.executable] + sys.argv + ['1'])
 
 def postv(sid):
     return json.loads(session.post(f"https://account.xiaomi.com/pass/serviceLoginAuth2?sid={sid}&_json=true&passive=true&hidden=true", data={"user": user, "hash": hashlib.md5(pwd.encode()).hexdigest().upper()}, headers=headers, cookies={"deviceId": str(wb_id)}).text.replace("&&&START&&&", ""))
@@ -171,7 +188,6 @@ data = postv("unlockApi")
 
 if data["code"] == 70016:
     remove("user", "pwd")
-    sys.exit()
 
 if data["securityStatus"] == 4 and "notificationUrl" in data and "bizType=SetEmail" in data["notificationUrl"]:
     add_email(data["notificationUrl"])
@@ -192,7 +208,6 @@ cookies = {cookie.name: cookie.value for cookie in session.get(location + "&clie
 if 'serviceToken' not in cookies:
     print(f"\n{cr}Failed to get serviceToken.{cres}")
     remove("wb_id")
-    sys.exit()
 
 if "login" not in datav:
     datav["login"] = "ok"
@@ -350,12 +365,13 @@ elif "descEN" in r:
     print(f"\ncode {r['code']}\n\n{r['descEN']}")
     if r["code"] == 20036:
         print("\nYou can unlock on:", (datetime.datetime.now().replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=r["data"]["waitHour"])).strftime("%Y-%m-%d %H:%M"))
-    if r["code"] == 10000:
-        print(f"\n{cr}invalid product or token")
+    else:
+        print(f"{cgg}\noffici5l.github.io/code\n{cres}")
 else:
     for key, value in r.items():
         print(f"\n{key}: {value}")
 
 print(p_)
 
-browserp == "wlm" and input("\nPress Enter to exit ...")
+if not os.path.exists("/data/data/com.termux"):
+    input("\nPress Enter to exit ...")
