@@ -16,13 +16,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: version
+      - name: Get version
         id: get_version
         run: |
           version=$(grep -oP '(?<=version = ")(.*)(?=")' MiUnlockTool.py)
           echo "VERSION=$version" >> $GITHUB_ENV
 
-      - name: tag
+      - name: Tag
         run: |
           if ! git ls-remote --tags origin | grep -q "$VERSION"; then
             git tag "$VERSION"
@@ -31,21 +31,14 @@ jobs:
             echo "Tag $VERSION already exists, skipping tag creation."
           fi
 
-      - name: release
+      - name: Create Release and Upload
         run: |
           if ! gh release view $VERSION; then
             gh release create $VERSION --title "Release $VERSION"
+            gh release upload $VERSION ./MiUnlockTool.py --clobber
           else
             echo "Release $VERSION already exists, skipping release creation."
-            exit 1
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ env.VERSION }}
-
-      - name: upload
-        run: |
-          gh release upload $VERSION ./MiUnlockTool.py --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
