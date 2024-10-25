@@ -1,5 +1,10 @@
 # The file content is linked to the link : http://offici5l.github.io/code.html
 
+20041:
+  message: "sorry, your mi id is not associated with a phone number"
+  description: "The xiaomi account is not linked to a phone number"
+  solution: "Add a phone number to the xiaomi account. ( If the option to add a phone number is not available, it can be added via : https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafePhone=true )"
+
 10013:
   message: "This device is not activated, please activate it and try to unlock it again"
   description: "The issue is often due to a part (most likely the motherboard) being replaced in the device."
