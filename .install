@@ -25,7 +25,7 @@ miunlockusersok="false"
 miunlockusers="$PREFIX/bin/.miunlockusersok"
 mitoolusers="$PREFIX/bin/.mitoolusersok"
 
-if [ -f "$miunlockusers" ] || [ -f "$mitoolusers" ]; then
+if [ ! -f "$miunlockusers" ] && [ ! -f "$mitoolusers" ]; then
     echo -ne "\rapt upgrade ..."
     apt upgrade > /dev/null 2> >(grep -v "apt does not have a stable CLI interface")
     touch "$miunlockusers"
