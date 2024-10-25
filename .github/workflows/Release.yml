@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Get version
+      - name: version
         id: get_version
         run: |
           version=$(grep -oP '(?<=version = ")(.*)(?=")' MiUnlockTool.py)
@@ -37,6 +37,7 @@ jobs:
             gh release create $VERSION --title "Release $VERSION"
           else
             echo "Release $VERSION already exists, skipping release creation."
+            exit 1
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,27 +45,6 @@ jobs:
 
       - name: upload
         run: |
-          if git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
-            if git diff --name-only HEAD~1 HEAD | grep -q "MiUnlockTool.py"; then
-              commit_message=$(git log -1 --pretty=format:"%s" -- MiUnlockTool.py)
-              old_notes=$(gh release view $VERSION --json body -q '.body')
-              if [ -z "$old_notes" ]; then
-                notes="$commit_message"
-              else
-                if [ "$old_notes" = "$commit_message" ]; then
-                  notes="$commit_message"
-                else
-                  notes="${old_notes}\n$commit_message"
-                fi
-              fi
-              new_notes=$(echo -e "$notes")
-              gh release edit $VERSION --notes "$new_notes"
-            else
-              echo "MiUnlockTool.py was not modified in the last commit, skipping notes update."
-            fi
-          else
-            echo "No previous commit to compare with."
-          fi
           gh release upload $VERSION ./MiUnlockTool.py --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
