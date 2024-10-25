@@ -153,3 +153,8 @@ FileNotFoundError: [Errno 2] No such file or directory: '/sdcard/Download/encryp
 - Some improvements, to handle jobs better.
 - Fix the issue with termux (Error message: fastboot: error: cannot load /sdcard/encryptData) , due to some termux-setup-storage issues, the encryptData will now be saved in $PREFIX/bin instead of /sdcard...
 - Other improvements in the installation process regarding Termux.
+
+### Version 1.5.7:
+
+- Enhanced performance of functions. 
+- Automatically update the MiUnlockTool if a new version is available.
