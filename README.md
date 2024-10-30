@@ -24,7 +24,7 @@
 
 <h2>For Android :</h2>
 <ol>
-  <li>Install <a href="offici5l.github.io/d-termux.html">Termux & Termux-api</a></li>
+  <li>Install <a href="http://offici5l.github.io/d-termux.html">Termux & Termux-api</a></li>
   <li>From Termux command line run:</li>
 </ol>
 <pre><code>curl -sS https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash</code></pre>
