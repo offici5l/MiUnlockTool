@@ -36,9 +36,9 @@
   solution: "Sometimes, enabling 'Find Device' in settings can resolve the issue. If the problem persists, create a new account."
 
 20045:
-  message: "Please use the common user tool on the official website"
-  description: "Invalid server region."
-  solution: "Change server. In Termux, use 'miunlock global'. In Windows, Linux, or MacOS, use 'python3 Miunlocktool.py global'. Available servers: global, india, russia, china, europe."
-  message: "The place where the account is registered does not match the place where the phone is sold."
-  description: "The device is from China, and you are using a global Xiaomi account."
-  solution: "Use a China account. In Termux run: miunlock china, On other systems run: python3 Miunlocktool.py china"
+  message_1: "Please use the common user tool on the official website"
+  description_1: "Invalid server region."
+  solution_1: "Change server. In Termux, use 'miunlock global'. In Windows, Linux, or MacOS, use 'python3 Miunlocktool.py global'. Available servers: global, india, russia, china, europe."
+  message_2: "The place where the account is registered does not match the place where the phone is sold."
+  description_2: "The device is from China, and you are using a global Xiaomi account."
+  solution_2: "Use a China account. In Termux run: miunlock china, On other systems run: python3 Miunlocktool.py china"
