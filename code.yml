@@ -38,7 +38,7 @@
 20045:
   message: "The place where the account is registered does not match the place where the phone is sold."
   description: "The device is from China, and you are using a global Xiaomi account."
-  solution: "Use a China account. In Termux, run: miunlock china, On other systems, run: python3 Miunlocktool.py china"
+  solution: "Use a China account. In Termux run: miunlock china, On other systems run: python3 Miunlocktool.py china"
   
 20045:
   message: "Please use the common user tool on the official website"
