@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-version = "1.5.7"
+version = "1.5.8"
 
 import os
 
@@ -91,7 +91,8 @@ else:
         with zipfile.ZipFile(fp, 'r') as zip_ref:
             zip_ref.extractall(cd)
         os.remove(fp)
-    cmd = os.path.join(fp, "fastboot")
+    pt = os.path.join(os.path.dirname(__file__), "platform-tools")
+    cmd = os.path.join(pt, "fastboot")
     if s == "Linux" or s == "Darwin":
         st = os.stat(cmd)
         os.chmod(cmd, st.st_mode | stat.S_IEXEC)
