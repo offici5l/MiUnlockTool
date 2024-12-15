@@ -1,10 +1,12 @@
 #!/usr/bin/python
 
-version = "1.5.8"
+version = "1.5.9"
 
 import os
 
-for lib in ['Cryptodome', 'urllib3', 'requests', 'colorama']:
+libs = ['Cryptodome', 'urllib3', 'requests', 'colorama']
+
+for lib in libs:
     try:
         __import__(lib)
     except ImportError:
@@ -17,6 +19,13 @@ for lib in ['Cryptodome', 'urllib3', 'requests', 'colorama']:
         else:
             cmd = f'pip install {lib}'
         os.system(cmd)
+
+for lib in libs:
+    try:
+        __import__(lib)
+    except ImportError:
+        print(f"\nFailed to install {lib}.\n")
+        exit()
 
 import re, requests, json, hmac, random, binascii, urllib, hashlib, io, urllib.parse, time, sys, urllib.request, zipfile, webbrowser, platform, subprocess, shutil, stat, datetime, threading
 from urllib3.util.url import Url
@@ -277,7 +286,7 @@ def CheckB(cmd, var_name, *fastboot_args):
             time.sleep(2)
             sys.stdout.write('\r\033[K')
             continue
-        
+
         print(f"\rFetching '{var_name}' — please wait...", end='', flush=True)
 
         lines = [line.split(f"{var_name}:")[1].strip() for line in stderr_lines + stdout_lines if f"{var_name}:" in line]
@@ -310,27 +319,51 @@ sys.stdout.write('\r\033[K')
 
 print(f"\n{cg}DeviceInfo:{cres}\nunlocked: {unlocked}\nSoC: {SoC}\nproduct: {product}\ntoken: {token}\n")
 
-class RetrieveEncryptData:
-    def add_nonce(self):
-        r = RetrieveEncryptData("/api/v2/nonce", {"r":''.join(random.choices(list("abcdefghijklmnopqrstuvwxyz"), k=16)), "sid":"miui_unlocktool_client"}).run()
-        self.params[b"nonce"] = r["nonce"].encode("utf-8")
-        self.params[b"sid"] = b"miui_unlocktool_client"
-        return self
-    def __init__(self, path, params):
-        self.path = path
-        self.params = {k.encode("utf-8"): v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in params.items()}
-    def getp(self, sep):
-        return b'POST'+sep+self.path.encode("utf-8")+sep+b"&".join([k+b"="+v for k,v in self.params.items()])
-    def run(self):
-        self.params[b"sign"] = binascii.hexlify(hmac.digest(b'2tBeoEyJTunmWUGq7bQH2Abn0k2NhhurOaqBfyxCuLVgn4AVj7swcawe53uDUno', self.getp(b"\n"), "sha1"))
-        for k, v in self.params.items():
-            self.params[k] = b64encode(AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").encrypt(v + (16 - len(v) % 16) * bytes([16 - len(v) % 16])))
-        self.params[b"signature"] = b64encode(hashlib.sha1(self.getp(b"&")+b"&"+ssecurity.encode("utf-8")).digest())
-        return json.loads(b64decode((lambda s: s[:-s[-1]])(AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").decrypt(b64decode(session.post(Url(scheme="https", host=url, path=self.path).url, data=self.params, headers=headers, cookies=cookies).text)))))
-
 print(p_)
 
-c = RetrieveEncryptData("/api/v2/unlock/device/clear", {"data":{"product":product}}).add_nonce().run()
+def run(path, params):
+    def pmsg(msg):
+        sys.stdout.write(f"\r{msg}")
+        if "9/9" in msg:
+            sys.stdout.write('\r\033[K')
+    def pack(sep):
+        return b'POST' + sep + path.encode("utf-8") + sep + b"&".join((k.encode("utf-8") if isinstance(k, str) else k) + b"=" + (v.encode("utf-8") if isinstance(v, str) else v) for k, v in params.items())
+    step = f"[{path.split('/')[-1]}]: "
+    pmsg(f"{step}Processing 0/9")
+    pack1 = pack(b"\n")
+    pmsg(f"{step}Processing 1/9")
+    params[b"sign"] = binascii.hexlify(hmac.digest(b'2tBeoEyJTunmWUGq7bQH2Abn0k2NhhurOaqBfyxCuLVgn4AVj7swcawe53uDUno', pack1, "sha1"))
+    pmsg(f"{step}Processing 2/9")
+    encrypted = {}
+    for k, v in params.items():
+        if isinstance(v, str):
+            v = v.encode("utf-8")
+        padded_value = v + (16 - len(v) % 16) * bytes([16 - len(v) % 16])
+        encrypted[k] = b64encode(AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").encrypt(padded_value))
+    params.update(encrypted)
+    pmsg(f"{step}Processing 3/9")
+    pack2 = pack(b"&")
+    pmsg(f"{step}Processing 4/9")
+    params[b"signature"] = b64encode(hashlib.sha1(pack2 + b"&" + ssecurity.encode("utf-8")).digest())
+    pmsg(f"{step}Processing 5/9")
+    response = session.post(Url(scheme="https", host=url, path=path).url, data=params, headers=headers, cookies=cookies).text
+    pmsg(f"{step}Processing 6/9")
+    decrypted = AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").decrypt(b64decode(response))
+    pmsg(f"{step}Processing 7/9")
+    cleaned = (lambda s: s[:-s[-1]])(decrypted)
+    pmsg(f"{step}Processing 8/9")
+    data = json.loads(b64decode(cleaned))
+    pmsg(f"{step}Processing 9/9")
+    return data
+
+
+def nonce():
+    return run("/api/v2/nonce", {"r": ''.join(random.choices("abcdefghijklmnopqrstuvwxyz", k=16)), "sid": "miui_unlocktool_client"})["nonce"]
+
+data = {'product': 'test'}
+path = "/api/v2/unlock/device/clear"
+c = run(path, {b"data": b64encode(json.dumps(data).encode("utf-8")), b"nonce": nonce(), b"sid": b"miui_unlocktool_client"})
+
 cleanOrNot = c['cleanOrNot']
 
 if cleanOrNot == 1:
@@ -347,7 +380,9 @@ if choice.lower() == 'q':
 
 print(p_)
 
-r = RetrieveEncryptData("/api/v3/ahaUnlock", {"appId":"1", "data":{"clientId":"2", "clientVersion":"7.6.727.43", "language":"en", "operate":"unlock", "pcId":hashlib.md5(wb_id.encode("utf-8")).hexdigest(), "product":product, "region":"","deviceInfo":{"boardVersion":"","product":product, "socId":"","deviceName":""}, "deviceToken":token}}).add_nonce().run()
+data = {"appId":"1", "data":{"clientId":"2", "clientVersion":"7.6.727.43", "language":"en", "operate":"unlock", "pcId":hashlib.md5(wb_id.encode("utf-8")).hexdigest(), "product":product, "region":"","deviceInfo":{"boardVersion":"","product":product, "socId":"","deviceName":""}, "deviceToken":token}}
+path = "/api/v3/ahaUnlock"
+r = run(path, {b"data": b64encode(json.dumps(data).encode("utf-8")), b"nonce": nonce(), b"sid": b"miui_unlocktool_client"})
 
 if "code" in r and r["code"] == 0:
     ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
@@ -358,7 +393,7 @@ if "code" in r and r["code"] == 0:
     try:
         result_stage = subprocess.run([cmd, "stage", "encryptData"], check=True, capture_output=True, text=True)
         result_unlock = subprocess.run([cmd, "oem", "unlock"], check=True, capture_output=True, text=True)
-        print(f"\n{cg}Unlock successful{cgg}\n")
+        print(f"\n{cg}Unlocked Successfully{cres}.\n")
         os.remove("encryptData")
     except subprocess.CalledProcessError as e:
         print("Error message:", e.stderr)
