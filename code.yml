@@ -42,3 +42,8 @@
   message_2: "The place where the account is registered does not match the place where the phone is sold."
   description_2: "The device is from China, and you are using a global Xiaomi account."
   solution_2: "Use a China account. In Termux run: miunlock china, On other systems run: python3 Miunlocktool.py china"
+
+20038:
+  message: "该手机已被账号 **** 通过查找手机锁定，无法解锁"
+  description: "device locked by account ****"
+  solution: "Log in to account **** in the following link i.mi.com/mobile/find and disconnect the device(product)"
