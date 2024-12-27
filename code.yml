@@ -46,4 +46,4 @@
 20038:
   message: "该手机已被账号 **** 通过查找手机锁定，无法解锁"
   description: "device locked by account ****"
-  solution: "Log in to account **** in the following link i.mi.com/mobile/find and disconnect the device(product)"
+  solution: "Log in to account **** in the following link: i.mi.com/mobile/find, select device, Disable Locate Device"
