@@ -3,14 +3,23 @@ name: upload
 on:
   workflow_dispatch:
     inputs:
-      release_type:
+      branch:
+        description: 'Select branch'
+        required: true
+        default: 'main'
         type: choice
+        options:
+          - main
+          - dev
+          - feature/test
+      release_type:
         description: 'Select release type'
+        required: true
+        default: 'prerelease'
+        type: choice
         options:
           - prerelease
           - release
-        required: true
-        default: prerelease
 
 jobs:
   linux:
@@ -18,6 +27,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Get version
         id: get_version
