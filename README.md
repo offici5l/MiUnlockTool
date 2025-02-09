@@ -2,7 +2,7 @@
 
   <a href="./releases"><img src="https://img.shields.io/badge/MiUnlockTool-%23FF6900?style=flat&logo=xiaomi&logoColor=white" alt="MiUnlockTool" style="width: 200px; vertical-align: middle;" /> </a><br>
 
-  <img src="https://img.shields.io/github/v/release/offici5l/MiUnlockTool?style=flat&label=Version&labelColor=black&color=brightgreen" alt="Version" /><br>
+  <img src="https://img.shields.io/github/v/release/offici5l/MiUnlockTool?include_prereleases&style=flat&label=Version&labelColor=black&color=brightgreen" alt="Version" /><br>
   <p style="font-weight: bold;">Developed to retrieve <code>encryptData(token)</code>
   <br>
   for Xiaomi devices to unlock the bootloader.
@@ -16,15 +16,7 @@
 
 <h1>Installation:</h1>
 
-<h2>For Windows, Linux, MacOS :</h2>
-<ol>
-  <li>Install Python3</li>
-  <li>Download <a href="https://raw.githubusercontent.com/offici5l/MiUnlockTool/${{ github.ref_name }}/MiUnlockTool.py">MiUnlockTool</a> and run it</li>
-</ol>
+For Windows, Linux, MacOS, Android(termux + Termux-api(For non-root users)):
+Install Python3
+Download prereleases and run it
 
-<h2>For Android :</h2>
-<ol>
-  <li>Install <a href="http://offici5l.github.io/d-termux.html">Termux & Termux-api</a></li>
-  <li>From Termux command line run:</li>
-</ol>
-<pre><code>curl -sS https://raw.githubusercontent.com/offici5l/MiUnlockTool/${{ github.ref_name }}/.install | bash</code></pre>
