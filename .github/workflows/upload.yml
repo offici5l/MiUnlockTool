@@ -20,15 +20,12 @@ on:
         options:
           - prerelease
           - release
-  push:
-    branches:
-      - dev
 
 jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout selected branch
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.branch }}
