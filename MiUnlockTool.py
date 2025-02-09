@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-version = "dev"
+version = "dev-1.5.9"
 
 print(f"\n[V{version}]\nhttps://github.com/offici5l/MiUnlockTool")
 
