@@ -6,11 +6,11 @@ try:
     __import__("usb")
 except ImportError:
     os.system("pip install pyusb -q")
-    
+
 import usb.core, usb.util, sys, subprocess, time, shutil, json
 
 if len(sys.argv) < 2:
-    exit("\noffici5l/MiUnlockTool/fastboot.py\n\nUsage: python fastboot.py <command>\n")  
+    exit("\nhttps://github.com/offici5l/MiUnlockTool\n\nUsage: python fastboot.py <command>\n")  
 
 def handle_termux():  
     if '/data/data/com.termux' in __file__: 
@@ -33,7 +33,7 @@ def handle_termux():
                             os.execvp('termux-usb', ['termux-usb', '-E', '-e', cmd, '-r', device])  
                     else:  
                         print("\rwaiting for device", end="", flush=True); time.sleep(2); print("\r\033[K", end="", flush=True)
-  
+
 
 def find_fastboot_device():
     handle_termux()

@@ -1,378 +1,244 @@
 #!/usr/bin/python
 
-version = "1.5.8"
+version = "dev"
+
+print(f"\n[V{version}]\nhttps://github.com/offici5l/MiUnlockTool")
 
 import os
 
-for lib in ['Cryptodome', 'urllib3', 'requests', 'colorama']:
-    try:
-        __import__(lib)
+for lib in ['Cryptodome', 'requests']:
+    try: __import__(lib)
     except ImportError:
-        prefix = os.getenv("PREFIX", "")
-        if lib == 'Cryptodome':
-            if "com.termux" in prefix:
-                cmd = 'pkg install python-pycryptodomex'
-            else:
-                cmd = 'pip install pycryptodomex'
-        else:
-            cmd = f'pip install {lib}'
+        p = os.getenv("PREFIX", "")
+        cmd = ('pkg install python-pycryptodomex' if "com.termux" in p 
+               else f'pip install pycryptodomex') if lib == 'Cryptodome' else f'pip install {lib}'
         os.system(cmd)
 
-import re, requests, json, hmac, random, binascii, urllib, hashlib, io, urllib.parse, time, sys, urllib.request, zipfile, webbrowser, platform, subprocess, shutil, stat, datetime, threading
-from urllib3.util.url import Url
+import requests, json, hashlib, urllib.parse, time, shelve, sys, binascii, hmac, re, random
 from base64 import b64encode, b64decode
+from urllib.parse import urlparse, urlencode, parse_qs, quote_plus
 from Cryptodome.Cipher import AES
-from urllib.parse import urlparse, parse_qs, urlencode
-from colorama import init, Fore, Style
+from Cryptodome.Util.Padding import pad, unpad
+import base64
 
-init(autoreset=True)
+headers = {"User-Agent": "offici5l/MiUnlockTool"}
 
-cg = Style.BRIGHT + Fore.GREEN
-cgg = Style.DIM
-cr = Fore.RED
-crr = Style.BRIGHT + Fore.RED
-cres = Style.RESET_ALL
-cy = Style.BRIGHT + Fore.YELLOW
-p_ = cg + "\n" + "_"*56 +"\n"
-session = requests.Session()
-headers = {"User-Agent": "XiaomiPCSuite"}
+def login():
 
-def check_for_update():
+    user = input('\nEnter user: ')
+    pwd = input('\nEnter pwd: ')
+
+    opts = {"1": {"chk": "Address", "v": "Email"}, "2": {"chk": "Phone", "v": "Phone"}}
+
+    choice = input("\nAccount verification\n\n1 Email address\n2 Phone number (requires solving CAPTCHA)\n\nChoose a verification method: ")
+    if choice not in opts: exit("Invalid choice.")
+
+    opt = opts[choice]
+    
+    base = "https://account.xiaomi.com"
+    Auth = base + "/pass/serviceLogin"
+    Auth2 = Auth + "Auth2"
+    urlsv = base + "/identity/auth/"
+    urlsend = urlsv + "send" + opt["v"] + "Ticket"
+    urlverify = urlsv + "verify" + opt["v"]  
+    url = Auth + "?sid=unlockApi&checkSafe" + opt["chk"] + "=true"
+
+
     try:
-        response = requests.get("https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/MiUnlockTool.py", timeout=3)
-        response.raise_for_status()
-        match = re.search(r'version\s*=\s*[\'"]([^\'"]+)[\'"]', response.text)
-        if match:
-            cloud_version = match.group(1)
-            if version < cloud_version:
-                print(f"\nNew version {cloud_version} is available")
-                with open(__file__, "w", encoding="utf-8") as f:
-                    f.write(response.text)
-                    print(f"\n{cg}Updated successfully{cres}")
-                os.execv(sys.executable)
+        r = requests.get(url, headers=headers)
+        cookies = r.cookies.get_dict()
     except Exception as e:
-        pass
+        exit(f"r: {type(e).__name__}")
 
-if '1' in sys.argv:
-    pass
-else:
-    print(cgg + f"\n[V{version}] For issues or feedback:\n- GitHub: github.com/offici5l/MiUnlockTool/issues\n- Telegram: t.me/Offici5l_Group\n" + cres)
-    check_for_update()
+    data = {
+        "_json": "true",
+        "callback": "https://unlock.update.miui.com/sts",
+        "sid": "unlockApi",
+        "qs": re.search(r"qs\s*:\s*'([^']+)'", r.text).group(1),
+        "_sign": re.search(r'"_sign"\s*:\s*"([^"]+)"', r.text).group(1),
+        "serviceParam": re.search(r"serviceParam\s*:\s*'([^']+)'", r.text).group(1),
+        "user": user,
+        "hash": hashlib.md5(pwd.encode(encoding='utf-8')).hexdigest().upper(),
+        "_locale": "en_US",
+        "useManMachine": "false"
+    }
 
-print(p_)
-
-s = platform.system()
-if s == "Linux" and os.path.exists("/data/data/com.termux"):
-    up = os.path.join(os.getenv("PREFIX", ""), "bin", "miunlock")
     try:
-        if "fastboot version" not in os.popen("fastboot --version").read():
-            raise Exception
-    except:
-        os.system("curl https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash")
-        exit()
-    if not os.path.exists(up):
-        shutil.copy(__file__, up)
-        os.system(f"chmod +x {up}")
-        print(f"\nuse command: {cg}miunlock{cres}\n")
-        exit()
-    if not os.path.exists("/data/data/com.termux.api"):
-        print("\ncom.termux.api app is not installed\nPlease install it first\n")
-        exit()
-    cmd = "fastboot"
-else:
-    dir = os.path.dirname(__file__)
-    fp = os.path.join(dir, "platform-tools")
-    if not os.path.exists(fp):
-        print("\ndownload platform-tools...\n")
-        url = f"https://dl.google.com/android/repository/platform-tools-latest-{s}.zip"
-        cd = os.path.join(os.path.dirname(__file__))
-        fp = os.path.join(cd, os.path.basename(url))    
-        urllib.request.urlretrieve(url, fp)    
-        with zipfile.ZipFile(fp, 'r') as zip_ref:
-            zip_ref.extractall(cd)
-        os.remove(fp)
-    pt = os.path.join(os.path.dirname(__file__), "platform-tools")
-    cmd = os.path.join(pt, "fastboot")
-    if s == "Linux" or s == "Darwin":
-        st = os.stat(cmd)
-        os.chmod(cmd, st.st_mode | stat.S_IEXEC)
+        r1 = requests.post(Auth2, data=data, headers=headers, cookies=cookies)
+        r1_text = json.loads(r1.text[11:])
+        if r1_text["code"] == 70016: exit("invalid user or pwd")
+        notificationUrl = r1_text.get("notificationUrl") or exit("r1: notificationUrl not found")
+        if "BindAppealOrSafePhone" in notificationUrl or "SetEmail" in notificationUrl:
+            exit(notificationUrl)
+        cookies.update(requests.get(notificationUrl, headers=headers, cookies=cookies).cookies.get_dict())
+    except Exception as e:
+        exit(f"r1: {type(e).__name__}")
+    
 
-datafile = os.path.join(os.path.dirname(__file__), "miunlockdata.json")
-
-while os.path.isfile(datafile):
     try:
-        with open(datafile, "r") as file:
-            data = json.load(file)
-        if '1' in sys.argv:
-            break
-        elif data and data.get("login") == "ok":
-            choice = input(f"\nYou are already logged in with account uid: {data['uid']}\n{cg}Press Enter to continue\n{cgg}(to log out, type 2 and press Enter){cres}\n").strip().lower()
-            if choice == "2":
-                os.remove(datafile)
-            else:
+        data_icode = {}
+        while True:
+            r2 = requests.post(urlsend, data=data_icode, cookies=cookies, headers=headers)
+            r2_text = json.loads(r2.text[11:])
+            if r2_text["code"] == 87001:
+                print(r2_text["reason"])
+                path = "/sdcard/captcha.jpg" if os.path.exists("/sdcard") else "captcha.jpg"
+                rc = requests.get(f"{base}/pass/getCode?icodeType=login", cookies=cookies)
+                cookies.update(rc.cookies.get_dict())
+                with open(path, "wb") as f:
+                    f.write(rc.content)
+                print(f"\nCaptcha saved as {path}")
+                icode = input("\nEnter captcha code: ").strip()
+                data_icode.update({'icode': icode})
+            elif r2_text["code"] == 0:
+                print(f"\nVerification code sent to your {opt["v"]}")
                 break
-        else:
-            os.remove(datafile)
-    except PermissionError:
-        os.remove(datafile)
-    except json.JSONDecodeError:
-        os.remove(datafile)
+            else:
+                exit(r2_text["tips"] if r2_text["code"] == 70022 else r2_text)
+    except Exception as e:
+        exit(f"r2: {type(e).__name__}")
 
-def remove(*keys):
-    print(f"\n{cr}invalid {keys[0] if len(keys) == 1 else ' or '.join(keys)}{cres}\n")
-    with open(datafile, "r+") as file:
-        data = json.load(file)
-        for key in keys:
-            data.pop(key, None)
-        file.seek(0)
-        json.dump(data, file, indent=2)
-        file.truncate()
-    os.execv(sys.executable, [sys.executable] + sys.argv + ['1'])
+    while True:
+        ticket = input("Enter code: ").strip()
+        try:
+            r3 = requests.post(urlverify, data={'ticket': ticket, 'trust': 'true'}, headers=headers, cookies=cookies)
+            r3_text = json.loads(r3.text[11:])
+            if r3_text["code"] == 70014:
+                print(r3_text["tips"])
+                continue
+            elif r3_text["code"] == 0:
+                break
+            else:
+                exit(r3_text)
+        except Exception as e:
+            exit(f"r3: {type(e).__name__}")
+
+
+    try:
+        r4 = requests.post(Auth2, data=data, headers=headers, cookies=cookies).cookies.get_dict()
+        del r4['cUserId'], r4['passInfo'], r4['uLocale']
+    except Exception as e:
+        exit(f"r4: {type(e).__name__}")
+
+    try:
+        r5 = json.loads(requests.get(f"{base}/pass/user/login/region", headers=headers, cookies=r4).text[11:])["data"]["region"]
+    except Exception as e:
+        exit(f"r5: {type(e).__name__}")
+
+    try:
+        r6 = next(k for k, v in json.loads(requests.get(f"{base}/pass2/config?key=regionConfig").text[11:])["regionConfig"].items() if v.get("region.codes") and r5 in v["region.codes"])
+    except Exception as e:
+        exit(f"r6: {type(e).__name__}")
+
+    midata = {"cookies": r4, "url": url, "region": r5, 'regionConfig': r6}
+    with open("midata.json", "w") as f:
+        json.dump(midata, f, indent=4)
+
+    return midata
+
 
 try:
-    with open(datafile, "r+") as file:
-        data = json.load(file)
-except FileNotFoundError:
-    data = {}
-    with open(datafile, 'w') as file:
-        json.dump(data, file)
+    with open('midata.json', 'r') as f:
+        midata = json.load(f)
+    print(f"\nAccount ID: {midata["cookies"]["userId"]}")
+    input(f"Press 'Enter' to continue.\nPress 'Ctrl' + 'd' to log out.")
+except (FileNotFoundError, json.JSONDecodeError, EOFError):
+    if os.path.exists('midata.json'):
+        os.remove('midata.json')
+    midata = login()
 
-def save(data, path):
-    with open(path, "w") as file:
-        json.dump(data, file, indent=2)
 
-if "user" not in data:
-    data["user"] = input("Xiaomi Account\nId or Email or Phone(in international format)\n : ")
-    sys.stdout.write("\033[F\033[K\033[F\033[K\033[F\033[K")
-    sys.stdout.flush()
-    save(data, datafile)
+cookies = midata["cookies"]
+url = midata["url"]
+pcId = hashlib.md5(midata["cookies"]["deviceId"].encode()).hexdigest()
+region = midata["region"]
+regionConfig = midata["regionConfig"]
 
-if "pwd" not in data:
-    data["pwd"] = input("Enter password: ")
-    sys.stdout.write("\033[F\033[K")
-    sys.stdout.flush()
-    save(data, datafile)
+print(f"\nAccount Region: {region}")
 
-if "wb_id" not in data:
-    input(f"\n{Fore.CYAN}Notice:\nIf logged in with any account in your default browser,\nplease log out before pressing Enter.\n\n{cres}{cg}Press Enter{cres} to open confirmation page, \n copy link after seeing {Fore.CYAN}{Style.BRIGHT}\"R\":\"\",\"S\":\"OK\"{Style.RESET_ALL}, \n  and return here\n\n")
-    conl = 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true&passive=false&hidden=false'
-    if s == "Linux":
-        os.system("xdg-open '" + conl + "'")
-    else:
-        webbrowser.open(conl)
-    time.sleep(2)
-    wb_id = parse_qs(urlparse(input("Enter Link: ")).query).get('d', [None])[0]
-    if wb_id is None:
-        print("\n\nInvalid link\n")
-        os.execv(sys.executable, [sys.executable] + sys.argv + ['1'])
-    data["wb_id"] = wb_id
-    save(data, datafile)
+try:
+    r8 = requests.get(url, cookies=cookies, headers=headers)
+    ssecurity = json.loads(r8.history[0].headers['extension-pragma'])['ssecurity']
+    cookies = r8.cookies.get_dict()
+    if not cookies: raise ValueError("Cookies are empty")
+except (Exception, KeyError, ValueError) as e:
+    exit(f"r8: {type(e).__name__} - {str(e)}")
 
-user, pwd, wb_id = (data.get(key, "") for key in ["user", "pwd", "wb_id"])
+Subdomains = {"Singapore": "unlock.update.intl", "China": "unlock.update", "India": "in-unlock.update.intl", "Russia": "ru-unlock.update.intl", "Europe": "eu-unlock.update.intl"}
 
-datav = data
+try:
+    input(f"\nregionConfig: {regionConfig}\nPress 'Enter' to continue\npress 'Ctrl' + 'd' to select it manually.\n")
+    Subdomain = Subdomains[regionConfig]
+except (EOFError):
+    for idx, name in enumerate(Subdomains, 1):
+        print(f"\n{idx}: {name}")
+    selection = input("\nregionConfig: ").strip()
+    Subdomain = list(Subdomains.values())[int(selection) - 1] if selection.isdigit() and 1 <= int(selection) <= len(Subdomains) else exit("Invalid selection")
 
-def add_email(SetEmail):
-    input(f"\n{cr}Failed to get passToken !{cres}\n\nThe account is not linked to an email.\n{cg}Press Enter{cres} to open the email adding page.\nAfter successfully adding your email, return here")
-    if s == "Linux":
-        os.system("xdg-open '" + SetEmail + "'")
-    else:
-        webbrowser.open(SetEmail)
-    time.sleep(2)
-    input(f"\nIf email added successfully, {cg}press Enter{cres} to continue\n")
-    os.execv(sys.executable, [sys.executable] + sys.argv + ['1'])
 
-def postv(sid):
-    return json.loads(session.post(f"https://account.xiaomi.com/pass/serviceLoginAuth2?sid={sid}&_json=true&passive=true&hidden=true", data={"user": user, "hash": hashlib.md5(pwd.encode()).hexdigest().upper()}, headers=headers, cookies={"deviceId": str(wb_id)}).text.replace("&&&START&&&", ""))
+session = requests.Session()
 
-data = postv("unlockApi")
+def send(path, param_order, params_raw):
 
-if data["code"] == 70016:
-    remove("user", "pwd")
+    if 'data' in params_raw:
+        params_raw['data'] = json.dumps(params_raw['data'])
+        params_raw['data'] = b64encode(params_raw['data'].encode()).decode()
 
-if data["securityStatus"] == 4 and "notificationUrl" in data and "bizType=SetEmail" in data["notificationUrl"]:
-    add_email(data["notificationUrl"])
+    cipher = lambda: AES.new(b64decode(ssecurity), AES.MODE_CBC, b'0102030405060708')
 
-if data["securityStatus"] == 16:
-    p = postv("passport")
-    if p["securityStatus"] == 4 and "notificationUrl" in p and "bizType=SetEmail" in p["notificationUrl"]:
-        add_email(p["notificationUrl"])
-    elif "passToken" not in p:
-         print(f"\n{cr}Failed to get passToken !{cres}\n")
-         exit()
-    data = json.loads(requests.get("https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&_json=true&passive=true&hidden=true", headers=headers, cookies={'passToken': p['passToken'], 'userId': str(p['userId']), 'deviceId': parse_qs(urlparse(p['location']).query)['d'][0]}).text.replace("&&&START&&&", ""))
+    ep = lambda ep: b64encode(cipher().encrypt(pad(ep.encode(), AES.block_size))).decode()
 
-ssecurity, nonce, location = data["ssecurity"], data["nonce"], data["location"]
-
-cookies = {cookie.name: cookie.value for cookie in session.get(location + "&clientSign=" + urllib.parse.quote_plus(b64encode(hashlib.sha1(f"nonce={nonce}".encode("utf-8") + b"&" + ssecurity.encode("utf-8")).digest())), headers=headers).cookies}
-
-if 'serviceToken' not in cookies:
-    print(f"\n{cr}Failed to get serviceToken.{cres}")
-    remove("wb_id")
-
-if "login" not in datav:
-    datav["login"] = "ok"
-    if "uid" not in datav:
-        datav["uid"] = data['userId']
-    save(datav, datafile)
-    print(f"\n\n{cg}Login successful! Login saved.{cres}")
-
-region = json.loads(requests.get("https://account.xiaomi.com/pass/user/login/region?", headers=headers, cookies={'passToken': data['passToken'], 'userId': str(data['userId']), 'deviceId': parse_qs(urlparse(data['location']).query)['d'][0]}).text.replace("&&&START&&&", ""))['data']['region']
-
-print(f"\n{cg}AccountInfo:{cres}\nid: {data['userId']}\nregion: {region}")
-
-region_config = json.loads(requests.get("https://account.xiaomi.com/pass2/config?key=register").text.replace("&&&START&&&", ""))['regionConfig']
-
-for key, value in region_config.items():
-    if 'region.codes' in value and region in value['region.codes']:
-        region = value['name'].lower()
-        break
-
-for arg in sys.argv:
-    if arg.lower() in ['global', 'india', 'russia', 'china', 'europe']:
-        region = arg
-        break
-
-g = "unlock.update.intl.miui.com"
-
-if region == "china":
-    url = g.replace("intl.", "")
-elif region == "india":
-    url = f"in-{g}"
-elif region == "russia":
-    url = f"ru-{g}"
-elif region == "europe":
-    url = f"eu-{g}"
-else:
-    url = g
-
-def read_stream(stream, output_list, process, restart_flag):
+    params_raw["sid"] = 'miui_unlocktool_client'
+    sign_params = '&'.join([f"{k}={params_raw[k]}" for k in param_order])
+    sign_str = f"POST\n{path}\n{sign_params}"
+    current_sign = b64encode(cipher().encrypt(pad(binascii.hexlify(hmac.new(b'2tBeoEyJTunmWUGq7bQH2Abn0k2NhhurOaqBfyxCuLVgn4AVj7swcawe53uDUno', sign_str.encode(), hashlib.sha1).digest()).decode().encode(), AES.block_size))).decode()
+    
+    encoded_params = [f"{k}={ep(params_raw[k])}" for k in param_order]
+    encoded_params.extend([f"sign={current_sign}", ssecurity])
+    sha1_input = f"POST&{path}&{'&'.join(encoded_params)}"
+    signature = b64encode(hashlib.sha1(sha1_input.encode()).digest()).decode()
+    
+    post_params = {k: ep(params_raw[k]) for k in param_order}
+    post_params.update({'sign': current_sign, 'signature': signature})
+    
     try:
-        for line in iter(stream.readline, ''):
-            line = line.strip()
-            output_list.append(line)
-            if "No permission" in line or "< waiting for any device >" in line:
-                process.terminate()
-                print(f'\r< waiting for any device >', end='', flush=True)
-                restart_flag[0] = True
-                return
-    finally:
-        stream.close()
+        r9 = session.post("https://" + Subdomain + ".miui.com" + path, params=post_params, cookies=cookies, headers=headers)
+    except Exception as e:
+        exit(f"r9: {type(e).__name__}")
 
-def CheckB(cmd, var_name, *fastboot_args):
-    while True:
-        process = subprocess.Popen([cmd] + list(fastboot_args), stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
-        stdout_lines, stderr_lines, restart_flag = [], [], [False]
+    dresponse = json.loads(b64decode(unpad(cipher().decrypt(b64decode(r9.text)), AES.block_size)).decode())
 
-        threading.Thread(target=read_stream, args=(process.stdout, stdout_lines, process, restart_flag)).start()
-        threading.Thread(target=read_stream, args=(process.stderr, stderr_lines, process, restart_flag)).start()
+    return dresponse
 
-        try:
-            process.wait()
-        except subprocess.SubprocessError as e:
-            print(f"Error while executing process: {e}")
-            return None
 
-        if restart_flag[0]:
-            time.sleep(2)
-            sys.stdout.write('\r\033[K')
-            continue
-        
-        print(f"\rFetching '{var_name}' — please wait...", end='', flush=True)
+try:
+    token = input("python fastboot.py getvar token\nor\npython fastboot.py oem get_token\n\nNote:\nIf you have token1 and token2,\nenter them as: token1token2\n\nEnter the device token: """)
+    token += '=' * (-len(token) % 4)
+    decoded = base64.urlsafe_b64decode(token)
+    if len(decoded) < 32:
+        raise ValueError("Token length mismatch")
+    product = decoded[24:30].decode('ascii', errors='strict')
+    cpuid = f"0x{int.from_bytes(decoded[32:], 'big'):08x}"    
+except (ValueError, UnicodeDecodeError) as e:
+    exit(e)
 
-        lines = [line.split(f"{var_name}:")[1].strip() for line in stderr_lines + stdout_lines if f"{var_name}:" in line]
-        if len(lines) > 1:
-            return "".join(lines)
-        return lines[0] if lines else None
+print(f"\nproduct: {product} | cpuid: {cpuid}\n")
 
-[print(char, end='', flush=True) or time.sleep(0.01) for char in "\nEnsure you're in Bootloader mode (fastboot mode)\n\n"]
+nr = send('/api/v2/nonce', ['r', 'sid'], {'r': ''.join(random.choices(list("abcdefghijklmnopqrstuvwxyz"), k=16))})
+nonce = nr.get('nonce')
+if not nonce: exit(nr)
 
-unlocked = None
-product = None
-SoC = None
-token = None
+cr = send('/api/v2/unlock/device/clear', ['data', 'nonce', 'sid'], {'data': {"product": product}, 'nonce': nonce})
+try:
+    print("\n".join([f"{key}: {value}" for key, value in cr.items()]))
+    input("\nPress 'Enter' to get encryptData\nPress 'Ctrl' + 'd' to exit\n")
+except EOFError:
+    exit()
 
-while unlocked is None or product is None or SoC is None or token is None:
-    if unlocked is None:
-        unlocked = CheckB(cmd, "unlocked", "getvar", "unlocked")
-    if product is None:
-        product = CheckB(cmd, "product", "getvar", "product")
-    if token is None:
-        token = CheckB(cmd, "token", "oem", "get_token")
-        if token:
-            SoC = "Mediatek"
-        else:
-            token = CheckB(cmd, "token", "getvar", "token")
-            if token:
-                SoC = "Qualcomm"
+ar = send('/api/v3/ahaUnlock', ['appId', 'data', 'nonce', 'sid'], {'appId': '1', 'data': {"clientId": "2", "clientVersion": "7.6.727.43", "deviceInfo": {"boardVersion": "", "deviceName": "", "product": product, "socId": ""}, "deviceToken": token, "language": "en", "operate": "unlock", "pcId": pcId, "region": "", "uid": midata["cookies"]["userId"]}, 'nonce': nonce})
 
-sys.stdout.write('\r\033[K')
-
-print(f"\n{cg}DeviceInfo:{cres}\nunlocked: {unlocked}\nSoC: {SoC}\nproduct: {product}\ntoken: {token}\n")
-
-class RetrieveEncryptData:
-    def add_nonce(self):
-        r = RetrieveEncryptData("/api/v2/nonce", {"r":''.join(random.choices(list("abcdefghijklmnopqrstuvwxyz"), k=16)), "sid":"miui_unlocktool_client"}).run()
-        self.params[b"nonce"] = r["nonce"].encode("utf-8")
-        self.params[b"sid"] = b"miui_unlocktool_client"
-        return self
-    def __init__(self, path, params):
-        self.path = path
-        self.params = {k.encode("utf-8"): v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in params.items()}
-    def getp(self, sep):
-        return b'POST'+sep+self.path.encode("utf-8")+sep+b"&".join([k+b"="+v for k,v in self.params.items()])
-    def run(self):
-        self.params[b"sign"] = binascii.hexlify(hmac.digest(b'2tBeoEyJTunmWUGq7bQH2Abn0k2NhhurOaqBfyxCuLVgn4AVj7swcawe53uDUno', self.getp(b"\n"), "sha1"))
-        for k, v in self.params.items():
-            self.params[k] = b64encode(AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").encrypt(v + (16 - len(v) % 16) * bytes([16 - len(v) % 16])))
-        self.params[b"signature"] = b64encode(hashlib.sha1(self.getp(b"&")+b"&"+ssecurity.encode("utf-8")).digest())
-        return json.loads(b64decode((lambda s: s[:-s[-1]])(AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").decrypt(b64decode(session.post(Url(scheme="https", host=url, path=self.path).url, data=self.params, headers=headers, cookies=cookies).text)))))
-
-print(p_)
-
-c = RetrieveEncryptData("/api/v2/unlock/device/clear", {"data":{"product":product}}).add_nonce().run()
-cleanOrNot = c['cleanOrNot']
-
-if cleanOrNot == 1:
-    print(f"\n{crr}This device clears user data when it is unlocked{cres}\n")
-elif cleanOrNot == -1:
-    print(f"\n{cg}Unlocking the device does not clear user data{cres}\n") 
-
-print(Style.BRIGHT + Fore.CYAN + c['notice'] + cres)
-
-choice = input(f"\n{cg}Press Enter to Unlock\n{cgg}( or type q and press Enter to quit){cres}")
-if choice.lower() == 'q':
-    print("\nExiting...\n")
-    exit() 
-
-print(p_)
-
-r = RetrieveEncryptData("/api/v3/ahaUnlock", {"appId":"1", "data":{"clientId":"2", "clientVersion":"7.6.727.43", "language":"en", "operate":"unlock", "pcId":hashlib.md5(wb_id.encode("utf-8")).hexdigest(), "product":product, "region":"","deviceInfo":{"boardVersion":"","product":product, "socId":"","deviceName":""}, "deviceToken":token}}).add_nonce().run()
-
-if "code" in r and r["code"] == 0:
-    ed = io.BytesIO(bytes.fromhex(r["encryptData"]))
-    with open("encryptData", "wb") as edfile:
-        edfile.write(ed.getvalue())
-    CheckB(cmd, "serialno", "getvar", "serialno")
-    sys.stdout.write('\r\033[K')
-    try:
-        result_stage = subprocess.run([cmd, "stage", "encryptData"], check=True, capture_output=True, text=True)
-        result_unlock = subprocess.run([cmd, "oem", "unlock"], check=True, capture_output=True, text=True)
-        print(f"\n{cg}Unlock successful{cgg}\n")
-        os.remove("encryptData")
-    except subprocess.CalledProcessError as e:
-        print("Error message:", e.stderr)
-elif "descEN" in r:
-    print(f"\ncode {r['code']}\n\n{r['descEN']}")
-    if r["code"] == 20036:
-        print("\nYou can unlock (repeat this process) on:", (datetime.datetime.now().replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=r["data"]["waitHour"])).strftime("%Y-%m-%d %H:%M"))
-    else:
-        print(f"{cgg}\noffici5l.github.io/code\n{cres}")
-else:
-    for key, value in r.items():
-        print(f"\n{key}: {value}")
-
-print(p_)
-
-if not os.path.exists("/data/data/com.termux"):
-    input("\nPress Enter to exit ...")
+print("\n".join([f"{key}: {value}" for key, value in ar.items()]))
+    
+if "code" in ar and ar["code"] == 0:
+    encryptData = ar["encryptData"]
+    print(f"\n\nUse one of the following commands to unlock the bootloader:\n\nfastboot oem unlock {encryptData}\n\nor\n\nfastboot flashing unlock {encryptData}\n")
