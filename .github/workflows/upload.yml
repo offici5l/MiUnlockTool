@@ -2,18 +2,32 @@ name: upload
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Select branch'
+        required: true
+        default: 'main'
+        type: choice
+        options:
+          - main
+          - dev
+      release_type:
+        description: 'Select release type'
+        required: true
+        default: 'prerelease'
+        type: choice
+        options:
+          - prerelease
+          - release
 
 jobs:
   linux:
     runs-on: ubuntu-latest
-    env:
-      BRANCH: dev
-      RELEASE_TYPE: prerelease
     steps:
-      - name: Checkout selected branch
+      - name: Checkout code
         uses: actions/checkout@v2
         with:
-          ref: ${{ env.BRANCH }}
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Get version
         id: get_version
@@ -33,7 +47,7 @@ jobs:
       - name: Create Release
         run: |
           if ! gh release view $VERSION; then
-            if [[ "${{ env.RELEASE_TYPE }}" == "prerelease" ]]; then
+            if [[ "${{ github.event.inputs.release_type }}" == "prerelease" ]]; then
               gh release create $VERSION --prerelease
             else
               gh release create $VERSION
