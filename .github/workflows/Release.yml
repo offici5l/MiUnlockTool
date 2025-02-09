@@ -1,13 +1,24 @@
-name: Release miunlock
+name: upload
 
 on:
-  push:
-    paths:
-      - MiUnlockTool.py
-  pull_request:
-    paths:
-      - MiUnlockTool.py
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Select branch'
+        required: true
+        default: 'main'
+        type: choice
+        options:
+          - main
+          - dev
+      release_type:
+        description: 'Select release type'
+        required: true
+        default: 'prerelease'
+        type: choice
+        options:
+          - prerelease
+          - release
 
 jobs:
   linux:
@@ -15,6 +26,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Get version
         id: get_version
@@ -31,14 +44,25 @@ jobs:
             echo "Tag $VERSION already exists, skipping tag creation."
           fi
 
-      - name: Create Release and Upload
+      - name: Create Release
         run: |
           if ! gh release view $VERSION; then
-            gh release create $VERSION --title "Release $VERSION"
-            gh release upload $VERSION ./MiUnlockTool.py --clobber
+            if [[ "${{ github.event.inputs.release_type }}" == "prerelease" ]]; then
+              gh release create $VERSION --prerelease
+            else
+              gh release create $VERSION
+            fi
           else
-            echo "Release $VERSION already exists, skipping release creation."
+            echo "$VERSION already exists"
           fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
+
+      - name: Package and Upload
+        run: |
+          zip MiUnlockTool_$VERSION.zip MiUnlockTool.py fastboot.py
+          gh release upload $VERSION MiUnlockTool_$VERSION.zip --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
