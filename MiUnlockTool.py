@@ -212,7 +212,7 @@ def send(path, param_order, params_raw):
 
 
 try:
-    token = input("python fastboot.py getvar token\nor\npython fastboot.py oem get_token\n\nNote:\nIf you have token1 and token2,\nenter them as: token1token2\n\nEnter the device token: """)
+    token = input("python fastboot.py getvar:token\nor\npython fastboot.py oem get_token\n\nNote:\nIf you have token1 and token2,\nenter them as: token1token2\n\nEnter the device token: """)
     token += '=' * (-len(token) % 4)
     decoded = base64.urlsafe_b64decode(token)
     if len(decoded) < 32:
