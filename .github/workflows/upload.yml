@@ -20,6 +20,9 @@ on:
         options:
           - prerelease
           - release
+  push:
+    branches:
+      - dev
 
 jobs:
   linux:
