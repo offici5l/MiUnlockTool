@@ -3,6 +3,7 @@
 version = "1.5.8"
 
 import os
+import getpass
 
 for lib in ['Cryptodome', 'urllib3', 'requests', 'colorama']:
     try:
@@ -148,7 +149,7 @@ if "user" not in data:
     save(data, datafile)
 
 if "pwd" not in data:
-    data["pwd"] = input("Enter password: ")
+    data["pwd"] = getpass.getpass("Enter password: ")
     sys.stdout.write("\033[F\033[K")
     sys.stdout.flush()
     save(data, datafile)
