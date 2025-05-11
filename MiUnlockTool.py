@@ -211,8 +211,14 @@ def send(path, param_order, params_raw):
     return dresponse
 
 
+print("""To obtain the token, use one of the following commands in bootloader(fastboot) mode:
+fastboot getvar token
+or
+fastboot oem get_token
+If the token appears in multiple parts, copy them and join them into one single line — no spaces or breaks""")
+
 try:
-    token = input("python fastboot.py getvar:token\nor\npython fastboot.py oem get_token\n\nNote:\nIf you have token1 and token2,\nenter them as: token1token2\n\nEnter the device token: """)
+    token = input('\nEnter the token: ')
     token += '=' * (-len(token) % 4)
     decoded = base64.urlsafe_b64decode(token)
     if len(decoded) < 32:
