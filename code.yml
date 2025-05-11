@@ -3,7 +3,7 @@
 20041:
   message: "sorry, your mi id is not associated with a phone number"
   description: "The xiaomi account is not linked to a phone number"
-  solution: "Add a phone number to the xiaomi account. ( If the option to add a phone number is not available, it can be added via : https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafePhone=true )"
+  solution: "Add a phone number to the xiaomi account. ( If the option to add a phone number is not available, it can be added via : https://account.xiaomi.com/pass/serviceLogin?checkSafePhone=true )"
 
 10013:
   message: "This device is not activated, please activate it and try to unlock it again"
