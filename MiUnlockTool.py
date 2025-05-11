@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-version = "dev-1.5.9"
+version = "dev-1.6.0"
 
 print(f"\n[V{version}]\nhttps://github.com/offici5l/MiUnlockTool")
 
@@ -14,7 +14,7 @@ for lib in ['Cryptodome', 'requests']:
                else f'pip install pycryptodomex') if lib == 'Cryptodome' else f'pip install {lib}'
         os.system(cmd)
 
-import requests, json, hashlib, urllib.parse, time, shelve, sys, binascii, hmac, re, random
+import requests, json, hashlib, urllib.parse, time, shelve, sys, binascii, hmac, re, random, io
 from base64 import b64encode, b64decode
 from urllib.parse import urlparse, urlencode, parse_qs, quote_plus
 from Cryptodome.Cipher import AES
@@ -247,4 +247,10 @@ print("\n".join([f"{key}: {value}" for key, value in ar.items()]))
     
 if "code" in ar and ar["code"] == 0:
     encryptData = ar["encryptData"]
-    print(f"\n\nUse one of the following commands to unlock the bootloader:\n\nfastboot oem unlock {encryptData}\n\nor\n\nfastboot flashing unlock {encryptData}\n")
+    ed = io.BytesIO(bytes.fromhex(encryptData))
+    filename = "encryptData"
+    with open(filename, "wb") as edfile:
+        edfile.write(ed.getvalue())
+    print('\n\ncommands to unlock the bootloader:\n')
+    print(f'\n\nfastboot stage {filename}')
+    print('\nfastboot oem unlock')
