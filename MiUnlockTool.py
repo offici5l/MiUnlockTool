@@ -3,19 +3,29 @@
 version = "1.5.9"
 
 import os
+import shutil
+
+def get_pip_command():
+    if shutil.which("pip3"):
+        return "pip3"
+    elif shutil.which("pip"):
+        return "pip"
+    else:
+        raise EnvironmentError("Could not find 'pip' or 'pip3' in your system !")
 
 for lib in ['Cryptodome', 'urllib3', 'requests', 'colorama']:
     try:
         __import__(lib)
     except ImportError:
         prefix = os.getenv("PREFIX", "")
+        pip_cmd = get_pip_command()
         if lib == 'Cryptodome':
             if "com.termux" in prefix:
                 cmd = 'pkg install python-pycryptodomex'
             else:
-                cmd = 'pip install pycryptodomex'
+                cmd = f'{pip_cmd} install pycryptodomex'
         else:
-            cmd = f'pip install {lib}'
+            cmd = f'{pip_cmd} install {lib}'
         os.system(cmd)
 
 import re, requests, json, hmac, random, binascii, urllib, hashlib, io, urllib.parse, time, sys, urllib.request, zipfile, webbrowser, platform, subprocess, shutil, stat, datetime, threading
