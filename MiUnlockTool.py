@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-version = "1.5.8"
+version = "1.5.9"
 
 import os
 
@@ -201,6 +201,10 @@ if data["securityStatus"] == 16:
          print(f"\n{cr}Failed to get passToken !{cres}\n")
          exit()
     data = json.loads(requests.get("https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&_json=true&passive=true&hidden=true", headers=headers, cookies={'passToken': p['passToken'], 'userId': str(p['userId']), 'deviceId': parse_qs(urlparse(p['location']).query)['d'][0]}).text.replace("&&&START&&&", ""))
+
+if "notificationUrl" in data:
+    print('\nnotificationUrl:\n')
+    exit(data["notificationUrl"])
 
 ssecurity, nonce, location = data["ssecurity"], data["nonce"], data["location"]
 
