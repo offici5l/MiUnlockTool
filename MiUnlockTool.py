@@ -110,7 +110,10 @@ else:
             st = os.stat(cmd)
             os.chmod(cmd, st.st_mode | stat.S_IEXEC)
 
-datafile = os.path.join(os.path.dirname(__file__), "miunlockdata.json")
+config_dir = os.environ.get("XDG_CONFIG_HOME", os.path.join(os.path.expanduser("~"), ".config"))
+data_dir = os.path.join(config_dir, "miunlocktool")
+os.makedirs(data_dir, exist_ok=True)
+datafile = os.path.join(data_dir, "miunlockdata.json")
 
 while os.path.isfile(datafile):
     try:
