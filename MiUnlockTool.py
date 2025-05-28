@@ -90,22 +90,25 @@ if s == "Linux" and os.path.exists("/data/data/com.termux"):
         exit()
     cmd = "fastboot"
 else:
-    dir = os.path.dirname(__file__)
-    fp = os.path.join(dir, "platform-tools")
-    if not os.path.exists(fp):
-        print("\ndownload platform-tools...\n")
-        url = f"https://dl.google.com/android/repository/platform-tools-latest-{s}.zip"
-        cd = os.path.join(os.path.dirname(__file__))
-        fp = os.path.join(cd, os.path.basename(url))    
-        urllib.request.urlretrieve(url, fp)    
-        with zipfile.ZipFile(fp, 'r') as zip_ref:
-            zip_ref.extractall(cd)
-        os.remove(fp)
-    pt = os.path.join(os.path.dirname(__file__), "platform-tools")
-    cmd = os.path.join(pt, "fastboot")
-    if s == "Linux" or s == "Darwin":
-        st = os.stat(cmd)
-        os.chmod(cmd, st.st_mode | stat.S_IEXEC)
+    if s == "Linux" and shutil.which("fastboot") is not None:
+        cmd = "fastboot"
+    else:
+        dir = os.path.dirname(__file__)
+        fp = os.path.join(dir, "platform-tools")
+        if not os.path.exists(fp):
+            print("\ndownload platform-tools...\n")
+            url = f"https://dl.google.com/android/repository/platform-tools-latest-{s}.zip"
+            cd = os.path.join(os.path.dirname(__file__))
+            fp = os.path.join(cd, os.path.basename(url))
+            urllib.request.urlretrieve(url, fp)
+            with zipfile.ZipFile(fp, 'r') as zip_ref:
+                zip_ref.extractall(cd)
+            os.remove(fp)
+        pt = os.path.join(os.path.dirname(__file__), "platform-tools")
+        cmd = os.path.join(pt, "fastboot")
+        if s == "Linux" or s == "Darwin":
+            st = os.stat(cmd)
+            os.chmod(cmd, st.st_mode | stat.S_IEXEC)
 
 datafile = os.path.join(os.path.dirname(__file__), "miunlockdata.json")
 
