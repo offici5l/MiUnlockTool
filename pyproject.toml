@@ -1,0 +1,15 @@
+[project]
+name = "miunlocktool"
+version = "1.5.9"
+description = "Unlock the bootloader on Xiaomi devices"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "colorama"
+    "pycryptodomex"
+    "requests"
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
