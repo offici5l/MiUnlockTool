@@ -381,7 +381,7 @@ elif "descEN" in r:
     if r["code"] == 20036:
         print("\nYou can unlock (repeat this process) on:", (datetime.datetime.now().replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=r["data"]["waitHour"])).strftime("%Y-%m-%d %H:%M"))
     else:
-        print(f"{cgg}\noffici5l.github.io/code\n{cres}")
+        print(f"{cgg}\nhttps://offici5l.github.io/Articles/code\n{cres}")
 else:
     for key, value in r.items():
         print(f"\n{key}: {value}")
