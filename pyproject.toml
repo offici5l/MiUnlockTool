@@ -5,8 +5,8 @@ description = "Unlock the bootloader on Xiaomi devices"
 readme = "README.md"
 requires-python = ">=3.7"
 dependencies = [
-    "colorama"
-    "pycryptodomex"
+    "colorama",
+    "pycryptodomex",
     "requests"
 ]
 
