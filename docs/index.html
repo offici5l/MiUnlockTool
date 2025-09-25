@@ -1,166 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Unlock Tool Error Codes</title>
+    <title>Mi Unlock Tool</title>
     <style>
         :root {
             --xiaomi-orange: #FF6900;
             --light-gray: #f4f4f4;
             --dark-gray: #333;
             --white: #fff;
-            --border-color: #ddd;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--light-gray);
             color: var(--dark-gray);
             margin: 0;
-            padding: 20px;
-        }
-        h1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             text-align: center;
-            color: var(--xiaomi-orange);
-            font-weight: 600;
-            margin-bottom: 40px;
         }
-        #errors-container {
-            max-width: 800px;
-            margin: 0 auto;
+        .container {
+            max-width: 90%;
         }
-        .accordion {
-            background-color: var(--white);
-            color: var(--dark-gray);
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            border-bottom: 1px solid var(--border-color);
-            text-align: left;
-            outline: none;
+        .button {
+            background-color: var(--xiaomi-orange);
+            color: var(--white);
+            padding: 18px 35px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
             font-size: 1.2em;
             font-weight: 600;
-            transition: background-color 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            cursor: pointer;
+            border-radius: 12px;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .accordion:after {
-            content: '\002B'; /* Plus sign */
-            color: var(--xiaomi-orange);
-            font-weight: bold;
-            font-size: 1.5em;
+        .button:hover {
+            background-color: #e65c00;
+            transform: translateY(-2px);
         }
-        .accordion.active:after {
-            content: "\2212"; /* Minus sign */
-        }
-        .accordion:hover, .accordion.active {
-            background-color: #f9f9f9;
-        }
-        .panel {
-            padding: 0 25px;
-            background-color: white;
-            display: none;
-            overflow: hidden;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .panel h3 {
-            font-size: 1.1em;
-            color: var(--xiaomi-orange);
-            margin-top: 20px;
-            margin-bottom: 8px;
-            border-bottom: 2px solid var(--light-gray);
-            padding-bottom: 5px;
-        }
-        .panel p, .panel ul {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: "Menlo", "Consolas", "Monaco", monospace;
-            background-color: #fafafa;
-            padding: 15px;
-            border-radius: 8px;
-            line-height: 1.6;
-            color: #555;
-            margin-top: 0;
-        }
-        .panel ul {
-            padding-left: 40px;
+        .button:active {
+            transform: translateY(1px);
         }
     </style>
 </head>
 <body>
-    <h1>Mi Unlock Tool Error Codes</h1>
-    <div id="errors-container"></div>
-
-    <script>
-        function createContentElement(text) {
-            const container = document.createElement('div');
-            if (text.includes('\n')) {
-                const list = document.createElement('ul');
-                const items = text.split('\n').filter(item => item.trim() !== '');
-                items.forEach(itemText => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = itemText;
-                    list.appendChild(listItem);
-                });
-                container.appendChild(list);
-            } else {
-                const p = document.createElement('p');
-                p.textContent = text;
-                container.appendChild(p);
-            }
-            return container;
-        }
-
-        fetch('code.json')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('errors-container');
-                data.forEach(error => {
-                    const button = document.createElement('button');
-                    button.className = 'accordion';
-                    button.textContent = `Error Code: ${error.errorCode}`;
-                    
-                    const panel = document.createElement('div');
-                    panel.className = 'panel';
-
-                    if (error.message) {
-                        const messageHeader = document.createElement('h3');
-                        messageHeader.textContent = 'Message';
-                        panel.appendChild(messageHeader);
-                        panel.appendChild(createContentElement(error.message));
-                    }
-
-                    if (error.description) {
-                        const descriptionHeader = document.createElement('h3');
-                        descriptionHeader.textContent = 'Description';
-                        panel.appendChild(descriptionHeader);
-                        panel.appendChild(createContentElement(error.description));
-                    }
-
-                    if (error.solution) {
-                        const solutionHeader = document.createElement('h3');
-                        solutionHeader.textContent = 'Solution';
-                        panel.appendChild(solutionHeader);
-                        panel.appendChild(createContentElement(error.solution));
-                    }
-                    
-                    container.appendChild(button);
-                    container.appendChild(panel);
-
-                    button.addEventListener('click', function() {
-                        this.classList.toggle('active');
-                        const panel = this.nextElementSibling;
-                        if (panel.style.display === 'block') {
-                            panel.style.display = 'none';
-                        } else {
-                            panel.style.display = 'block';
-                        }
-                    });
-                });
-            })
-            .catch(error => console.error('Error fetching error codes:', error));
-    </script>
+    <div class="container">
+        <a href="error_codes.html" class="button">Mi Unlock Tool Error Codes</a>
+    </div>
 </body>
 </html>
