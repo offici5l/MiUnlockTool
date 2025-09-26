@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,6 +24,9 @@
         }
         .container {
             max-width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .button {
             background-color: var(--xiaomi-orange);
@@ -39,6 +42,7 @@
             border: none;
             transition: background-color 0.3s ease, transform 0.2s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: -webkit-fill-available;
         }
         .button:hover {
             background-color: #e65c00;
@@ -51,6 +55,7 @@
 </head>
 <body>
     <div class="container">
+        <a href="https://github.com/offici5l/MiUnlockTool" class="button" style="margin-bottom: 15px;">Installation (GitHub)</a>
         <a href="error_codes.html" class="button">Mi Unlock Tool Error Codes</a>
     </div>
 </body>
