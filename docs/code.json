@@ -64,6 +64,12 @@
     "message": "Please unlock *** hours later. And do not add your account in MIUI again, otherwise you will wait from scratch",
     "description": "This is normal; please wait. The duration of the waiting period may vary depending on the type of device.",
     "solution": "Please wait until the waiting period is over, then restart the unlocking tool. (Note: if you restart the tool after some time and the timer has not decreased, this indicates that your account has been suspended."
+  },
+  {
+    "errorCode": "20039",
+    "message": "Device basic data verification failed. This device couldn't be unlocked",
+    "description": "The issue arises because the device token does not contain the full set of data, meaning the token is incomplete.",
+    "solution": "!"
   }
 ]
 
