@@ -58,5 +58,12 @@
     "message": "该手机已被账号 **** 通过查找手机锁定，无法解锁",
     "description": "device locked by account ****",
     "solution": "Log in to account **** in the following link: i.mi.com/mobile/find, select device, Disable Locate Device."
+  },
+  {
+    "errorCode": "20036",
+    "message": "Please unlock *** hours later. And do not add your account in MIUI again, otherwise you will wait from scratch",
+    "description": "This is normal; please wait. The duration of the waiting period may vary depending on the type of device.",
+    "solution": "Please wait until the waiting period is over, then restart the unlocking tool. (Note: if you restart the tool after some time and the timer has not decreased, this indicates that your account has been suspended."
   }
 ]
+
