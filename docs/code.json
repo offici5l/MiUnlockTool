@@ -63,7 +63,7 @@
     "errorCode": "20036",
     "message": "Please unlock *** hours later. And do not add your account in MIUI again, otherwise you will wait from scratch",
     "description": "This is normal; please wait. The duration of the waiting period may vary depending on the type of device.",
-    "solution": "Please wait until the waiting period is over, then restart the unlocking tool. (Note: if you restart the tool after some time and the timer has not decreased, this indicates that your account has been suspended."
+    "solution": "Please wait until the waiting period is over, then restart the unlocking tool. (Note: If the waiting time does not decrease or resets to 144 hours, this means your account has been suspended. You need to use a different Xiaomi account.)"
   },
   {
     "errorCode": "20039",
