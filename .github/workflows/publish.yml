@@ -2,6 +2,15 @@ name: Publish to PyPI
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose environment'
+        required: true
+        type: choice
+        options:
+          - test
+          - production
+        default: test
 
 permissions:
   contents: read
@@ -27,7 +36,15 @@ jobs:
       - name: Build package
         run: python -m build
 
+      - name: Publish to Test PyPI
+        if: ${{ github.event.inputs.environment == 'test' }}
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        run: twine upload --repository testpypi dist/*
+
       - name: Publish to PyPI
+        if: ${{ github.event.inputs.environment == 'production' }}
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
