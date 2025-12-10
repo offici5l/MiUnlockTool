@@ -33,11 +33,12 @@ jobs:
       - name: Install build tools
         run: python -m pip install --upgrade build twine
 
-      - name: Modify version for test environment
+- name: Modify version for test environment
         if: ${{ github.event.inputs.environment == 'test' }}
         run: |
-          TIMESTAMP=$(date +%Y%m%d%H%M%S)
-          sed -i "s/version = \"\([^\"]*\)\"/version = \"\1.dev$TIMESTAMP\"/" pyproject.toml
+          DATE=$(date +%Y%m%d)
+          TIME=$(date +%H%M)
+          sed -i "s/version = \".*\"/version = \"${DATE}test${TIME}\"/" pyproject.toml
           echo "Modified version for testing:"
           grep "version" pyproject.toml
 
