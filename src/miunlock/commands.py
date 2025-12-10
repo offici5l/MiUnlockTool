@@ -18,7 +18,15 @@ def read_stream(stream, output_list, process, restart_flag):
 
 def CheckB(cmd, var_name, *fastboot_args):
     while True:
-        process = subprocess.Popen([cmd] + list(fastboot_args), stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+        try:
+            process = subprocess.Popen([cmd] + list(fastboot_args), stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+        except FileNotFoundError:
+            return {'error': f"Fastboot command '{cmd}' not found in PATH"}
+        except PermissionError:
+            return {'error': 'Permission denied. Run PowerShell as Administrator'}
+        except Exception as e:
+            return {'error': f"{type(e).__name__}: {str(e)}"}
+
         stdout_lines, stderr_lines, restart_flag = [], [], [False]
 
         threading.Thread(target=read_stream, args=(process.stdout, stdout_lines, process, restart_flag)).start()
@@ -45,22 +53,25 @@ def CheckB(cmd, var_name, *fastboot_args):
 def get_product(cmd):
     product = None
     while product is None:
-        if product is None:
-            product = CheckB(cmd, "product", "getvar", "product")
+        product = CheckB(cmd, "product", "getvar", "product")
+        if isinstance(product, dict) and 'error' in product:
+            return product
     print(f"\nproduct: {product}\n")
     return product
-
 
 def get_device_token(cmd):
     token = None
     while token is None:
-        if token is None:
-            token = CheckB(cmd, "token", "oem", "get_token")
+        token = CheckB(cmd, "token", "oem", "get_token")
+        if isinstance(token, dict) and 'error' in token:
+            return token
+        if token:
+            print(f"\ndevice token: {token}")
+            return token
+        else:
+            token = CheckB(cmd, "token", "getvar", "token")
+            if isinstance(token, dict) and 'error' in token:
+                return token
             if token:
                 print(f"\ndevice token: {token}")
                 return token
-            else:
-                token = CheckB(cmd, "token", "getvar", "token")
-                if token:
-                    print(f"\ndevice token: {token}")
-                    return token

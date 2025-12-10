@@ -24,6 +24,8 @@ def unlock_device(domain, ssecurity, cookies, pcId, fastboot_cmd):
     print("\nEnsure your Xiaomi device is in fastboot mode ...\n")
 
     product = get_product(fastboot_cmd)
+    if isinstance(product, dict) and 'error' in product:
+        return product
 
     data = {"product": product}
     params_raw = {"appId": "1", "data": data, "nonce": nonce}
@@ -43,6 +45,8 @@ def unlock_device(domain, ssecurity, cookies, pcId, fastboot_cmd):
     input("\nPress 'Enter' to continue — unlock(encryptData)")
 
     device_token = get_device_token(fastboot_cmd)
+    if isinstance(device_token, dict) and 'error' in device_token:
+        return device_token
 
     data = {
         "clientId": "2",
