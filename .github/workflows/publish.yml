@@ -37,8 +37,11 @@ jobs:
         if: ${{ github.event.inputs.environment == 'test' }}
         run: |
           TIMESTAMP=$(date +%Y%m%d%H%M)
-          sed -i "s/version = \"\([0-9]*\.[0-9]*\)\.\([0-9]*\)\"/version = \"\1.$((\2+1)).dev${TIMESTAMP}\"/" pyproject.toml
-
+          VERSION=$(grep -oP 'version = "\K[^"]+' pyproject.toml)
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          NEW_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1)).dev${TIMESTAMP}"
+          sed -i "s/version = \".*\"/version = \"${NEW_VERSION}\"/" pyproject.toml
+          
       - name: Build package
         run: python -m build
 
