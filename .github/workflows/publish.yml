@@ -36,11 +36,8 @@ jobs:
       - name: Modify version for test environment
         if: ${{ github.event.inputs.environment == 'test' }}
         run: |
-          DATE=$(date +%Y%m%d)
-          TIME=$(date +%H%M)
-          sed -i "s/version = \".*\"/version = \"${DATE}test${TIME}\"/" pyproject.toml
-          echo "Modified version for testing:"
-          grep "version" pyproject.toml
+          TIMESTAMP=$(date +%Y%m%d%H%M)
+          sed -i "s/version = \"\([^\"]*\)\"/version = \"\1.dev${TIMESTAMP}\"/" pyproject.toml
 
       - name: Build package
         run: python -m build
