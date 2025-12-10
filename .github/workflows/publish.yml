@@ -33,7 +33,7 @@ jobs:
       - name: Install build tools
         run: python -m pip install --upgrade build twine
 
-- name: Modify version for test environment
+      - name: Modify version for test environment
         if: ${{ github.event.inputs.environment == 'test' }}
         run: |
           DATE=$(date +%Y%m%d)
