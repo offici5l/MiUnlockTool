@@ -1,3 +1,4 @@
+
 name: Publish to PyPI
 
 on:
@@ -13,7 +14,7 @@ on:
         default: test
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-and-publish:
@@ -32,6 +33,22 @@ jobs:
 
       - name: Install build tools
         run: python -m pip install --upgrade build twine
+
+      - name: Get version
+        id: get_version
+        run: |
+          VERSION=$(grep -oP 'version = "\K[^"]+' pyproject.toml)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION is: $VERSION"
+
+      - name: Extract release notes
+        if: ${{ github.event.inputs.environment == 'production' }}
+        run: |
+          VERSION=$(grep -oP 'version = "\K[^"]+' pyproject.toml)
+          echo "VERSION is: $VERSION"
+          sed -n "/^### Version $VERSION:/,/^### Version/p" CHANGELOG.md | sed '$d' > release_notes.md
+          echo "Release notes content:"
+          cat release_notes.md
 
       - name: Modify version for test environment
         if: ${{ github.event.inputs.environment == 'test' }}
@@ -58,3 +75,21 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: twine upload dist/*
+
+      - name: Create Git Tag
+        if: ${{ github.event.inputs.environment == 'production' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ steps.get_version.outputs.version }}" -m "Release v${{ steps.get_version.outputs.version }}"
+          git push origin "v${{ steps.get_version.outputs.version }}"
+
+      - name: Create GitHub Release
+        if: ${{ github.event.inputs.environment == 'production' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Release v${{ steps.get_version.outputs.version }}
+          draft: false
+          prerelease: false
+          body_path: release_notes.md
