@@ -58,7 +58,7 @@ def get_creds():
         return {"error": "User ID not found in cookies!"}
 
     if response.status_code == 401:
-        print('\nURL(Auth) expired ...')
+        print('\nURL(Auth) expired ...\n')
         return get_creds()
 
     return {"error": f"Unexpected status code: {response.status_code}"}

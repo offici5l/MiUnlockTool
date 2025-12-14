@@ -3,11 +3,7 @@ import json
 import hashlib
 
 def get_service_data(cookies):
-    device_id = cookies.get('deviceId')
-    if not device_id:
-        return {"error": "Missing deviceId in cookies"}
-        
-    pcId = hashlib.md5(device_id.encode()).hexdigest()
+
     url = 'https://account.xiaomi.com/pass/serviceLogin'
     params = {'sid': 'unlockApi'}
     headers = {"User-Agent": "XiaomiPCSuite"}
@@ -29,7 +25,7 @@ def get_service_data(cookies):
         if not ssecurity:
             return {"error": "Missing ssecurity in response"}
             
-        return {"cookies": r.cookies.get_dict(), "ssecurity": ssecurity, "pcId": pcId}
+        return {"cookies": r.cookies.get_dict(), "ssecurity": ssecurity}
         
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}

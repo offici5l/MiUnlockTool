@@ -37,7 +37,7 @@ def get_pass_token():
         return creds
         
     user_id = creds["user_id"]
-    print(f'\naccount id: {user_id}')
+    print(f'\naccount id: {user_id}\n')
 
     device_id = creds["device_id"]
 
@@ -55,7 +55,7 @@ def get_pass_token():
     if response_text.get("code") == 70016:
         return {"error": "Invalid password"}      
     elif response_text.get("code") == 87001:
-        print('\nCAPTCHA verification required !')
+        print('\nCAPTCHA verification required !\n')
         cookies = verify(response_text["captchaUrl"], response.cookies.get_dict(), data)
     elif 'notificationUrl' in response_text:
         notificationUrl = response_text.get("notificationUrl")
@@ -64,7 +64,7 @@ def get_pass_token():
         elif "SetEmail" in notificationUrl:
             return {"error": "Please link your account to an email address and then try again."}
         else:
-            print('\nverification required !')
+            print('\nverification required !\n')
             cookies = verification(notificationUrl, cookies, data)
             if "error" in cookies:
                 return cookies
@@ -81,7 +81,7 @@ def get_pass_token():
 
     cookies_file.parent.mkdir(parents=True, exist_ok=True)
     pickle.dump(cookies, open(cookies_file, "wb"))
-    print("Login successful")
+    print("\nLogin successful\n")
 
     return cookies
         

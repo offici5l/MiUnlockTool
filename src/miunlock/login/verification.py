@@ -74,7 +74,7 @@ def verification(notificationUrl, cookies, data):
             else:
                 subprocess.run(['xdg-open', str(path)])
 
-            print(f"\nCaptcha displayed from {path}")
+            print(f"\nCaptcha displayed from {path}\n")
 
             icode = input("\nEnter captcha code: ").strip()
             data_icode.update({'icode': icode})
@@ -82,7 +82,7 @@ def verification(notificationUrl, cookies, data):
             path.unlink()
 
         elif r2_text.get("code") == 0:
-            print(f"\nVerification code sent to your {method}")
+            print(f"\nVerification code sent to your {method}\n")
             break
         else:
             if r2_text.get("code") == 70022:

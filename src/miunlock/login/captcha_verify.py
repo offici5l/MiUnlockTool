@@ -20,7 +20,7 @@ def download_captcha(path, captchaUrl, cookies):
     else:
         subprocess.run(['xdg-open', str(path)])
     
-    print(f"\nCaptcha displayed from {path}")
+    print(f"\nCaptcha displayed from {path}\n")
     return cookies
 
 def verify(captchaUrl, cookies, data):
@@ -32,7 +32,7 @@ def verify(captchaUrl, cookies, data):
     response_text = json.loads(response.text[11:])
     if response_text.get("code") == 87001:
         path.unlink()
-        print("\nIncorrect captcha code. A new captcha will be generated ...")
+        print("\nIncorrect captcha code. A new captcha will be generated ...\n")
         return verify(response_text["captchaUrl"], response.cookies.get_dict(), data)
     cookies = response.cookies.get_dict()
     path.unlink()

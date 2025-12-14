@@ -35,7 +35,7 @@ def CheckB(cmd, var_name, *fastboot_args):
         try:
             process.wait()
         except subprocess.SubprocessError as e:
-            print(f"\nError while executing process: {e}")
+            print(f"\nError while executing process: {e}\n")
             return None
 
         if restart_flag[0]:
@@ -66,12 +66,12 @@ def get_device_token(cmd):
         if isinstance(token, dict) and 'error' in token:
             return token
         if token:
-            print(f"\ndevice token: {token}")
+            print(f"\ndevice token: {token}\n")
             return token
         else:
             token = CheckB(cmd, "token", "getvar", "token")
             if isinstance(token, dict) and 'error' in token:
                 return token
             if token:
-                print(f"\ndevice token: {token}")
+                print(f"\ndevice token: {token}\n")
                 return token

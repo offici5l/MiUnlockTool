@@ -36,11 +36,11 @@ def unlock_device(domain, ssecurity, cookies, pcId, fastboot_cmd):
     elif clear["code"] != 0:
         return {"error": clear}
     else:
-        print('notice:', clear["notice"])
+        print(f'\nnotice: {clear["notice"]}\n')
         if clear['cleanOrNot'] == 1:
-            print('\nThe device will clear user data when unlocked')
+            print('\nThe device will clear user data when unlocked\n')
         else:
-            print('\nUnlocking this device will not erase user data')
+            print('\nUnlocking this device will not erase user data\n')
 
     input("\nPress 'Enter' to continue — unlock(encryptData)")
 
@@ -78,7 +78,7 @@ def unlock_device(domain, ssecurity, cookies, pcId, fastboot_cmd):
         filename = Path.home() / f"{int(time.time())}encryptData"
         with open(filename, "wb") as edfile:
             edfile.write(ed.getvalue())
-        print(f"\nEncrypted data saved to: {filename}")
+        print(f"\nEncrypted data saved to: {filename}\n")
         try:
             result_stage = subprocess.run([fastboot_cmd, "stage", filename], check=True, capture_output=True, text=True)
             result_unlock = subprocess.run([fastboot_cmd, "oem", "unlock"], check=True, capture_output=True, text=True)
