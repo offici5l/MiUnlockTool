@@ -45,11 +45,7 @@ jobs:
         run: |
           VERSION=$(grep -oP 'version = "\K[^"]+' pyproject.toml)
           echo "VERSION is: $VERSION"
-          awk -v v="$VERSION" '
-$0 ~ "^### Version " v ":" {found=1; next}
-found && /^### Version / {exit}
-found {print}
-' CHANGELOG.md > release_notes.md
+          awk -v v="$VERSION" '$0 ~ "^### Version " v ":" {found=1; next} found && /^### Version / {exit} found {print}' CHANGELOG.md > release_notes.md
           echo "Release notes content:"
           cat release_notes.md
 
