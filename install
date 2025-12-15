@@ -1,0 +1,36 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+if ! command -v python3 &>/dev/null; then
+    printf "\n\n\n\e[1;32mInstalling Python3...\e[0m\n\n\n"
+    yes | pkg install python3
+fi
+
+if ! command -v adb &>/dev/null || ! command -v fastboot &>/dev/null; then
+    printf "\n\n\n\e[1;32mUpdate & Upgrade Pkg...\e[0m\n\n\n"
+    yes | apt update && yes | apt upgrade
+    printf "\n\n\n\e[1;32mInstalling ADB and Fastboot...\e[0m\n\n\n"
+    yes | pkg uninstall termux-adb 2>/dev/null
+    curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash
+    ln -s $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
+    ln -s $PREFIX/bin/termux-adb $PREFIX/bin/adb
+fi
+
+if ! python3 -c "import Cryptodome" &>/dev/null; then
+    printf "\n\n\n\e[1;32mInstalling Cryptodome...\e[0m\\n\n\n"
+    yes | pip install pycryptodomex
+fi
+
+if ! python3 -c "import urllib3" &>/dev/null; then
+    printf "\n\n\n\e[1;32mInstalling urllib3...\e[0m\\n\n\n"
+    yes | pip install urllib3
+fi
+
+if ! python3 -c "import requests" &>/dev/null; then
+    printf "\n\n\n\e[1;32mInstalling requests...\e[0m\\n\n\n"
+    yes | pip install requests
+fi
+
+printf "\n\n\n\033[32mupdate MiUnlockTool...\033[0m\n\n\n"
+curl "https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockTool.py" -o "$PREFIX/bin/miunlock" && chmod +x "$PREFIX/bin/miunlock"
+
+printf "\n\n\nuse command: \e[1;32mmiunlock\e[0m\n"
