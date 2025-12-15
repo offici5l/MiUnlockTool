@@ -19,13 +19,18 @@
 
 </div>
 
-
-## Requirements
-- Python 3.7+
+---
 
 ## Installation
+
 ```sh
 pip install miunlock
+```
+
+### Quick Install Android(Termux):
+
+```sh
+curl -sS https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash
 ```
 
 ## Usage

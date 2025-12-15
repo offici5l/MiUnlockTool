@@ -178,3 +178,7 @@ fixes, improvements, and additions:
 - Fixed "KeyError: 'ssecurity'" error by simulating the captcha entry step...
 - Improved login process
 - Added custom encryption/decryption library, AES - no longer dependent on external libraries
+
+### Version 1.6.1:
+
+- improvements

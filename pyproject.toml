@@ -1,6 +1,6 @@
 [project]
 name = "miunlock"
-version = "1.6.0"
+version = "1.6.1"
 description = "Retrieve Xiaomi encryptData(token) to unlock bootloader"
 authors = [{name = "offici5l"}]
 readme = "README.md"

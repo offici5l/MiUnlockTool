@@ -79,7 +79,7 @@ def config_termux():
         )
         
         if "package:com.termux.api" not in result.stdout:
-            return {"error": "com.termux.api app is not installed"}
+            return {"error": "com.termux.api app is not installed! Download it from https://github.com/termux/termux-api/releases/latest first and run miunlock again after installation"}
         
         PREFIX = os.environ.get('PREFIX', '/data/data/com.termux/files/usr')
         fastboot_path = f"{PREFIX}/bin/termux-fastboot"
