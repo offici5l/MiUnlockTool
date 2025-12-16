@@ -57,6 +57,8 @@ def get_pass_token():
     elif response_text.get("code") == 87001:
         print('\nCAPTCHA verification required !\n')
         cookies = verify(response_text["captchaUrl"], response.cookies.get_dict(), data)
+        if "error" in cookies:
+            return cookies
     elif 'notificationUrl' in response_text:
         notificationUrl = response_text.get("notificationUrl")
         if "BindAppealOrSafePhone" in notificationUrl:
