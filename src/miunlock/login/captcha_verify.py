@@ -36,5 +36,6 @@ def verify(captchaUrl, cookies, data):
         return verify(response_text["captchaUrl"], response.cookies.get_dict(), data)
     cookies = response.cookies.get_dict()
     path.unlink()
-
+    if 'passToken' not in cookies:
+        return {"error": f"\npass token was not found:\ncookies: {cookies}\nresponse_text: {response_text}\n"}
     return cookies
