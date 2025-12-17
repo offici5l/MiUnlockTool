@@ -4,6 +4,7 @@ import platform
 import requests
 import subprocess
 from pathlib import Path
+from .verification import verification
 
 headers = {"User-Agent": "XiaomiPCSuite"}
 
@@ -30,12 +31,21 @@ def verify(captchaUrl, cookies, data):
     data.update({'captCode': captCode})
     response = requests.post(f"https://account.xiaomi.com/pass/serviceLoginAuth2", data=data, headers=headers, cookies=cookies)
     response_text = json.loads(response.text[11:])
+    data.pop('captCode', None)
     if response_text.get("code") == 87001:
         path.unlink()
         print("\nIncorrect captcha code. A new captcha will be generated ...\n")
         return verify(response_text["captchaUrl"], response.cookies.get_dict(), data)
     cookies = response.cookies.get_dict()
     path.unlink()
+
     if 'passToken' not in cookies:
-        return {"error": f"\npass token was not found:\ncookies: {cookies}\nresponse_text: {response_text}\n"}
+        if 'authStart?sid=unlockApi&context' in response_text.get('notificationUrl', ''):
+            notificationUrl = response_text['notificationUrl']
+            print('\nverification required !\n')
+            cookies = verification(notificationUrl, cookies, data)
+            return cookies
+        else:
+            return {"error": f"\npass token was not found:\ncookies: {cookies}\nresponse_text: {response_text}\n"}
+
     return cookies
