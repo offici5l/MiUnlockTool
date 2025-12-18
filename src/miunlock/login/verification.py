@@ -122,6 +122,10 @@ def verification(notificationUrl, cookies, data):
 
     cookies = r6.cookies.get_dict()
     if 'passToken' not in cookies:
-        return {"error": "verification: pass token was not found"}
+        r7_text = json.loads(r6.text[11:])
+        if 'authStart?sid=unlockApi&context' in r7_text.get('notificationUrl', ''):
+            return {"error": 'Verification failed!'}
+        else:
+            return {"error": f"Verification failed!\nresponse:{r7_text}"}
 
     return cookies

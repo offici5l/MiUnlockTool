@@ -51,29 +51,35 @@ def get_pass_token():
     response = requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2", data=data, headers=headers, cookies=cookies)
         
     response_text = json.loads(response.text[11:])
+    cookies = response.cookies.get_dict()
+    if 'passToken' not in cookies:
+        if response_text.get("code") == 70016:
+            return {"error": "Invalid password"}      
+        elif response_text.get("code") == 87001:
+            print('\nCAPTCHA verification required !\n')
+            r_verify = verify(response_text["captchaUrl"], cookies, data)
+            if "error" in r_verify:
+                return r_verify
+            elif 'notificationUrl' in r_verify:
+                print('\nverification required !\n')
+                notification_url = r_verify['notificationUrl']
+                cookies = verification(notification_url, cookies, data)
+                if "error" in cookies:
+                    return cookies
+            else:
+                cookies = r_verify
+        elif 'notificationUrl' in response_text:
+            notificationUrl = response_text.get("notificationUrl")
+            if "BindAppealOrSafePhone" in notificationUrl:
+                return {"error": "Please link the account to a phone number, then try again."} 
+            elif "SetEmail" in notificationUrl:
+                return {"error": "Please link your account to an email address and then try again."}
+            else:
+                print('\nverification required !\n')
+                cookies = verification(notificationUrl, cookies, data)
+                if "error" in cookies:
+                    return cookies
 
-    if response_text.get("code") == 70016:
-        return {"error": "Invalid password"}      
-    elif response_text.get("code") == 87001:
-        print('\nCAPTCHA verification required !\n')
-        cookies = verify(response_text["captchaUrl"], response.cookies.get_dict(), data)
-        if "error" in cookies:
-            return cookies
-    elif 'notificationUrl' in response_text:
-        notificationUrl = response_text.get("notificationUrl")
-        if "BindAppealOrSafePhone" in notificationUrl:
-            return {"error": "Please link the account to a phone number, then try again."} 
-        elif "SetEmail" in notificationUrl:
-            return {"error": "Please link your account to an email address and then try again."}
-        else:
-            print('\nverification required !\n')
-            cookies = verification(notificationUrl, cookies, data)
-            if "error" in cookies:
-                return cookies
-    else:
-        cookies = response.cookies.get_dict()
-        if 'passToken' not in cookies:
-            return {"error": "pass token was not found"}
 
     required = {"deviceId", "passToken", "userId"}
     missing = required - cookies.keys()

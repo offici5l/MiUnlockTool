@@ -4,7 +4,6 @@ import platform
 import requests
 import subprocess
 from pathlib import Path
-from .verification import verification
 
 headers = {"User-Agent": "XiaomiPCSuite"}
 
@@ -42,9 +41,7 @@ def verify(captchaUrl, cookies, data):
     if 'passToken' not in cookies:
         if 'authStart?sid=unlockApi&context' in response_text.get('notificationUrl', ''):
             notificationUrl = response_text['notificationUrl']
-            print('\nverification required !\n')
-            cookies = verification(notificationUrl, cookies, data)
-            return cookies
+            return {"notificationUrl": notificationUrl}
         else:
             return {"error": f"\npass token was not found:\ncookies: {cookies}\nresponse_text: {response_text}\n"}
 
