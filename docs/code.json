@@ -51,7 +51,7 @@
     "errorCode": "20045",
     "message": "Message 1: Please use the common user tool on the official website\nMessage 2: The place where the account is registered does not match the place where the phone is sold.",
     "description": "Description 1: Invalid server region.\nDescription 2: The error occurs because you used a Xiaomi account region that does not match the region your device is intended for. For example, the error happens when using a global Xiaomi account to unlock a Chinese device, or vice versa!.",
-    "solution": "Solution 1:\n- Change server. In Termux, use 'miunlock global'. In Windows, Linux, or MacOS, use 'python3 Miunlocktool.py global'. Available servers: global, india, russia, china, europe.\nSolution 2: Use a Xiaomi account from the same region as the device. For example, if the device is Chinese, use a Chinese Xiaomi account."
+    "solution": "Solution 1:\n- Change server. select the regionConfig manually.\nSolution 2: Use a Xiaomi account from the same region as the device. For example, if the device is Chinese, use a Chinese Xiaomi account."
   },
   {
     "errorCode": "20038",
