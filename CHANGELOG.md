@@ -182,3 +182,7 @@ fixes, improvements, and additions:
 ### Version 1.6.1:
 
 - improvements
+
+### Version 1.6.2:
+
+- Fix: error (`com.termux.api app is not installed`)
