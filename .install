@@ -31,7 +31,7 @@ run_step "Installing Python3" \
 "yes | pkg install python3"
 
 run_step "Installing termux-adb" \
-"curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash"
+"curl -fsS https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash"
 
 run_step "Installing MiUnlockTool" \
 "pip install -U miunlock"
