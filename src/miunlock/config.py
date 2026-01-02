@@ -73,7 +73,7 @@ def config_termux():
             subprocess.run(['termux-reload-settings'], check=False)
         
         result = subprocess.run(
-            ["cmd", "package", "list", "packages", "com.termux.api"],
+            ["cmd", "package", "list", "packages", "--user", "0", "com.termux.api"],
             capture_output=True,
             text=True
         )
