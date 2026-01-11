@@ -4,6 +4,7 @@ import platform
 import requests
 from pathlib import Path
 import subprocess
+from colorama import Fore
 
 headers = {"User-Agent": "XiaomiPCSuite"}
 
@@ -24,10 +25,10 @@ def verification(notificationUrl, cookies, data):
 
     if 8 in options and 4 in options:
         while True:
-            print("\nChoose verification method:")
+            print(f"\n{Fore.CYAN}Choose verification method:")
             print("1 = phone verification (CAPTCHA required)")
             print("2 = email verification")
-            choice = input("Enter 1 or 2: ").strip()
+            choice = input(f"{Fore.CYAN}Enter 1 or 2: ").strip()
             if choice == "1":
                 method = "Phone"
                 break
@@ -35,7 +36,7 @@ def verification(notificationUrl, cookies, data):
                 method = "Email"
                 break
             else:
-                print("\nInvalid choice!\n")
+                print(f"\n{Fore.RED}Invalid choice!\n")
     elif 4 in options:
         method = "Phone"
     elif 8 in options:
@@ -55,7 +56,7 @@ def verification(notificationUrl, cookies, data):
         r2_text = json.loads(r2.text[11:])
 
         if r2_text.get("code") == 87001:
-            print(r2_text.get("reason", ""))
+            print(Fore.RED + r2_text.get("reason", ""))
             captchaUrl = r2_text.get("captchaUrl")
             path = Path.home() / f"{int(time.time())}_captcha.jpg"
 
@@ -65,7 +66,7 @@ def verification(notificationUrl, cookies, data):
             with open(path, "wb") as f:
                 f.write(rc.content)
 
-            input('\nPress Enter to open the CAPTCHA image')
+            input(f'\n{Fore.CYAN}Press Enter to open the CAPTCHA image')
 
             if platform.system() == 'Windows':
                 subprocess.run(['start', str(path)], shell=True)
@@ -74,15 +75,15 @@ def verification(notificationUrl, cookies, data):
             else:
                 subprocess.run(['xdg-open', str(path)])
 
-            print(f"\nCaptcha displayed from {path}\n")
+            print(f"\n{Fore.GREEN}Captcha displayed from {path}\n")
 
-            icode = input("\nEnter captcha code: ").strip()
+            icode = input(f"\n{Fore.CYAN}Enter captcha code: ").strip()
             data_icode.update({'icode': icode})
 
             path.unlink()
 
         elif r2_text.get("code") == 0:
-            print(f"\nVerification code sent to your {method}\n")
+            print(f"\n{Fore.GREEN}Verification code sent to your {method}\n")
             break
         else:
             if r2_text.get("code") == 70022:
@@ -91,7 +92,7 @@ def verification(notificationUrl, cookies, data):
                 return {"error": r2_text}
 
     while True:
-        ticket = input("Enter code: ").strip()
+        ticket = input(f"{Fore.CYAN}Enter code: ").strip()
         send_data = {
             "ticket": ticket,
             "trust": "true"
@@ -100,7 +101,7 @@ def verification(notificationUrl, cookies, data):
         r3_text = json.loads(r3.text[11:])
 
         if r3_text.get("code") == 70014:
-            print(r3_text.get("tips", ""))
+            print(Fore.RED + r3_text.get("tips", ""))
             continue
         elif r3_text.get("code") == 0:
             break

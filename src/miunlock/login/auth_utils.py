@@ -6,6 +6,7 @@ from urllib.parse import urlparse, parse_qs
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from colorama import Fore
 
 headers = {"User-Agent": "XiaomiPCSuite"}
 
@@ -28,7 +29,7 @@ def create_session_with_retry():
 
 
 def get_creds():
-    input("\nPress Enter to open confirmation page, \n copy url after seeing \"R\":\"\",\"S\":\"OK\", \n  and return here")
+    input(f"\n{Fore.CYAN}Press Enter to open confirmation page, \n copy url after seeing \"R\":\"\",\"S\":\"OK\", \n  and return here")
     config_url = 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true'
     if platform.system() == "Linux":
         os.system("xdg-open '" + config_url + "'")
@@ -36,7 +37,7 @@ def get_creds():
         webbrowser.open(config_url)
 
     time.sleep(2)
-    url = input("\nEnter url: ").strip()
+    url = input(f"\n{Fore.CYAN}Enter url: ").strip()
     
     if urlparse(url).netloc != "unlock.update.miui.com":
         return {"error": "Invalid URL"}
@@ -58,7 +59,7 @@ def get_creds():
         return {"error": "User ID not found in cookies!"}
 
     if response.status_code == 401:
-        print('\nURL(Auth) expired ...\n')
+        print(f'\n{Fore.YELLOW}URL(Auth) expired ...\n')
         return get_creds()
 
     return {"error": f"Unexpected status code: {response.status_code}"}

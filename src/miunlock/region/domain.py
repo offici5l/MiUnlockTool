@@ -1,3 +1,5 @@
+from colorama import Fore, Style
+
 def domain(regionConfig=None):
 
     domains = {
@@ -17,22 +19,22 @@ def domain(regionConfig=None):
 def config_manually():
     available_regions = domain()
 
-    print("\n" + "="*50)
+    print("\n" + Fore.CYAN + "="*50)
     print("Available Regions:")
     for idx, region in enumerate(available_regions, 1):
         print(f"  {idx}. {region}")
-    print("="*50)
+    print("="*50 + Style.RESET_ALL)
 
     while True:
-        choice = input(f"\nSelect region number (1-{len(available_regions)}): ").strip()
+        choice = input(f"\n{Fore.CYAN}Select region number (1-{len(available_regions)}): ").strip()
 
         try:
             choice_idx = int(choice) - 1
             if 0 <= choice_idx < len(available_regions):
                 selected = available_regions[choice_idx]
-                print(f"\nregionConfig Selected: {selected}\n")
+                print(f"\n{Fore.GREEN}regionConfig Selected: {selected}\n")
                 return selected
             else:
-                print(f"\nInvalid choice. Please enter a number between 1 and {len(available_regions)}\n")
+                print(f"\n{Fore.RED}Invalid choice. Please enter a number between 1 and {len(available_regions)}\n")
         except ValueError:
-            print(f"\nInvalid input. Please enter a number between 1 and {len(available_regions)}\n")
+            print(f"\n{Fore.RED}Invalid input. Please enter a number between 1 and {len(available_regions)}\n")

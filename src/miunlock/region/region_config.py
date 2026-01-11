@@ -1,5 +1,6 @@
 import json
 import requests
+from colorama import Fore
 
 def region_config(region):
     headers = {"User-Agent": "XiaomiPCSuite"}
@@ -18,7 +19,7 @@ def region_config(region):
         if not region_config:
             return {"error": f"Region config not found for region: {region}"}
 
-        print(f"\nregionConfig: {region_config}\n")
+        print(f"\n{Fore.GREEN}regionConfig: {region_config}\n")
 
         return {"regionConfig": region_config}
 

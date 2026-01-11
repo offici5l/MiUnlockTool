@@ -2,6 +2,7 @@ import subprocess
 import threading
 import time
 import sys
+from colorama import Fore
 
 def read_stream(stream, output_list, process, restart_flag):
     try:
@@ -10,7 +11,7 @@ def read_stream(stream, output_list, process, restart_flag):
             output_list.append(line)
             if "No permission" in line or "< waiting for any device >" in line:
                 process.terminate()
-                print(f'\r< waiting for any device >', end='', flush=True)
+                print(f'\r{Fore.YELLOW}< waiting for any device >', end='', flush=True)
                 restart_flag[0] = True
                 return
     finally:
@@ -35,7 +36,7 @@ def CheckB(cmd, var_name, *fastboot_args):
         try:
             process.wait()
         except subprocess.SubprocessError as e:
-            print(f"\nError while executing process: {e}\n")
+            print(f"\n{Fore.RED}Error while executing process: {e}\n")
             return None
 
         if restart_flag[0]:
@@ -43,7 +44,7 @@ def CheckB(cmd, var_name, *fastboot_args):
             sys.stdout.write('\r\033[K')
             continue
 
-        print(f"\rFetching '{var_name}' — please wait...", end='', flush=True)
+        print(f"\r{Fore.CYAN}Fetching '{var_name}' — please wait...", end='', flush=True)
 
         lines = [line.split(f"{var_name}:")[1].strip() for line in stderr_lines + stdout_lines if f"{var_name}:" in line]
         if len(lines) > 1:
@@ -56,7 +57,7 @@ def get_product(cmd):
         product = CheckB(cmd, "product", "getvar", "product")
         if isinstance(product, dict) and 'error' in product:
             return product
-    print(f"\nproduct: {product}\n")
+    print(f"\n{Fore.GREEN}product: {product}\n")
     return product
 
 def get_device_token(cmd):
@@ -66,12 +67,12 @@ def get_device_token(cmd):
         if isinstance(token, dict) and 'error' in token:
             return token
         if token:
-            print(f"\ndevice token: {token}\n")
+            print(f"\n{Fore.GREEN}device token: {token}\n")
             return token
         else:
             token = CheckB(cmd, "token", "getvar", "token")
             if isinstance(token, dict) and 'error' in token:
                 return token
             if token:
-                print(f"\ndevice token: {token}\n")
+                print(f"\n{Fore.GREEN}device token: {token}\n")
                 return token

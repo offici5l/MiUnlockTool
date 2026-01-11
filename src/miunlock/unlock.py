@@ -7,6 +7,7 @@ import subprocess
 import os
 import time
 from pathlib import Path
+from colorama import Fore
 
 def unlock_device(domain, ssecurity, cookies, pcId, fastboot_cmd):
         
@@ -21,7 +22,7 @@ def unlock_device(domain, ssecurity, cookies, pcId, fastboot_cmd):
     else:
         nonce = nonce_resp.get("nonce")
 
-    print("\nEnsure your Xiaomi device is in fastboot mode ...\n")
+    print(f"\n{Fore.YELLOW}Ensure your Xiaomi device is in fastboot mode ...\n")
 
     product = get_product(fastboot_cmd)
     if isinstance(product, dict) and 'error' in product:
@@ -36,13 +37,13 @@ def unlock_device(domain, ssecurity, cookies, pcId, fastboot_cmd):
     elif clear["code"] != 0:
         return {"error": clear}
     else:
-        print(f'\nnotice: {clear["notice"]}\n')
+        print(f'\n{Fore.YELLOW}notice: {clear["notice"]}\n')
         if clear['cleanOrNot'] == 1:
-            print('\nThe device will clear user data when unlocked\n')
+            print(f'\n{Fore.RED}The device will clear user data when unlocked\n')
         else:
-            print('\nUnlocking this device will not erase user data\n')
+            print(f'\n{Fore.GREEN}Unlocking this device will not erase user data\n')
 
-    input("\nPress 'Enter' to continue — unlock(encryptData)")
+    input(f"\n{Fore.CYAN}Press 'Enter' to continue — unlock(encryptData)")
 
     device_token = get_device_token(fastboot_cmd)
     if isinstance(device_token, dict) and 'error' in device_token:
@@ -78,7 +79,7 @@ def unlock_device(domain, ssecurity, cookies, pcId, fastboot_cmd):
         filename = Path.home() / f"{int(time.time())}encryptData"
         with open(filename, "wb") as edfile:
             edfile.write(ed.getvalue())
-        print(f"\nEncrypted data saved to: {filename}\n")
+        print(f"\n{Fore.GREEN}Encrypted data saved to: {filename}\n")
         try:
             result_stage = subprocess.run([fastboot_cmd, "stage", filename], check=True, capture_output=True, text=True)
             result_unlock = subprocess.run([fastboot_cmd, "oem", "unlock"], check=True, capture_output=True, text=True)

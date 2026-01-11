@@ -1,5 +1,6 @@
 import json
 import requests
+from colorama import Fore
 
 def region(pass_token):
     headers = {"User-Agent": "XiaomiPCSuite"}
@@ -14,7 +15,7 @@ def region(pass_token):
         region = region_data.get("data", {}).get("region")
         if not region:
             return {"error": "Failed to get region"}
-        print(f"\nAccount Region: {region}\n")
+        print(f"\n{Fore.GREEN}Account Region: {region}\n")
         return {"success": f"{region}"}
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}

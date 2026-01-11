@@ -17,6 +17,7 @@ from pathlib import Path
 from .captcha_verify import verify
 from .verification import verification
 from .auth_utils import get_creds
+from colorama import Fore
 
 cookies_file = Path.home() / ".miunlock" / "cookies.pkl"
 
@@ -26,7 +27,7 @@ def get_pass_token():
 
     if cookies_file.exists():
         pass_token = pickle.load(open(cookies_file, "rb"))
-        choice = input(f"\nAlready logged in\nAccount ID: {pass_token['userId']}\n\nPress 'Enter' to continue\n(To log out, type 2 and press Enter.)").strip().lower()
+        choice = input(f"\n{Fore.GREEN}Already logged in\n{Fore.YELLOW}Account ID: {pass_token['userId']}\n\n{Fore.CYAN}Press 'Enter' to continue\n(To log out, type 2 and press Enter.)").strip().lower()
         if choice == "2":
             cookies_file.unlink()
         else:
@@ -37,14 +38,14 @@ def get_pass_token():
         return creds
         
     user_id = creds["user_id"]
-    print(f'\naccount id: {user_id}\n')
+    print(f'\n{Fore.GREEN}account id: {user_id}\n')
 
     device_id = creds["device_id"]
 
     response = requests.get('https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi', headers=headers, cookies={'deviceId': creds["device_id"]})
     cookies = response.cookies.get_dict()
 
-    pwd = hashlib.md5(input("\nEnter password: ").encode()).hexdigest().upper()
+    pwd = hashlib.md5(input(f"\n{Fore.CYAN}Enter password: ").encode()).hexdigest().upper()
 
     data = {'_json':'true','callback':'https://unlock.update.miui.com/sts','sid':'unlockApi','qs':'%3Fsid%3DunlockApi','_sign':'CiofaOM8ndWC+UjNoI6pjSx8sPM=','serviceParam':'{"checkSafePhone":false,"checkSafeAddress":false,"lsrp_score":0.0}','_locale':'en_US','useManMachine':'false','user':user_id, 'hash': pwd}
 
@@ -56,12 +57,12 @@ def get_pass_token():
         if response_text.get("code") == 70016:
             return {"error": "Invalid password"}      
         elif response_text.get("code") == 87001:
-            print('\nCAPTCHA verification required !\n')
+            print(f'\n{Fore.YELLOW}CAPTCHA verification required !\n')
             r_verify = verify(response_text["captchaUrl"], cookies, data)
             if "error" in r_verify:
                 return r_verify
             elif 'notificationUrl' in r_verify:
-                print('\nverification required !\n')
+                print(f'\n{Fore.YELLOW}verification required !\n')
                 notification_url = r_verify['notificationUrl']
                 cookies = verification(notification_url, cookies, data)
                 if "error" in cookies:
@@ -75,7 +76,7 @@ def get_pass_token():
             elif "SetEmail" in notificationUrl:
                 return {"error": "Please link your account to an email address and then try again."}
             else:
-                print('\nverification required !\n')
+                print(f'\n{Fore.YELLOW}verification required !\n')
                 cookies = verification(notificationUrl, cookies, data)
                 if "error" in cookies:
                     return cookies
@@ -89,7 +90,7 @@ def get_pass_token():
 
     cookies_file.parent.mkdir(parents=True, exist_ok=True)
     pickle.dump(cookies, open(cookies_file, "wb"))
-    print("\nLogin successful\n")
+    print(f"\n{Fore.GREEN}Login successful\n")
 
     return cookies
         
