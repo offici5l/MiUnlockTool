@@ -6,7 +6,6 @@ from pathlib import Path
 import urllib.request
 import zipfile
 import subprocess
-import requests
 
 SYSTEM = platform.system()
 
@@ -17,45 +16,6 @@ def make_executable(path):
             os.chmod(path, st.st_mode | stat.S_IEXEC)
         except Exception as e:
             print(f"\nWarning: Could not make {path} executable: {e}\n")
-
-def install_termux_fastboot():
-    print('\nfastboot is not installed! It will now be installed from repo: https://github.com/nohajc/termux-adb ...\n')
-    
-    try:
-        print("\nUpdating System & Fixing Broken Packages...\n")
-        result = subprocess.run(
-            "yes | apt --fix-broken install && yes | apt update && yes | apt upgrade",
-            shell=True,
-            capture_output=True,
-            text=True
-        )
-        
-        if result.returncode != 0:
-            return {'error': f'System update failed: {result.stderr or result.stdout}'}
-        
-        print("\nInstalling fastboot...\n")
-        response = requests.get("https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh")
-        
-        if response.status_code != 200:
-            return {'error': f'Failed to download install script: HTTP {response.status_code}'}
-        
-        result = subprocess.run(
-            response.text,
-            shell=True,
-            capture_output=True,
-            text=True,
-            executable='/data/data/com.termux/files/usr/bin/bash'
-        )
-        
-        if result.returncode != 0:
-            return {'error': f'Installation failed: {result.stderr or result.stdout}'}
-        
-        return {'success': True}
-        
-    except requests.RequestException as e:
-        return {'error': f'Network error: {str(e)}'}
-    except Exception as e:
-        return {'error': f'Installation error: {str(e)}'}
 
 
 def config_termux():
@@ -85,16 +45,10 @@ def config_termux():
         fastboot_path = f"{PREFIX}/bin/termux-fastboot"
         
         if not os.path.isfile(fastboot_path):
-            install_result = install_termux_fastboot()
-            
-            if isinstance(install_result, dict) and "error" in install_result:
-                return install_result
-            
-            if not os.path.isfile(fastboot_path):
-                return {"error": "Failed to install termux-fastboot"}
-        
-        make_executable(fastboot_path)
-        return {"path": fastboot_path}
+            return {"error": "Platform-tools (without root) is not installed! Please install it frist from the repo: https://github.com/nohajc/termux-adb."}
+        else:
+            make_executable(fastboot_path)
+            return {"path": fastboot_path}
         
     except Exception as e:
         return {"error": f"Termux configuration error: {str(e)}"}
