@@ -1,7 +1,7 @@
 import subprocess
 import threading
 import time
-import sys
+
 from migate.config import (
     console
 )
@@ -21,63 +21,63 @@ def read_stream(stream, output_list, process, restart_flag, status):
 
 def CheckB(cmd, var_name, *fastboot_args):
 
-    with console.status("[white]Initializing...[/white]") as status: # Initial status message
+    with console.status("[white]Initializing...[/white]") as status:
 
         while True:
 
             try:
-
-                process = subprocess.Popen([cmd] + list(fastboot_args), stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+                process = subprocess.Popen(
+                    [cmd] + list(fastboot_args),
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    bufsize=1,
+                    universal_newlines=True
+                )
 
             except FileNotFoundError:
-
                 return {'error': f"Fastboot command '{cmd}' not found in PATH"}
 
             except PermissionError:
-
                 return {'error': 'Permission denied. Run PowerShell as Administrator'}
 
             except Exception as e:
-
                 return {'error': f"{type(e).__name__}: {str(e)}"}
-
 
 
             stdout_lines, stderr_lines, restart_flag = [], [], [False]
 
+            threading.Thread(
+                target=read_stream,
+                args=(process.stdout, stdout_lines, process, restart_flag, status),
+                daemon=True
+            ).start()
 
-
-            threading.Thread(target=read_stream, args=(process.stdout, stdout_lines, process, restart_flag, status)).start()
-
-            threading.Thread(target=read_stream, args=(process.stderr, stderr_lines, process, restart_flag, status)).start()
-
-
+            threading.Thread(
+                target=read_stream,
+                args=(process.stderr, stderr_lines, process, restart_flag, status),
+                daemon=True
+            ).start()
 
             try:
-
                 process.wait()
-
             except subprocess.SubprocessError as e:
-
                 console.print(f"\n[red]Error while executing process: {e}[/red]\n")
-
                 return None
 
-
-
             if restart_flag[0]:
-
                 time.sleep(2)
-
                 continue
 
+            status.update(f"[white]Fetching '{var_name}' — please wait...[/white]")
+            break
 
 
-            status.update(f"[white]Fetching '{var_name}' — please wait...[/white]") # Update status
+        lines = [
+            line.split(f"{var_name}:")[1].strip()
+            for line in stderr_lines + stdout_lines
+            if f"{var_name}:" in line
+        ]
 
-
-
-        lines = [line.split(f"{var_name}:")[1].strip() for line in stderr_lines + stdout_lines if f"{var_name}:" in line]
         if len(lines) > 1:
             return "".join(lines)
         return lines[0] if lines else None
