@@ -1,6 +1,6 @@
 [project]
 name = "miunlock"
-version = "1.6.3"
+version = "1.6.4"
 description = "Retrieve Xiaomi encryptData(token) to unlock bootloader"
 authors = [{name = "offici5l"}]
 readme = "README.md"
@@ -19,7 +19,8 @@ requires-python = ">=3.7"
 
 dependencies = [
     "requests",
-    "colorama"
+    "colorama",
+    "migate"
 ]
 
 [project.urls]

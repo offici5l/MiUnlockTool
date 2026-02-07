@@ -1,52 +1,57 @@
-from miunlock.login.login import get_pass_token
 from miunlock.region.config import get_domain
-from miunlock.service import get_service_data
 from miunlock.unlock import unlock_device
 from pathlib import Path
 from miunlock.config import config_s
 import hashlib
-from colorama import init, Fore
+from migate.config import (
+    console
+)
+import migate
 
 def main():
-    init(autoreset=True)
+
 
     result = config_s()    
     if "error" in result:
-        print(f"\n{Fore.RED}{result['error']}\n")
+        console.print(f"\n[red]{result['error']}[/red]\n")
         return
     else:
         fastboot_cmd = result['path']
+    
+    service_id = 'unlockApi'
+    service_param = {"sid": service_id}
+    service_param["checkSafeAddress"] = True
 
-    pass_token = get_pass_token()
+    pass_token = migate.get_passtoken(service_param)
     if "error" in pass_token:
-        print(f"\n{Fore.RED}{pass_token['error']}\n")
+        console.print(f"\n[red]{pass_token['error']}[/red]\n")
         return
    
     pcId = hashlib.md5(pass_token.get('deviceId').encode()).hexdigest()
 
     domain = get_domain(pass_token)
     if "error" in domain:
-        print(f"\n{Fore.RED}{domain['error']}\n")
+        console.print(f"\n[red]{domain['error']}[/red]\n")
         return
 
-    service_data = get_service_data(pass_token)
+    service_data = migate.get_service(pass_token, service_id)
     if "error" in service_data:
-        print(f"\n{Fore.RED}{service_data['error']}\n")
+        console.print(f"\n[red]{service_data['error']}[/red]\n")
         return
     cookies = service_data["cookies"]
-    ssecurity = service_data["ssecurity"]
+    ssecurity = service_data['servicedata']["ssecurity"]
 
     unlock = unlock_device(domain, ssecurity, cookies, pcId, fastboot_cmd)
 
     if "success" in unlock:
-        print(f"\n{Fore.GREEN}{unlock['success']}\n")
+        console.print(f"\n[green]{unlock['success']}[/green]\n")
     elif "info" in unlock:
         if "descEN" in unlock['info']:
-            print(f"\n{Fore.YELLOW}code: {unlock['info']['code']}\ndescription: {unlock['info']['descEN']}\n")
+            console.print(f"\n[orange]code: {unlock['info']['code']}\ndescription: {unlock['info']['descEN']}[/orange]\n")
         else:
-            print(f"\n{Fore.YELLOW}{unlock}\n")
+            console.print(f"\n[orange]{unlock}[/orange]\n")
     else:
-        print(f"\n{Fore.RED}{unlock['error']}\n")
+        console.print(f"\n[red]{unlock['error']}[/red]\n")
 
     return 
 

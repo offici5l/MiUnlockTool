@@ -2,49 +2,80 @@ import subprocess
 import threading
 import time
 import sys
-from colorama import Fore
+from migate.config import (
+    console
+)
 
-def read_stream(stream, output_list, process, restart_flag):
+def read_stream(stream, output_list, process, restart_flag, status):
     try:
         for line in iter(stream.readline, ''):
             line = line.strip()
             output_list.append(line)
             if "No permission" in line or "< waiting for any device >" in line:
                 process.terminate()
-                print(f'\r{Fore.YELLOW}< waiting for any device >', end='', flush=True)
+                status.update(f'[orange]< waiting for any device >[/orange]')
                 restart_flag[0] = True
                 return
     finally:
         stream.close()
 
 def CheckB(cmd, var_name, *fastboot_args):
-    while True:
-        try:
-            process = subprocess.Popen([cmd] + list(fastboot_args), stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
-        except FileNotFoundError:
-            return {'error': f"Fastboot command '{cmd}' not found in PATH"}
-        except PermissionError:
-            return {'error': 'Permission denied. Run PowerShell as Administrator'}
-        except Exception as e:
-            return {'error': f"{type(e).__name__}: {str(e)}"}
 
-        stdout_lines, stderr_lines, restart_flag = [], [], [False]
+    with console.status("[white]Initializing...[/white]") as status: # Initial status message
 
-        threading.Thread(target=read_stream, args=(process.stdout, stdout_lines, process, restart_flag)).start()
-        threading.Thread(target=read_stream, args=(process.stderr, stderr_lines, process, restart_flag)).start()
+        while True:
 
-        try:
-            process.wait()
-        except subprocess.SubprocessError as e:
-            print(f"\n{Fore.RED}Error while executing process: {e}\n")
-            return None
+            try:
 
-        if restart_flag[0]:
-            time.sleep(2)
-            sys.stdout.write('\r\033[K')
-            continue
+                process = subprocess.Popen([cmd] + list(fastboot_args), stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
 
-        print(f"\r{Fore.CYAN}Fetching '{var_name}' — please wait...", end='', flush=True)
+            except FileNotFoundError:
+
+                return {'error': f"Fastboot command '{cmd}' not found in PATH"}
+
+            except PermissionError:
+
+                return {'error': 'Permission denied. Run PowerShell as Administrator'}
+
+            except Exception as e:
+
+                return {'error': f"{type(e).__name__}: {str(e)}"}
+
+
+
+            stdout_lines, stderr_lines, restart_flag = [], [], [False]
+
+
+
+            threading.Thread(target=read_stream, args=(process.stdout, stdout_lines, process, restart_flag, status)).start()
+
+            threading.Thread(target=read_stream, args=(process.stderr, stderr_lines, process, restart_flag, status)).start()
+
+
+
+            try:
+
+                process.wait()
+
+            except subprocess.SubprocessError as e:
+
+                console.print(f"\n[red]Error while executing process: {e}[/red]\n")
+
+                return None
+
+
+
+            if restart_flag[0]:
+
+                time.sleep(2)
+
+                continue
+
+
+
+            status.update(f"[white]Fetching '{var_name}' — please wait...[/white]") # Update status
+
+
 
         lines = [line.split(f"{var_name}:")[1].strip() for line in stderr_lines + stdout_lines if f"{var_name}:" in line]
         if len(lines) > 1:
@@ -57,7 +88,7 @@ def get_product(cmd):
         product = CheckB(cmd, "product", "getvar", "product")
         if isinstance(product, dict) and 'error' in product:
             return product
-    print(f"\n{Fore.GREEN}product: {product}\n")
+    console.print(f"\n[green]product: {product}[/green]\n")
     return product
 
 def get_device_token(cmd):
@@ -67,12 +98,12 @@ def get_device_token(cmd):
         if isinstance(token, dict) and 'error' in token:
             return token
         if token:
-            print(f"\n{Fore.GREEN}device token: {token}\n")
+            console.print(f"\n[green]device token: {token}[/green]\n")
             return token
         else:
             token = CheckB(cmd, "token", "getvar", "token")
             if isinstance(token, dict) and 'error' in token:
                 return token
             if token:
-                print(f"\n{Fore.GREEN}device token: {token}\n")
+                console.print(f"\n[green]device token: {token}[/green]\n")
                 return token

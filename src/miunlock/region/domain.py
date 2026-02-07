@@ -1,4 +1,6 @@
-from colorama import Fore, Style
+from migate.config import (
+    console
+)
 
 def domain(regionConfig=None):
 
@@ -19,22 +21,22 @@ def domain(regionConfig=None):
 def config_manually():
     available_regions = domain()
 
-    print("\n" + Fore.CYAN + "="*50)
+    console.print("\n[white]" + "="*50 + "[/white]")
     print("Available Regions:")
     for idx, region in enumerate(available_regions, 1):
         print(f"  {idx}. {region}")
-    print("="*50 + Style.RESET_ALL)
+    console.print("[white]" + "="*50 + "[/white]")
 
     while True:
-        choice = input(f"\n{Fore.CYAN}Select region number (1-{len(available_regions)}): ").strip()
+        choice = console.input(f"\n[white]Select region number (1-{len(available_regions)}): [/white]").strip()
 
         try:
             choice_idx = int(choice) - 1
             if 0 <= choice_idx < len(available_regions):
                 selected = available_regions[choice_idx]
-                print(f"\n{Fore.GREEN}regionConfig Selected: {selected}\n")
+                console.print(f"\n[green]regionConfig Selected: {selected}[/green]\n")
                 return selected
             else:
-                print(f"\n{Fore.RED}Invalid choice. Please enter a number between 1 and {len(available_regions)}\n")
+                console.print(f"\n[red]Invalid choice. Please enter a number between 1 and {len(available_regions)}[/red]\n")
         except ValueError:
-            print(f"\n{Fore.RED}Invalid input. Please enter a number between 1 and {len(available_regions)}\n")
+            console.print(f"\n[red]Invalid input. Please enter a number between 1 and {len(available_regions)}[/red]\n")

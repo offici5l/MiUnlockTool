@@ -6,7 +6,9 @@ from pathlib import Path
 import urllib.request
 import zipfile
 import subprocess
-from colorama import Fore
+from migate.config import (
+    console
+)
 
 SYSTEM = platform.system()
 
@@ -16,7 +18,7 @@ def make_executable(path):
             st = os.stat(path)
             os.chmod(path, st.st_mode | stat.S_IEXEC)
         except Exception as e:
-            print(f"\n{Fore.YELLOW}Warning: Could not make {path} executable: {e}\n")
+            console.print(f"\n[orange]Warning: Could not make {path} executable: {e}[/orange]\n")
 
 
 def config_termux():
@@ -70,13 +72,13 @@ def download_platform_tools():
     tools_dir = Path.home() / "platform-tools"
     zip_path = tools_dir.parent / "platform-tools.zip"
     
-    print(f"\n{Fore.CYAN}Downloading platform-tools for {os_name} from {url} ...\n")
+    console.print(f"\n[white]Downloading platform-tools for {os_name} from {url} ...[/white]\n")
     
     try:
         tools_dir.parent.mkdir(parents=True, exist_ok=True)
         urllib.request.urlretrieve(url, str(zip_path))
         
-        print(f"\n{Fore.CYAN}Extracting platform-tools...\n")
+        console.print(f"\n[white]Extracting platform-tools...[/white]\n")
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(str(tools_dir.parent))
         
@@ -120,7 +122,7 @@ def config_s():
             make_executable(str(fastboot_path))
             return {"path": str(fastboot_path)}
         
-        print(f'\n{Fore.YELLOW}fastboot is not installed!\n')
+        console.print(f'\n[orange]fastboot is not installed![/orange]\n')
         return download_platform_tools()
         
     except Exception as e:

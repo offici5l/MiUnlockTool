@@ -1,6 +1,8 @@
 import json
 import requests
-from colorama import Fore
+from migate.config import (
+    console
+)
 
 def region(pass_token):
     headers = {"User-Agent": "XiaomiPCSuite"}
@@ -15,7 +17,7 @@ def region(pass_token):
         region = region_data.get("data", {}).get("region")
         if not region:
             return {"error": "Failed to get region"}
-        print(f"\n{Fore.GREEN}Account Region: {region}\n")
+        console.print(f"\n[green]Account Region: {region}[/green]\n")
         return {"success": f"{region}"}
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}

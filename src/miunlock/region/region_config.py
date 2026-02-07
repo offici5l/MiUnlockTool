@@ -1,6 +1,8 @@
 import json
 import requests
-from colorama import Fore
+from migate.config import (
+    console
+)
 
 def region_config(region):
     headers = {"User-Agent": "XiaomiPCSuite"}
@@ -19,7 +21,7 @@ def region_config(region):
         if not region_config:
             return {"error": f"Region config not found for region: {region}"}
 
-        print(f"\n{Fore.GREEN}regionConfig: {region_config}\n")
+        console.print(f"\n[green]regionConfig: {region_config}[/green]\n")
 
         return {"regionConfig": region_config}
 
