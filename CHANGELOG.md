@@ -196,3 +196,8 @@ fixes, improvements, and additions:
 - Fix: error (`401 Client Error: Unauthorized for url`)
 - improvements
 - Add migate (github.com/offici5l/migate) for authentication
+
+
+### Version 1.6.5:
+
+- minor bug fixes
