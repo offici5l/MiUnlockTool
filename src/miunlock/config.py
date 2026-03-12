@@ -104,7 +104,7 @@ def download_platform_tools():
 
 def config_s():
     try:
-        if SYSTEM == "Linux" and os.path.exists("/data/data/com.termux"):
+        if (SYSTEM == "Linux" or SYSTEM == "Android") and os.path.exists("/data/data/com.termux"):
             return config_termux()
         
         cmd = shutil.which("fastboot")
