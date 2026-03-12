@@ -197,7 +197,10 @@ fixes, improvements, and additions:
 - improvements
 - Add migate (github.com/offici5l/migate) for authentication
 
-
 ### Version 1.6.5:
 
 - minor bug fixes
+
+### Version 1.6.6:
+
+- minor fixes
