@@ -8,6 +8,7 @@
 
 [![Version](https://img.shields.io/pypi/v/miunlock?label=Version&labelColor=black&color=brightgreen)](https://pypi.org/project/miunlock/)
 [![Changelog](https://img.shields.io/badge/Changelog-blue?style=flat&logoColor=white)](CHANGELOG.md)
+[![Error Codes](https://img.shields.io/badge/Error%20Codes-orange?style=flat&logoColor=white)](https://offici5l.github.io/MiUnlockTool/error_codes)
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
 
