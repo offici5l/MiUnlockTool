@@ -70,6 +70,12 @@
     "message": "Device basic data verification failed. This device couldn't be unlocked",
     "description": "The issue arises because the device token does not contain the full set of data, meaning the token is incomplete.",
     "solution": "!"
+  },
+  {
+    "errorCode": "30002",
+    "message": "Couldn't unlock. Please go to Mi Community to apply for authorization and try again.",
+    "description": "Invalid server region",
+    "solution": "Change server. select the regionConfig manually."
   }
 ]
 
