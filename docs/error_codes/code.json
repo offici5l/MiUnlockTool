@@ -45,7 +45,7 @@
     "errorCode": "20033",
     "message": "Your account is not authorized to unlock. Please please change to another account",
     "description": "The account has been restricted from accessing the bootloader unlock service because Xiaomi's servers detected suspicious activity.",
-    "solution": "Sometimes, enabling 'Find Device' in settings can resolve the issue. If the problem persists, create apokemon new account."
+    "solution": "Sometimes, enabling 'Find Device' in settings can resolve the issue. If the problem persists, create a new account."
   },
   {
     "errorCode": "20045",
