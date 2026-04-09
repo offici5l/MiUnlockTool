@@ -70,7 +70,7 @@ pkg i python
 <br>
   
 ```
-sudo apt install python3
+sudo apt install python3 python3-venv
 ```
 
 </details>
