@@ -34,7 +34,7 @@ def main():
         console.print(f"\n[red]{domain['error']}[/red]\n")
         return
 
-    service_data = migate.get_service(pass_token, service_id)
+    service_data = migate.get_service(pass_token, service_param)
     if "error" in service_data:
         console.print(f"\n[red]{service_data['error']}[/red]\n")
         return
