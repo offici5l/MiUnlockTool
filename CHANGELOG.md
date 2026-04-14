@@ -209,3 +209,7 @@ fixes, improvements, and additions:
 
 - minor fixes
 - [ migate 1.0.5: Fixes and improvements](https://github.com/offici5l/migate) 
+
+### Version 1.6.8:
+
+- minor fixes & improvements

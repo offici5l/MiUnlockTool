@@ -10,7 +10,6 @@ import migate
 
 def main():
 
-
     result = config_s()    
     if "error" in result:
         console.print(f"\n[red]{result['error']}[/red]\n")
@@ -19,27 +18,22 @@ def main():
         fastboot_cmd = result['path']
     
     service_id = 'unlockApi'
-    service_param = {"sid": service_id}
-    service_param["checkSafeAddress"] = True
+    param = {"sid": service_id}
+    param["checkSafeAddress"] = True
 
-    pass_token = migate.get_passtoken(service_param)
-    if "error" in pass_token:
-        console.print(f"\n[red]{pass_token['error']}[/red]\n")
-        return
+    passToken = migate.get_passtoken(param)
    
-    pcId = hashlib.md5(pass_token.get('deviceId').encode()).hexdigest()
+    service = migate.get_service(passToken, param)
+    cookies = service["cookies"]
+    ssecurity = service['servicedata']["ssecurity"]
+    deviceId = service['servicedata']["deviceId"]
 
-    domain = get_domain(pass_token)
+    pcId = hashlib.md5(deviceId.encode()).hexdigest()
+
+    domain = get_domain(passToken)
     if "error" in domain:
         console.print(f"\n[red]{domain['error']}[/red]\n")
         return
-
-    service_data = migate.get_service(pass_token, service_param)
-    if "error" in service_data:
-        console.print(f"\n[red]{service_data['error']}[/red]\n")
-        return
-    cookies = service_data["cookies"]
-    ssecurity = service_data['servicedata']["ssecurity"]
 
     unlock = unlock_device(domain, ssecurity, cookies, pcId, fastboot_cmd)
 
