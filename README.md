@@ -100,42 +100,46 @@ sudo pacman -S python
 python3 -m venv anyname
 ```
 <h3> Step 3 </h3>
-<p>Source the approriate variables inside the anyname/bin/ directory for your commandline shell</p>
+<p>Source the approriate variables inside the anyname/bin/ directory with your commandline shell. If you're unsure which shell your OS uses run the following command:
+
+```sh
+echo $SHELL
+```
+</p>
 
 <details>
-<summary> PowerShell (Windows) </summary>
+<summary> Windows </summary>
 <br>
   
-```
-anyname/bin/activate.ps1
+```sh
+# PowerShell
+anyname/bin/Activate.ps1
+# CMD
+anyname/bin/activate.bat
 ```
 </details>
 
 <details>
-<summary> bash/zsh (Default on macOS and most Linux systems) </summary>
+<summary> macOS/Linux </summary>
 <br>
 
-```
+Choose the variable file intended for your shell
+
+```sh
+# bash/zsh (Default on macOS and most Linux distributions)
 source anyname/bin/activate
 ```
-</details>
 
-<details>
-<summary> fish </summary>
-<br>
-
-```
+```sh
+# fish
 source anyname/bin/activate.fish
 ```
-</details>
 
-<details>
-<summary> tcsh </summary>
-<br>
-
-```
+```sh
+# tcsh
 source anyname/bin/activate.csh
 ```
+
 </details>
 
 <h3> Step 4 </h3>
