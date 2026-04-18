@@ -32,6 +32,8 @@ pip install miunlock
 
 > See the **[Installation Guide](INSTALL.md)** for detailed instructions.
 
+---
+
 ## Usage
 
 ```sh
