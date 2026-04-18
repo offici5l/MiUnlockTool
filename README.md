@@ -11,6 +11,8 @@
 [![Version](https://img.shields.io/pypi/v/miunlock?label=Version&labelColor=black&color=brightgreen)](https://pypi.org/project/miunlock/)
 [![Changelog](https://img.shields.io/badge/Changelog-blue?style=flat&logoColor=white)](CHANGELOG.md)
 
+---
+
 | | MiUnlockTool | Official MiFlashUnlock |
 |---|---|---|
 | Supported platforms | All | Windows only |
