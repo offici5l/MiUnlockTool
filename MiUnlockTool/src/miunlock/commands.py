@@ -21,7 +21,7 @@ def read_stream(stream, output_list, process, restart_flag, status):
 
 def CheckB(cmd, var_name, *fastboot_args):
 
-    with console.status("[white]Initializing...[/white]") as status:
+    with console.status("[white]Initializing...[/white]", spinner="bouncingBar") as status:
 
         while True:
 

@@ -213,3 +213,7 @@ fixes, improvements, and additions:
 ### Version 1.6.8:
 
 - minor fixes & improvements
+
+### Version 1.6.9:
+
+- improvements

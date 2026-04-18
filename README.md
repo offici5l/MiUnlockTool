@@ -4,164 +4,55 @@
   <img src="https://img.shields.io/badge/MiUnlockTool-%23FF6900?style=flat&logo=xiaomi&logoColor=white" alt="MiUnlockTool" width="200"/>
 </a>
 
-<br>
-
-[![Version](https://img.shields.io/pypi/v/miunlock?label=Version&labelColor=black&color=brightgreen)](https://pypi.org/project/miunlock/)
-[![Changelog](https://img.shields.io/badge/Changelog-blue?style=flat&logoColor=white)](CHANGELOG.md)
-[![Error Codes](https://img.shields.io/badge/Error%20Codes-orange?style=flat&logoColor=white)](https://offici5l.github.io/MiUnlockTool/error_codes)
-
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
+**Developed to retrieve `encryptData(token)` for Xiaomi devices to unlock the bootloader.**
 
 ---
 
-**Developed to retrieve `encryptData(token)` for Xiaomi devices to unlock the bootloader.**
+[![Version](https://img.shields.io/pypi/v/miunlock?label=Version&labelColor=black&color=brightgreen)](https://pypi.org/project/miunlock/)
+[![Changelog](https://img.shields.io/badge/Changelog-blue?style=flat&logoColor=white)](CHANGELOG.md)
 
-**Compatible with all platforms.**
+| | MiUnlockTool | Official MiFlashUnlock |
+|---|---|---|
+| Supported platforms | All | Windows only |
+| Save login session | ✅ | ❌ |
+| Verification methods | SMS / Email | SMS |
+| Region config | Automatic / Manual | Automatic |
 
 </div>
 
 ---
 
 ## Installation
-<h4>
-  
-An automatic installer for termux can be found [here](#quick-install-for-androidtermux)
-
-</h4>
-
-<h3> Step 1 </h3>
-<p>Install Python</p>
-
-<details>
-<summary> Windows </summary>
-<br>
-
-You can download the installer [directly](https://www.python.org/downloads/) from Python's website or via WinGet:
-```sh
-winget search Python.Python
-# Replace 3.14 with the latest version
-winget install Python.Python.3.14
-```
-</details>
-
-<details>
-<summary> macOS </summary>
-<br>
-
-You can download the installer [directly](https://www.python.org/downloads/) from Python's website or via [Homebrew](https://brew.sh/):
-```
-brew install --cask python
-```
-</details>
-
-
-<details>
-<summary> Termux </summary>
-<br>
-  
-```
-pkg i python
-```
-
-</details>
-
-<details>
-<summary> Ubuntu/Debian </summary>
-<br>
-  
-```
-sudo apt install python3 python3-venv
-```
-
-</details>
-
-<details>
-<summary> Fedora </summary>
-<br>
-
-```
-sudo dnf install python3
-```
-</details>
-
-<details>
-<summary> Arch Linux </summary>
-<br>
-
-```
-sudo pacman -S python
-```
-</details>
-
-<h3> Step 2 </h3>
-<p>Create a virual environment for Python under any name you want</p>
-
-```
-python3 -m venv anyname
-```
-<h3> Step 3 </h3>
-<p>Source the approriate variables inside the anyname/bin/ directory with your commandline shell. If you're unsure which shell your OS uses run the following command:
 
 ```sh
-echo $SHELL
-```
-</p>
-
-<details>
-<summary> Windows </summary>
-<br>
-  
-```sh
-# PowerShell
-anyname/bin/Activate.ps1
-# CMD
-anyname/bin/activate.bat
-```
-</details>
-
-<details>
-<summary> macOS/Linux </summary>
-<br>
-
-Choose the variable file intended for your shell
-
-```sh
-# bash/zsh (Default on macOS and most Linux distributions)
-source anyname/bin/activate
-```
-
-```sh
-# fish
-source anyname/bin/activate.fish
-```
-
-```sh
-# tcsh
-source anyname/bin/activate.csh
-```
-
-</details>
-
-<h3> Step 4 </h3>
-
-<p>Install MiUnlockTool</p>
-
-```
 pip install miunlock
 ```
 
----
-
-### Quick Install for Android(Termux):
-
-```sh
-curl -sS https://raw.githubusercontent.com/offici5l/MiUnlockTool/main/.install | bash
-```
+> See the **[Installation Guide](INSTALL.md)** for detailed instructions.
 
 ## Usage
-
-Run the command and follow the on-screen insctructions
 
 ```sh
 miunlock
 ```
+
+---
+
+<div align="center">
+
+
+❓ [FAQ & Troubleshooting](FAQ.md)
+
+---
+
+🤝 [Contributing](CONTRIBUTING.md)
+
+<a href="https://github.com/offici5l/MiUnlockTool/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=offici5l/MiUnlockTool" />
+</a>
+
+---
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
+
+</div>
