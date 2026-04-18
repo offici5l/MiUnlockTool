@@ -12,11 +12,12 @@ Skip [here](#android-termux) for Termux instructions
 <br>
 
 You can download the installer [directly](https://www.python.org/downloads/) from Python's website or via WinGet:
-```sh
-winget search Python.Python
-# Replace 3.14 with the latest version
-winget install Python.Python.3.14
 ```
+winget install python
+```
+
+On Windows you can skip straight to [Step 4](#-step-4-) (and ignore the note at the bottom), but if you're getting an ```externally managed environment``` error you will need to do steps 2 and 3 as well
+
 </details>
 
 <details>
