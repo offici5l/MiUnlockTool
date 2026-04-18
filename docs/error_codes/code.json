@@ -39,8 +39,7 @@
     "errorCode": "20031",
     "message": "Please add your account in Settings > Developer options > Mi Unlock status",
     "description": "You did not bind the account in 'Mi Unlock Status'.",
-    "solution": "Go to Developer options » Mi Unlock status » Agree » Add account and device. Note: If you have already linked the account but are still encountering the same code,
-please manually select the regionConfig in the tool."
+    "solution": "Go to Developer options » Mi Unlock status » Agree » Add account and device. Note: If you have already linked the account but are still encountering the same code,\nplease manually select the regionConfig in the tool."
   },
   {
     "errorCode": "20033",
