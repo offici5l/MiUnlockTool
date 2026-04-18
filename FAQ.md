@@ -6,6 +6,21 @@ See: [answer error codes](https://offici5l.github.io/MiUnlockTool/error_codes)
 
 ---
 
+## Will my Data Be wiped After Unlocking the Bootloader?
+
+```miunlock``` will tell you whether your data will be wiped or not before proceeding.
+
+> [!WARNING]
+> As a general rule, **bootloader unlocking wipes all user data**. Back up your device before unlocking.
+
+#### Exception — Legacy Devices (No Data Wipe)
+
+The following device codenames are unlocked **without** clearing user data:
+
+`gemini`, `ido`, `kate`, `kenzo`, `land`, `markw`, `meri`, `mido`, `nikel`, `omega`, `prada`, `rolex`, `santoni`, `venus`, `wt88047`
+
+---
+
 ## Does this tool bypass the waiting period?
 
 No. MiUnlockTool follows the same official flow as Xiaomi's own tool.
