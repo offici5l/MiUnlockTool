@@ -1,13 +1,8 @@
-import migate
+from migate import get_passtoken, get_region, get_regionConfig, get_service
 
 from miunlock.domain import get_domain
 from miunlock.unlock import unlock_device
 from miunlock.config import get_fastboot
-
-from migate.config import (
-    console
-)
-
 
 def main():
 
@@ -16,20 +11,17 @@ def main():
     param = {"sid": 'unlockApi'}
     param["checkSafeAddress"] = True
 
-    passToken = migate.get_passtoken(param)
+    passToken = get_passtoken(param)
 
-    region = migate.get_region(passToken)
+    region = get_region(passToken)
 
-    regionConfig = migate.get_regionConfig(region)
+    regionConfig = get_regionConfig(region)
 
     domain = get_domain(regionConfig)
 
-    service = migate.get_service(passToken, param)
-    cookies = service["cookies"]
-    ssecurity = service['servicedata']["ssecurity"]
-    deviceId = service['servicedata']["deviceId"]
+    service = get_service(passToken, param)
 
-    unlock = unlock_device(domain, ssecurity, cookies, deviceId, fastboot_cmd)
+    unlock_device(domain, service, fastboot_cmd)
 
 if __name__ == "__main__":
     main()

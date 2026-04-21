@@ -9,7 +9,11 @@ from pathlib import Path
 from migate.config import console
 
 
-def unlock_device(domain, ssecurity, cookies, deviceId, fastboot_cmd):
+def unlock_device(domain, service, fastboot_cmd):
+
+    cookies = service["cookies"]
+    ssecurity = service['servicedata']["ssecurity"]
+    deviceId = service['servicedata']["deviceId"]
 
     r = "".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=16))
     nonce_resp = _send("/api/v2/nonce", {"r": r}, domain, ssecurity, cookies)

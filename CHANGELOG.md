@@ -217,3 +217,8 @@ fixes, improvements, and additions:
 ### Version 1.6.9:
 
 - improvements
+
+### Version 1.7.0:
+
+- Minor improvements
+- [migate](https://github.com/offici5l/migate): New login methods: Browser(default), Terminal, QR code
