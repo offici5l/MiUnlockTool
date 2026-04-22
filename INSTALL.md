@@ -11,7 +11,7 @@ Skip [here](#android-termux) for Termux instructions
 <summary> Windows </summary>
 <br>
 
-You can download the installer [directly](https://www.python.org/downloads/) from Python's website or via WinGet:
+You can download the installer [directly](https://www.python.org/downloads/) from Python's website (don't forget to check the "Add Python to PATH" option) or via WinGet:
 ```
 winget install python
 ```
