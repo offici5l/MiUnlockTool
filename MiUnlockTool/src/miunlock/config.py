@@ -8,10 +8,19 @@ import urllib.error
 import zipfile
 import subprocess
 import tempfile
-from migate.config import (
-    console
-)
 
+from rich.console import Console
+from rich.theme import Theme
+
+c_theme = Theme({
+    "orange": "bold #ff6900",
+    "green":  "bold #00c853",
+    "red":    "bold #d50000",
+    "white":  "bold white",
+})
+
+console = Console(theme=c_theme)
+loader = console.status("", spinner="dots")
 
 SYSTEM = platform.system()
 

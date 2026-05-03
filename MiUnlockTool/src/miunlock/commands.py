@@ -1,10 +1,7 @@
 import subprocess
 import threading
 import time
-
-from migate.config import (
-    console
-)
+from miunlock.config import console
 
 def read_stream(stream, output_list, process, restart_flag, status):
     try:

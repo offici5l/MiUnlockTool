@@ -1,13 +1,12 @@
 from miunlock.utils import _send
 from miunlock.commands import get_device_token, get_product
+from miunlock.config import console
 import random
 import hashlib
 import io
 import subprocess
 import time
 from pathlib import Path
-from migate.config import console
-
 
 def unlock_device(domain, service, fastboot_cmd):
 

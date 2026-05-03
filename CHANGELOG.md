@@ -222,3 +222,8 @@ fixes, improvements, and additions:
 
 - Minor improvements
 - [migate](https://github.com/offici5l/migate): New login methods: Browser(default), Terminal, QR code
+
+### Version 1.7.1:
+
+- Improved region data center detection
+- improvements [migate](https://github.com/offici5l/migate)

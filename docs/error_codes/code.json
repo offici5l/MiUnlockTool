@@ -39,7 +39,7 @@
     "errorCode": "20031",
     "message": "Please add your account in Settings > Developer options > Mi Unlock status",
     "description": "You did not bind the account in 'Mi Unlock Status'.",
-    "solution": "Go to Developer options » Mi Unlock status » Agree » Add account and device. Note: If you have already linked the account but are still encountering the same code,\nplease manually select the regionConfig in the tool."
+    "solution": "Go to Developer options » Mi Unlock status » Agree » Add account and device. Note: If you have already linked the account but are still encountering the same code,\nplease manually select the dataCenterZone in the tool."
   },
   {
     "errorCode": "20033",
@@ -51,7 +51,7 @@
     "errorCode": "20045",
     "message": "Message 1: Please use the common user tool on the official website\nMessage 2: The place where the account is registered does not match the place where the phone is sold.",
     "description": "Description 1: Invalid server region.\nDescription 2: The error occurs because you used a Xiaomi account region that does not match the region your device is intended for. For example, the error happens when using a global Xiaomi account to unlock a Chinese device, or vice versa!.",
-    "solution": "Solution 1:\n- Change server. select the regionConfig manually.\nSolution 2: Use a Xiaomi account from the same region as the device. For example, if the device is Chinese, use a Chinese Xiaomi account."
+    "solution": "Solution 1:\n- Change dataCenterZone \nSolution 2: Use a Xiaomi account from the same region as the device. For example, if the device is Chinese, use a Chinese Xiaomi account."
   },
   {
     "errorCode": "20038",
@@ -75,7 +75,7 @@
     "errorCode": "30002",
     "message": "Couldn't unlock. Please go to Mi Community to apply for authorization and try again.",
     "description": "You did not bind the account in 'Mi Unlock Status'.",
-    "solution": "Go to Developer options » Mi Unlock status » Agree » Add account and device. Note: If you have already linked the account but are still encountering the same code,\nplease manually select the regionConfig in the tool."
+    "solution": "Go to Developer options » Mi Unlock status » Agree » Add account and device. Note: If you have already linked the account but are still encountering the same code,\nplease manually select the dataCenterZone in the tool."
   }
 ]
 

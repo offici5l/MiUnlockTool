@@ -18,7 +18,7 @@
 | Supported platforms | All | Windows only |
 | Save login session | ✅ | ❌ |
 | Verification methods | SMS / Email | SMS |
-| Region config | Automatic / Manual | Automatic |
+| dataCenterZone config | Automatic / Manual | Automatic |
 
 </div>
 
