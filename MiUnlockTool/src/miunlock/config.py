@@ -28,7 +28,14 @@ def make_executable(path):
     if SYSTEM in ["Linux", "Darwin", "Android"]:
         try:
             st = os.stat(path)
-            os.chmod(path, st.st_mode | stat.S_IEXEC)
+            if os.getuid() == st.st_uid:
+                x_bit = stat.S_IXUSR
+            elif os.getgid() == st.st_gid:
+                x_bit = stat.S_IXGRP
+            else:
+                x_bit = stat.S_IXOTH
+            if not (st.st_mode & x_bit):
+                os.chmod(path, st.st_mode | x_bit)
         except Exception as e:
             console.print(f"[red]✗ Could not make {path} executable: {e}[/red]")
             raise SystemExit(1)
