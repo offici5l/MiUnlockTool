@@ -31,6 +31,8 @@ def unlock_device(domain, service, fastboot_cmd):
         console.print(f"\n[red]{product['error']}[/red]\n")
         return
 
+    console.print(f"\n[green]Device Codename: {product}[/green]\n")
+
     clear = _send("/api/v2/unlock/device/clear", {"appId": "1", "data": {"product": product}, "nonce": nonce}, domain, ssecurity, cookies)
     if "error" in clear:
         console.print(f"\n[red]{clear['error']}[/red]\n")
