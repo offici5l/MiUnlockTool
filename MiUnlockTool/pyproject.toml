@@ -1,5 +1,5 @@
 [project]
-version = "1.7.1"
+version = "1.7.2"
 name = "miunlock"
 description = "Retrieve Xiaomi encryptData(token) to unlock bootloader"
 authors = [{name = "offici5l"}]
