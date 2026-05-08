@@ -19,6 +19,10 @@ The following device codenames are unlocked **without** clearing user data:
 
 `gemini`, `ido`, `kate`, `kenzo`, `land`, `markw`, `meri`, `mido`, `nikel`, `omega`, `prada`, `rolex`, `santoni`, `venus`, `wt88047`
 
+Device codenames of respective brands can be found below:
+
+[Xiaomi](https://en.wikipedia.org/wiki/List_of_Xiaomi_products#Current) [Redmi](https://en.wikipedia.org/wiki/List_of_Redmi_products#Phones) [POCO](https://en.wikipedia.org/wiki/Poco_(smartphone)#Smartphones)
+
 ---
 
 ## Does this tool bypass the waiting period?
