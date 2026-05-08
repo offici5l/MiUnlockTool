@@ -227,3 +227,7 @@ fixes, improvements, and additions:
 
 - Improved region data center detection
 - improvements [migate](https://github.com/offici5l/migate)
+
+### Version 1.7.2:
+
+- minor fixes & improvements
