@@ -85,7 +85,6 @@ def get_product(cmd):
         product = CheckB(cmd, "product", "getvar", "product")
         if isinstance(product, dict) and 'error' in product:
             return product
-    console.print(f"\n[green]product: {product}[/green]\n")
     return product
 
 def get_device_token(cmd):
@@ -95,12 +94,10 @@ def get_device_token(cmd):
         if isinstance(token, dict) and 'error' in token:
             return token
         if token:
-            console.print(f"\n[green]device token: {token}[/green]\n")
             return token
         else:
             token = CheckB(cmd, "token", "getvar", "token")
             if isinstance(token, dict) and 'error' in token:
                 return token
             if token:
-                console.print(f"\n[green]device token: {token}[/green]\n")
                 return token
