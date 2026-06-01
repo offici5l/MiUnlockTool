@@ -2,7 +2,7 @@
 
 ## Getting an error code? 
 
-See: [answer error codes](https://offici5l.github.io/post/miunlock_error_codes)
+See: [answer error codes](https://offici5l.github.io/post/miunlock-error-codes/)
 
 ---
 
