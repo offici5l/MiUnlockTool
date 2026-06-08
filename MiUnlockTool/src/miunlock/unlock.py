@@ -8,7 +8,7 @@ import subprocess
 import time
 from pathlib import Path
 
-def unlock_device(domain, service, fastboot_cmd):
+def unlock_device(domain, service, fastboot_cmd, device_token_override=None):
 
     cookies = service["cookies"]
     ssecurity = service['servicedata']["ssecurity"]
@@ -49,10 +49,13 @@ def unlock_device(domain, service, fastboot_cmd):
 
     console.input("\n[white]Press 'Enter' to continue — unlock(encryptData)[/white]")
 
-    device_token = get_device_token(fastboot_cmd)
-    if isinstance(device_token, dict) and "error" in device_token:
-        console.print(f"\n[red]{device_token['error']}[/red]\n")
-        return
+    if device_token_override:
+        device_token = device_token_override
+    else:
+        device_token = get_device_token(fastboot_cmd)
+        if isinstance(device_token, dict) and "error" in device_token:
+            console.print(f"\n[red]{device_token['error']}[/red]\n")
+            return
 
     data = {
         "clientId": "2",
