@@ -4,7 +4,13 @@ from miunlock.unlock import unlock_device
 from miunlock.config import get_fastboot
 from miunlock.config import console
 
+import argparse
+
 def main():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--device-token", type=str, default=None)
+    args = parser.parse_args()
 
     fastboot_cmd = get_fastboot()
     
@@ -52,7 +58,7 @@ def main():
         "Europe": "https://eu-unlock.update.intl.miui.com",
     }.get(Zone)
 
-    unlock_device(domain, service, fastboot_cmd)
+    unlock_device(domain, service, fastboot_cmd, args.device_token)
 
 if __name__ == "__main__":
     main()
