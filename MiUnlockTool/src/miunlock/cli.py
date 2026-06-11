@@ -53,6 +53,3 @@ def main():
     }.get(Zone)
 
     unlock_device(domain, service, fastboot_cmd)
-
-if __name__ == "__main__":
-    main()
