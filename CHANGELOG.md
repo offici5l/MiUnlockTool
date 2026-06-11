@@ -231,3 +231,7 @@ fixes, improvements, and additions:
 ### Version 1.7.2:
 
 - minor fixes & improvements
+
+### Version 1.7.3:
+
+- minor improvements: support `python -m miunlock` when script entry point is unavailable
