@@ -234,4 +234,4 @@ fixes, improvements, and additions:
 
 ### Version 1.7.3:
 
-- minor improvements: support `python -m miunlock` when script entry point is unavailable
+- minor improvements: support `python -m miunlock` when entry point is unavailable
