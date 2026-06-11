@@ -89,3 +89,6 @@ def unlock_device(domain, service, fastboot_cmd):
         console.print("\n[green]Unlock successful[/green]\n")
     except subprocess.CalledProcessError as e:
         console.print(f"\n[red]{e.stderr}[/red]\n")
+    finally:
+        if filename.exists():
+            filename.unlink()
