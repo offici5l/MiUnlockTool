@@ -4,7 +4,7 @@
   <img src="https://img.shields.io/badge/MiUnlockTool-%23FF6900?style=flat&logo=xiaomi&logoColor=white" alt="MiUnlockTool" width="200"/>
 </a>
 
-**Developed to retrieve `encryptData(token)` for Xiaomi devices to unlock the bootloader.**
+**Developed to retrieve [`encryptData(token)`](encryptData.md) for Xiaomi devices to unlock the bootloader.**
 
 ---
 
