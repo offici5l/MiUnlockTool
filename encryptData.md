@@ -11,7 +11,7 @@ It is the `deviceToken` signed by Xiaomi's server.
 ```
 fastboot getvar token
 ```
-or on MediaTek devices:
+or:
 ```
 fastboot oem get_token
 ```
