@@ -22,9 +22,9 @@ For example, on all modern devices the token includes the following fields:
 
 - `1` is the value of `version` (fixed)
 - `1` or `2` is the value of `tokenversion` (fixed)
-- Random data e.g. `ebdbf1635ecc3899c74190f9a3b2c1d4` is the value of `nonce` (not fixed , a new value is generated every time the device reboots, which is why the `deviceToken` changes each time, and this is what makes `encryptData` expire immediately after a reboot)
 - Device codename (fixed)
 - Unique processor identifier `cpuid` (fixed)
+- Random data e.g. `ebdbf1635ecc3899c74190f9a3b2c1d4` is the value of `nonce` (not fixed , a new value is generated every time the device reboots, which is why the `deviceToken` changes each time, and this is what makes `encryptData` expire immediately after a reboot)
 
 ---
 
