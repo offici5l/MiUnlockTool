@@ -6,6 +6,18 @@ See: [miunlock codes & messages reference](miunlock-codes-reference.md)
 
 ---
 
+## What is encryptData?
+
+[See](encryptData.md)
+
+---
+
+## How does the tool work?
+
+[See](encryptData.md)
+
+---
+
 ## Do I need to add my account in Developer Options?
 
 **Yes**
