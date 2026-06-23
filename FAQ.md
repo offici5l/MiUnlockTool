@@ -6,6 +6,32 @@ See: [miunlock codes & messages reference](miunlock-codes-reference.md)
 
 ---
 
+## Do I need to add my account in Developer Options?
+
+**Yes**
+
+Enable Developer Options (tap 7 times on MIUI version / Build number), then go to:  
+**Settings → Additional settings → Developer options → Mi Unlock status**  
+and tap **"Add account and device"**
+
+---
+
+## Do I need permission from Xiaomi Community?
+
+**Yes** if ROM version **HyperOS**
+
+---
+
+## Does this tool bypass the waiting period?
+
+**No.**
+
+MiUnlockTool follows the **exact same official process** as Xiaomi’s official tool.  
+So It is simply an **alternative tool**
+
+
+---
+
 ## Will my Data Be wiped After Unlocking the Bootloader?
 
 ```miunlock``` will tell you whether your data will be wiped or not before proceeding.
@@ -22,12 +48,6 @@ The following device codenames are unlocked **without** clearing user data:
 Device codenames of respective brands can be found below:
 
 [Xiaomi](https://en.wikipedia.org/wiki/List_of_Xiaomi_products#Current) [Redmi](https://en.wikipedia.org/wiki/List_of_Redmi_products#Phones) [POCO](https://en.wikipedia.org/wiki/Poco_(smartphone)#Smartphones)
-
----
-
-## Does this tool bypass the waiting period?
-
-No. MiUnlockTool follows the same official flow as Xiaomi's own tool.
 
 ---
 
