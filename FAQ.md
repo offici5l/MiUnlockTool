@@ -1,5 +1,11 @@
 # FAQ
 
+## How do I unlock my device's bootloader?
+
+[Follow the bootloader unlock guide](unlock_guide.md)
+
+---
+
 ## Getting an error code? 
 
 See: [miunlock codes & messages reference](miunlock-codes-reference.md)
