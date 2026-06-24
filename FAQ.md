@@ -75,7 +75,7 @@ Device codenames of respective brands can be found below:
 - If On Windows: the device should appear in Device Manager without a warning icon — install the drivers:
   - [Xiaomi USB Driver](http://bigota.d.miui.com/tools/xiaomi_usb_driver.rar) ([installation guide](https://web.vip.miui.com/page/info/mio/mio/detail?postId=18464849&app_version=dev.20051))
   - [Google ADB Driver](https://dl.google.com/android/repository/latest_usb_driver_windows.zip) ([installation guide](https://developer.android.com/studio/run/oem-usb#InstallingDriver))
-- Make sure the device is in fastboot mode
+- Make sure the xiaomi device is in **fastboot** mode (not fastbootd)
 - Try a different USB data cable — prefer the original
 - Unplug and replug the cable and make sure it's connected properly
 - Remove any previously installed ADB/Fastboot and let miunlock use its own
